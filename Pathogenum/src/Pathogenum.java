@@ -8,7 +8,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
 
 import Entities.Entity;
@@ -85,13 +84,16 @@ public class Pathogenum extends BasicGame{
 		if(i.isKeyDown(Input.KEY_UP)){
 			System.out.println("UP");
 			keys[0] = 1;
-		}else if(i.isKeyDown(Input.KEY_DOWN)){
+		}
+		if(i.isKeyDown(Input.KEY_DOWN)){
 			System.out.println("DOWN");
 			keys[1] = 1;
-		}else if(i.isKeyDown(Input.KEY_LEFT)){
+		}
+		if(i.isKeyDown(Input.KEY_LEFT)){
 			System.out.println("LEFT");
 			keys[2] = 1;
-		}else if(i.isKeyDown(Input.KEY_RIGHT)){
+		}
+		if(i.isKeyDown(Input.KEY_RIGHT)){
 			System.out.println("RIGHT");
 			keys[3] = 1;
 		}
