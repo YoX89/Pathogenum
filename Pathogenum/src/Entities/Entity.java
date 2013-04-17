@@ -1,41 +1,42 @@
 package Entities;
 
+import org.jbox2d.collision.shapes.CircleShape;
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.FixtureDef;
+import org.jbox2d.dynamics.World;
 import org.newdawn.slick.Image;
 
 public class Entity {
 	
 	public final static int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
-	int posX;
-	int posY;
-	double[] acc;
-	int speed;
+	private Body body;
 	
-	public int getSpeed() {
-		return speed;
-	}
-
-	public void setSpeed(int speed) {
-		this.speed = speed;
-	}
-
-	public double[] getAcc() {
-		return acc;
-	}
-
-	public void setAcc(double[] acc) {
-		this.acc = acc;
-	}
 
 	Image img;
 	String name;
 	
-	public Entity(int x, int y, String name, Image img,int speed){
-		this.speed = speed;
-		acc = new double[4];
-		posX = x;
-		posY = y;
+	public Entity(int x, int y, String name, Image img, World world){
+
 		this.name = name;
 		this.img = img;
+		BodyDef bd = new BodyDef();
+		bd.position = new Vec2(x+50, y+50);
+		
+		bd.type = BodyType.DYNAMIC;
+		CircleShape cs = new CircleShape();
+		cs.m_radius = 0.5f;
+		FixtureDef fd = new FixtureDef();
+		fd.shape = cs;
+		fd.density = 0.5f;
+		fd.friction = 0.3f;        
+		fd.restitution = 0.5f;
+		
+//		body = new Body(bd, world);
+		body = world.createBody(bd);
+		body.createFixture(fd);
 	}
 	
 	public String getName() {
@@ -47,36 +48,22 @@ public class Entity {
 	}
 
 	public void draw(){
-		img.draw(posX,posY);
+		Vec2 pos = body.getPosition();
+		img.draw(pos.x , pos.y);
 	}
 	
-	public int getPosX() {
-		return posX;
+	public Vec2 getPos() {
+		return body.getPosition();
+	}
+	
+	public void addForce(int[] acc){
+		body.applyForce(new Vec2( 100000000 * (acc[3]-acc[2]), 100000000 * (acc[1] - acc[0])), getPos());
 	}
 
-	public void setPosX(int posX) {
-		this.posX = posX;
-	}
 
-	public int getPosY() {
-		return posY;
-	}
 
-	public void setPosY(int posY) {
-		this.posY = posY;
-	}
-	
-	public void move(){
-		posX += acc[3];
-		posX -= acc[2];
-		posY += acc[1];
-		posY -= acc[0];
-	}
-	
-	public void addInc(int direction, double accInc){
-		acc[direction] += accInc;
-	}
-	
+
+/*	
 	public void runInertia(){
 		for(int i = 0; i < 4; i++){
 			if(acc[i] > 0){
@@ -88,5 +75,6 @@ public class Entity {
 			}
 		}
 	}
+	*/
 	
 }

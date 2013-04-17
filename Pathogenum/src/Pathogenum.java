@@ -1,6 +1,8 @@
 import java.io.File;
 import java.util.ArrayList;
 
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.World;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -20,12 +22,15 @@ public class Pathogenum extends BasicGame{
 	ArrayList<Shape> shapes;
 	ArrayList<Entity> entities;
 	Player play;
+	//TODO Extend world?
+	World world;
 	
 	public Pathogenum(String title) {
 		super(title);
 		images = new ArrayList<Image>();
 		shapes = new ArrayList<Shape>();
 		entities = new ArrayList<Entity>();
+		world = new World(new Vec2(0f,0f));
 	}
 
 	@Override
@@ -41,7 +46,7 @@ public class Pathogenum extends BasicGame{
 	@Override
 	public void init(GameContainer arg0) throws SlickException {
 		readImages("resources/");
-		play = new Player(0,0,"Player1",images.get(0), 100);
+		play = new Player(0,0,"Player1",images.get(0), 100, world);
 		entities.add(play);
 	}
 
@@ -57,13 +62,8 @@ public class Pathogenum extends BasicGame{
 	@Override
 	public void update(GameContainer arg0, int arg1) throws SlickException {
 		int[] acc = checkMovementKey();
-		for(int i = 0; i < acc.length; i++){
-			if(acc[i] == 1){
-				play.addInc(i, 10/(play.getAcc()[i]+play.getSpeed()));
-			}
-		}
-		play.move();
-		play.runInertia();
+		world.step(arg1, 3, 3);
+		play.addForce(acc);
 	}
 	
 	/**
@@ -82,19 +82,19 @@ public class Pathogenum extends BasicGame{
 		Input i = new Input(0);
 		int[] keys = new int[4];
 		if(i.isKeyDown(Input.KEY_UP)){
-			System.out.println("UP");
+//			System.out.println("UP");
 			keys[0] = 1;
 		}
 		if(i.isKeyDown(Input.KEY_DOWN)){
-			System.out.println("DOWN");
+//			System.out.println("DOWN");
 			keys[1] = 1;
 		}
 		if(i.isKeyDown(Input.KEY_LEFT)){
-			System.out.println("LEFT");
+//			System.out.println("LEFT");
 			keys[2] = 1;
 		}
 		if(i.isKeyDown(Input.KEY_RIGHT)){
-			System.out.println("RIGHT");
+//			System.out.println("RIGHT");
 			keys[3] = 1;
 		}
 		return keys;
