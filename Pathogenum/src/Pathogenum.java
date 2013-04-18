@@ -24,6 +24,7 @@ public class Pathogenum extends BasicGame{
 	Player play;
 	//TODO Extend world?
 	World world;
+	int[] keys = new int[4];
 	
 	public Pathogenum(String title) {
 		super(title);
@@ -63,7 +64,7 @@ public class Pathogenum extends BasicGame{
 	public void update(GameContainer arg0, int arg1) throws SlickException {
 		int[] acc = checkMovementKey();
 		world.step(arg1, 3, 3);
-		play.addForce(acc);
+		play.addForce(acc, arg1);
 	}
 	
 	/**
@@ -80,23 +81,32 @@ public class Pathogenum extends BasicGame{
 	//Needs to be changed entirely to allow many keys, maybe manipulate key-events with on_press and on_release?
 	private int[] checkMovementKey(){
 		Input i = new Input(0);
-		int[] keys = new int[4];
 		if(i.isKeyDown(Input.KEY_UP)){
-//			System.out.println("UP");
+			System.out.println("UP");
 			keys[0] = 1;
+		} else {
+			keys[0] = 0; 
 		}
+		
 		if(i.isKeyDown(Input.KEY_DOWN)){
-//			System.out.println("DOWN");
+			System.out.println("DOWN");
 			keys[1] = 1;
+		} else {
+			keys[1] = 0; 
 		}
 		if(i.isKeyDown(Input.KEY_LEFT)){
-//			System.out.println("LEFT");
+			System.out.println("LEFT");
 			keys[2] = 1;
+		} else {
+			keys[2] = 0; 
 		}
 		if(i.isKeyDown(Input.KEY_RIGHT)){
-//			System.out.println("RIGHT");
+			System.out.println("RIGHT");
 			keys[3] = 1;
+		} else {
+			keys[3] = 0; 
 		}
 		return keys;
 	}
+	
 }

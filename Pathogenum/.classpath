@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="lib/slick.jar"/>
 	<classpathentry kind="lib" path="lib/jbox2d-library-2.2.1.1-javadoc.jar"/>
 	<classpathentry kind="lib" path="lib/jbox2d-library-2.2.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jbox2d-library-2.2.1.1-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

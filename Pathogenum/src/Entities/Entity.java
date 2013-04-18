@@ -13,6 +13,7 @@ public class Entity {
 	
 	public final static int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
 	private Body body;
+	private float force = 100000.f;
 	
 
 	Image img;
@@ -34,9 +35,9 @@ public class Entity {
 		fd.friction = 0.3f;        
 		fd.restitution = 0.5f;
 		
-//		body = new Body(bd, world);
 		body = world.createBody(bd);
 		body.createFixture(fd);
+		body.setLinearDamping(0.0005f);
 	}
 	
 	public String getName() {
@@ -56,8 +57,12 @@ public class Entity {
 		return body.getPosition();
 	}
 	
-	public void addForce(int[] acc){
-		body.applyForce(new Vec2( 100000000 * (acc[3]-acc[2]), 100000000 * (acc[1] - acc[0])), getPos());
+	public void addForce(int[] acc, int ms){
+		System.out.println(acc[0] + " " + acc[1] + " " + acc[2] + " " + acc[3]);
+		System.out.println(body.getMass() + " ");
+		Vec2 f = new Vec2( (force * ms) * (acc[3]-acc[2]), (force * ms) * (acc[1] - acc[0]));
+		System.out.println("x: " + f.x + " y: " + f.y);
+		body.applyLinearImpulse(f, getPos());
 	}
 
 
