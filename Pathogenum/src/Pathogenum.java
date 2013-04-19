@@ -24,7 +24,7 @@ public class Pathogenum extends BasicGame{
 	ArrayList<Entity> entities;
 	Player play;
 	//TODO Extend world?
-	World world;
+	PathogenumWorld world;
 	int[] keys = new int[4];
 	
 	public Pathogenum(String title) {
@@ -32,7 +32,7 @@ public class Pathogenum extends BasicGame{
 		images = new ArrayList<Image>();
 		shapes = new ArrayList<Shape>();
 		entities = new ArrayList<Entity>();
-		world = new World(new Vec2(0f,0f));
+		world = new PathogenumWorld(new Vec2(0f,0f));
 	}
 
 	@Override
