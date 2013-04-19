@@ -10,6 +10,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Shape;
 
 import Entities.Entity;
@@ -36,18 +37,28 @@ public class Pathogenum extends BasicGame{
 
 	@Override
 	public void render(GameContainer arg0, Graphics arg1) throws SlickException {
-		for(Shape s: shapes){
-			arg1.draw(s);
-		}
+		//for(Shape s: shapes){
+		//	arg1.draw(s);
+		//}
 		for(Entity e: entities){
-			e.draw();
+			e.draw(arg1);
 		}
 	}
 
 	@Override
 	public void init(GameContainer arg0) throws SlickException {
 		readImages("resources/");
-		play = new Player(0,0,"Player1",images.get(0), 100, world);
+		float[] points = new float[6];
+		points[0] = 0;
+		points[1] = 0;
+		points[2] = 45;
+		points[3] = 0;
+		points[4] = (float)22.5;
+		points[5] = (float)22.5;
+		Polygon p = new Polygon(points);
+		shapes.add(p);
+		play = new Player(0,0,"Player1",p, 100, world);
+		//play = new Player(0,0,"Player1",images.get(0), 100, world);
 		entities.add(play);
 	}
 
