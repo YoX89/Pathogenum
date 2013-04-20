@@ -2,7 +2,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.World;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -47,7 +46,7 @@ public class Pathogenum extends BasicGame{
 
 	@Override
 	public void init(GameContainer arg0) throws SlickException {
-		readImages("resources/");
+		readImages("resources/gfx/");
 		float[] points = new float[6];
 		points[0] = 0;
 		points[1] = 0;
