@@ -6,27 +6,29 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
-import org.jbox2d.dynamics.World;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Shape;
+
+import utils.Dimensions;
+import Physics.PathogenumWorld;
 
 public class Entity {
 	
 	public final static int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
 	private Body body;
-	private float force = 0.0005f;
+	private float force = 0.00005f;
 	
 
 	Image img;
 	Shape sh;
 	String name;
 	
-	public Entity(int x, int y, String name, Image img, World world){
+	public Entity(int x, int y, String name, Image img, PathogenumWorld world){
 		this.name = name;
 		this.img = img;
 		BodyDef bd = new BodyDef();
-		bd.position = new Vec2(x+50, y+50);
+		bd.position = new Vec2(x, y);
 		
 		bd.type = BodyType.DYNAMIC;
 		CircleShape cs = new CircleShape();
@@ -41,11 +43,11 @@ public class Entity {
 		body.createFixture(fd);
 		body.setLinearDamping(0.0015f);
 	}
-	public Entity(int x, int y, String name, Shape sh, World world){
+	public Entity(int x, int y, String name, Shape sh, PathogenumWorld world){
 		this.name = name;
 		this.sh = sh;
 		BodyDef bd = new BodyDef();
-		bd.position = new Vec2(x+50, y+50);
+		bd.position = new Vec2(x, y);
 		
 		bd.type = BodyType.DYNAMIC;
 		CircleShape cs = new CircleShape();
@@ -74,9 +76,9 @@ public class Entity {
 		Vec2 pos = body.getPosition();
 		if(img != null){
 			System.out.println("img draw");
-			img.draw(pos.x , pos.y);
+			img.draw(Dimensions.meterToPixel(pos.x) , Dimensions.meterToPixel(pos.y));
 		}else if(sh != null){
-			sh.setLocation(pos.x, pos.y);
+			sh.setLocation(Dimensions.meterToPixel(pos.x), Dimensions.meterToPixel(pos.y));
 			arg1.draw(sh);
 		}
 		
@@ -89,11 +91,11 @@ public class Entity {
 	public void addForce(int[] acc, int ms){
 		//System.out.println(acc[0] + " " + acc[1] + " " + acc[2] + " " + acc[3]);
 		//System.out.println(body.getMass() + " ");
-		Vec2 f = new Vec2( (force * ms) * (acc[3]-acc[2]), (force * ms) * (acc[1] - acc[0]));
+		Vec2 f = new Vec2( (force * ms) * (acc[3]-acc[2]), (force* ms) * (acc[1] - acc[0]));
 //		System.out.println("x: " + f.x + " y: " + f.y);
 		
 		Vec2 curr_vec = body.getLinearVelocity();
-		Vec2 new_vec = new Vec2(curr_vec.x + (f.x * 10) , curr_vec.y + (f.y *10));
+		Vec2 new_vec = new Vec2(curr_vec.x + (f.x) , curr_vec.y + (f.y));
 		
 		body.setLinearVelocity(new_vec);
 //		System.out.println(curr_vec.x + " " + new_vec.x);

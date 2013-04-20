@@ -9,11 +9,13 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
 
+import utils.Dimensions;
 import Entities.Entity;
 import Entities.Player;
+import Physics.PathogenumWorld;
 
 
 public class Pathogenum extends BasicGame{
@@ -47,16 +49,10 @@ public class Pathogenum extends BasicGame{
 	@Override
 	public void init(GameContainer arg0) throws SlickException {
 		readImages("resources/gfx/");
-		float[] points = new float[6];
-		points[0] = 0;
-		points[1] = 0;
-		points[2] = 45;
-		points[3] = 0;
-		points[4] = (float)22.5;
-		points[5] = (float)22.5;
-		Polygon p = new Polygon(points);
-		shapes.add(p);
-		play = new Player(0,0,"Player1",p, 100, world);
+
+		Circle circle = new Circle(100, 100, Dimensions.meterToPixel(0.5f));
+		shapes.add(circle);
+		play = new Player((int)Dimensions.pixelToMeter(100),(int)Dimensions.pixelToMeter(100),"Player1",circle, 100, world);
 		//play = new Player(0,0,"Player1",images.get(0), 100, world);
 		entities.add(play);
 	}
@@ -84,7 +80,7 @@ public class Pathogenum extends BasicGame{
 	public static void main(String[] args) throws SlickException {
 		Pathogenum petriDish = new Pathogenum("Pathogenum");
 		AppGameContainer agc = new AppGameContainer(petriDish);
-		agc.setDisplayMode(1024, 768, false);
+		agc.setDisplayMode(Dimensions.SCREEN_WIDTH, Dimensions.SCREEN_HEIGHT, false);
 		agc.setTargetFrameRate(60);
 		agc.start();
 	}
@@ -118,5 +114,8 @@ public class Pathogenum extends BasicGame{
 		}
 		return keys;
 	}
+	
+	
+
 	
 }
