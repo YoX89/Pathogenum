@@ -13,7 +13,7 @@
 	<classpathentry kind="lib" path="lib/jbox2d-library-2.2.1.1-javadoc.jar"/>
 	<classpathentry kind="lib" path="lib/jbox2d-library-2.2.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jbox2d-library-2.2.1.1-sources.jar"/>
-	<classpathentry kind="lib" path="E:/eclipse/workspace2/Pathogenum/Pathogenum/lib/jogg-0.0.7.jar"/>
-	<classpathentry kind="lib" path="E:/eclipse/workspace2/Pathogenum/Pathogenum/lib/jorbis-0.0.15.jar"/>
+	<classpathentry kind="lib" path="lib/jogg-0.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/jorbis-0.0.15.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
