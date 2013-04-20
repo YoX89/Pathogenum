@@ -21,6 +21,11 @@ public HubServer(int port){
 	}
 }
 
+//for testing purposes
+public GamesMonitor getGM(){
+	return gm;
+}
+
 public void run(){
 		while(true){
 			try{
