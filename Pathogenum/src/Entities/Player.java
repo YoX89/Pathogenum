@@ -5,10 +5,10 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Shape;
 
 import utils.Dimensions;
-
 import Physics.PathogenumWorld;
 
 public class Player extends Entity{
@@ -37,6 +37,13 @@ public class Player extends Entity{
 		body = world.createBody(bd);
 		body.createFixture(fd);
 		body.setLinearDamping(0.0015f);
+	}
+	
+	
+	public void draw(Graphics arg1){
+		Vec2 pos = body.getPosition();
+		sh.setLocation(Dimensions.meterToPixel(pos.x) - sh.getWidth()/2, Dimensions.meterToPixel(pos.y) - sh.getHeight()/2);
+		arg1.draw(sh);
 	}
 
 }

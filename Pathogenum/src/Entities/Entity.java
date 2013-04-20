@@ -64,7 +64,6 @@ public class Entity {
 			if(sh instanceof Rectangle){
 //				System.out.println("The world width is " + Dimensions.pixelToMeter(Dimensions.SCREEN_WIDTH) + "x" +
 //						Dimensions.pixelToMeter(Dimensions.SCREEN_HEIGHT));
-				System.out.println("The top wall is located at x:" + pos.x + ", y:" + pos.y );
 			}
 			sh.setLocation(Dimensions.meterToPixel(pos.x), Dimensions.meterToPixel(pos.y));
 			arg1.draw(sh);
