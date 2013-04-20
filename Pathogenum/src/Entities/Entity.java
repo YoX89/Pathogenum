@@ -1,13 +1,10 @@
 package Entities;
 
-import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.BodyDef;
-import org.jbox2d.dynamics.BodyType;
-import org.jbox2d.dynamics.FixtureDef;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 import utils.Dimensions;
@@ -16,51 +13,37 @@ import Physics.PathogenumWorld;
 public class Entity {
 	
 	public final static int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
-	private Body body;
-	private float force = 0.00005f;
+	protected Body body;
+	private float force = 0.0003f;
 	
 
-	Image img;
-	Shape sh;
-	String name;
+	protected Image img;
+	protected Shape sh;
+	protected String name;
 	
-	public Entity(int x, int y, String name, Image img, PathogenumWorld world){
-		this.name = name;
-		this.img = img;
-		BodyDef bd = new BodyDef();
-		bd.position = new Vec2(x, y);
-		
-		bd.type = BodyType.DYNAMIC;
-		CircleShape cs = new CircleShape();
-		cs.m_radius = 0.5f;
-		FixtureDef fd = new FixtureDef();
-		fd.shape = cs;
-		fd.density = 0.5f;
-		fd.friction = 0.3f;        
-		fd.restitution = 0.5f;
-		
-		body = world.createBody(bd);
-		body.createFixture(fd);
-		body.setLinearDamping(0.0015f);
-	}
-	public Entity(int x, int y, String name, Shape sh, PathogenumWorld world){
+//	public Entity(int x, int y, String name, Image img, PathogenumWorld world){
+//		this.name = name;
+//		this.img = img;
+//		BodyDef bd = new BodyDef();
+//		bd.position = new Vec2(x, y);
+//		
+//		bd.type = BodyType.DYNAMIC;
+//		CircleShape cs = new CircleShape();
+//		cs.m_radius = 0.5f;
+//		FixtureDef fd = new FixtureDef();
+//		fd.shape = cs;
+//		fd.density = 0.5f;
+//		fd.friction = 0.3f;        
+//		fd.restitution = 0.5f;
+//		
+//		body = world.createBody(bd);
+//		body.createFixture(fd);
+//		body.setLinearDamping(0.0015f);
+//	}
+	public Entity(String name, Shape sh, PathogenumWorld world){
 		this.name = name;
 		this.sh = sh;
-		BodyDef bd = new BodyDef();
-		bd.position = new Vec2(x, y);
 		
-		bd.type = BodyType.DYNAMIC;
-		CircleShape cs = new CircleShape();
-		cs.m_radius = 0.5f;
-		FixtureDef fd = new FixtureDef();
-		fd.shape = cs;
-		fd.density = 0.5f;
-		fd.friction = 0.3f;        
-		fd.restitution = 0.5f;
-		
-		body = world.createBody(bd);
-		body.createFixture(fd);
-		body.setLinearDamping(0.0015f);
 	}
 
 	
@@ -78,6 +61,11 @@ public class Entity {
 			System.out.println("img draw");
 			img.draw(Dimensions.meterToPixel(pos.x) , Dimensions.meterToPixel(pos.y));
 		}else if(sh != null){
+			if(sh instanceof Rectangle){
+//				System.out.println("The world width is " + Dimensions.pixelToMeter(Dimensions.SCREEN_WIDTH) + "x" +
+//						Dimensions.pixelToMeter(Dimensions.SCREEN_HEIGHT));
+				System.out.println("The top wall is located at x:" + pos.x + ", y:" + pos.y );
+			}
 			sh.setLocation(Dimensions.meterToPixel(pos.x), Dimensions.meterToPixel(pos.y));
 			arg1.draw(sh);
 		}

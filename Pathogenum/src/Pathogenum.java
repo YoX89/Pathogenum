@@ -10,11 +10,13 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 import utils.Dimensions;
 import Entities.Entity;
 import Entities.Player;
+import Entities.Wall;
 import Physics.PathogenumWorld;
 
 
@@ -34,6 +36,29 @@ public class Pathogenum extends BasicGame{
 		shapes = new ArrayList<Shape>();
 		entities = new ArrayList<Entity>();
 		world = new PathogenumWorld(new Vec2(0f,0f));
+		createWalls();
+	}
+
+	private void createWalls() {
+		Rectangle topWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.meterToPixel(0.1f),
+				Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.2f),
+				Dimensions.meterToPixel(0.1f));
+		
+//		Rectangle leftWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.SCREEN_HEIGHT/2,
+//				Dimensions.meterToPixel(0.1f),
+//				Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.2f));
+//		
+//		Rectangle rightWall = new Rectangle(Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.1f), Dimensions.SCREEN_HEIGHT/2,
+//				Dimensions.meterToPixel(0.1f),
+//				Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.2f));
+//		
+//		Rectangle bottomWall = new Rectangle(Dimensions.SCREEN_WIDTH/2, Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.1f),
+//				Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.2f),
+//				Dimensions.meterToPixel(0.1f));
+//		
+		entities.add(new Wall(topWall, world));
+		
+		
 	}
 
 	@Override
@@ -52,7 +77,7 @@ public class Pathogenum extends BasicGame{
 
 		Circle circle = new Circle(100, 100, Dimensions.meterToPixel(0.5f));
 		shapes.add(circle);
-		play = new Player((int)Dimensions.pixelToMeter(100),(int)Dimensions.pixelToMeter(100),"Player1",circle, 100, world);
+		play = new Player("Player1",circle, 100, world);
 		//play = new Player(0,0,"Player1",images.get(0), 100, world);
 		entities.add(play);
 	}
