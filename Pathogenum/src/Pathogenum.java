@@ -9,6 +9,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
@@ -77,7 +78,6 @@ public class Pathogenum extends BasicGame{
 	@Override
 	public void init(GameContainer arg0) throws SlickException {
 		readImages("resources/gfx/");
-
 		Circle circle = new Circle(100, 100, Dimensions.meterToPixel(0.5f));
 		shapes.add(circle);
 		play = new Player("Player1",circle, 100, world,0.5f);
