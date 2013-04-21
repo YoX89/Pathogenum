@@ -35,7 +35,7 @@ public class Client extends BasicGame {
 	public Client(String title) {
 		super(title);
 	}
-	
+	//args0 = hostname, args1 = port
 	public static void main(String args[]){
 		
 		try {

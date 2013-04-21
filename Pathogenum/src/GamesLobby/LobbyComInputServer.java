@@ -26,7 +26,7 @@ public class LobbyComInputServer extends Thread{
 	public void run(){
 		System.out.println("LobbyComInputServer started");
 		while(true){ // ändra t while(!gamestarted)
-			byte[] com = new byte[1];
+			byte[] com = new byte[4];
 			try {
 				is.read(com);
 				System.out.println("Input command read");

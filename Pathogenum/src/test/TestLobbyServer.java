@@ -22,7 +22,7 @@ public class TestLobbyServer {
 		int port = 2085;
 		LobbyServer ls = new LobbyServer(port);
 		ls.start();
-		
+		String returnmsg = "";
 		try {
 			Socket connection = new Socket("localhost",port);
 			InputStream is = connection.getInputStream();
@@ -39,22 +39,30 @@ public class TestLobbyServer {
 			int com = Conversions.ByteArrayToInt(buff);
 			if(com != LobbyServer.SENDMESSAGE){
 				succ = false;
+				System.out.println("Not sendmessage");
 			}
 			is.read(buff);
 			int mLength = Conversions.ByteArrayToInt(buff);
 			buff = new byte[mLength];
 			is.read(buff);
 			String retmsg = new String(buff);
-			if(!retmsg.substring(retmsg.length()-message.length(), retmsg.length()-1).equals(message)){
+			String[] sp = retmsg.split(":");
+			sp[1] = sp[1].trim();
+			if(!sp[1].equals(message)){
 				succ = false;
+				System.out.println("Not same-> Org: " + message + ", Ret: " + retmsg);
 			}
+			returnmsg = retmsg;
+			connection.close();
 			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Return: " + returnmsg);
 		assertTrue(succ);
+		System.out.println("Done");
 	}
 
 }

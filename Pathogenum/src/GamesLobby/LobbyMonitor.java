@@ -36,6 +36,9 @@ public class LobbyMonitor {
 	public synchronized String getMessage(LobbyComOutputServer lcos){
 		String msg = messageQueue.peek();
 		register.put(lcos, true);
+		if(msg == null){
+			return null;
+		}
 		if(allSent()){
 			messageQueue.pop();
 			return msg;

@@ -27,13 +27,13 @@ public class LobbyComOutputServer extends Thread {
 	public void run() {
 		System.out.println("LobbyComOutputServer started");
 		while (true) { // ändra t while(!gamestarted)
+			readAndPrintMsg();
 			try {
 				lm.waitForEvent(); // wait for event
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			readAndPrintMsg();
-
+			System.out.println("new turn");
 		}
 	}
 
