@@ -16,6 +16,7 @@ import org.newdawn.slick.geom.Shape;
 
 import utils.Dimensions;
 import Entities.Entity;
+import Entities.NPC;
 import Entities.Player;
 import Entities.Wall;
 import Physics.PathogenumWorld;
@@ -82,9 +83,9 @@ public class Pathogenum extends BasicGame{
 		play = new Player("Player1",circle, 100, world,0.5f);
 		//play = new Player(0,0,"Player1",images.get(0), 100, world);
 		entities.add(play);
-		entities.add(new Player("Stand still",new Circle(200, 200, Dimensions.meterToPixel(0.4f)), 100, world,0.4f));
-		entities.add(new Player("Stand still2",new Circle(400, 200, Dimensions.meterToPixel(0.6f)), 100, world,0.5f));
-		entities.add(new Player("Stand still3",new Circle(200, 500, Dimensions.meterToPixel(0.7f)), 100, world,0.6f));
+		entities.add(new NPC("Stand still",new Circle(200, 200, Dimensions.meterToPixel(0.4f)), 100, world,0.4f));
+		entities.add(new NPC("Stand still2",new Circle(400, 200, Dimensions.meterToPixel(0.6f)), 100, world,0.5f));
+		entities.add(new NPC("Stand still3",new Circle(200, 500, Dimensions.meterToPixel(0.7f)), 100, world,0.6f));
 	}
 
 	private void readImages(String dir) throws SlickException {
