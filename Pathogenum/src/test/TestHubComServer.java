@@ -14,7 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import util.Conversions;
+import utils.Conversions;
 
 import GamesLobby.GameAddress;
 import GamesLobby.GamesMonitor;

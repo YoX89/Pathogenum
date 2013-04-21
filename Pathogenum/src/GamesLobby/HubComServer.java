@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-import util.Conversions;
+import utils.Conversions;
 
 public class HubComServer extends Thread{
 	
