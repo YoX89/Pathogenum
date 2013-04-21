@@ -83,9 +83,8 @@ public class Client extends BasicGame {
 	public void init(GameContainer arg0) throws SlickException {
 		sendButton = new Image("resources/gfx/SendButton.png");
 
-		txt  = new TextField(arg0, arg0.getDefaultFont() , 400, 250, 100, 15); //DONT WORK RIGHT!
-		txt.setTextColor(new Color(0,0,0));
-		txt.setText("This is input text");
+		txt  = new TextField(arg0, arg0.getDefaultFont() , 400, 250, sendButton.getWidth(), 30); //DONT WORK RIGHT!
+		txt.setBackgroundColor(new Color(0,0,0));
 		Music bgMusic = new Music("resources/audio/Invincible.ogg");
 		bgMusic.loop();
 		
@@ -94,8 +93,8 @@ public class Client extends BasicGame {
 	@Override
 	public void update(GameContainer arg0, int arg1) throws SlickException {
 		
-		MouseOverArea moa = new MouseOverArea(arg0, sendButton, 400, 300, 131, 65);
-		if(moa.isMouseOver()&&Mouse.isButtonDown(0)){
+		MouseOverArea moa = new MouseOverArea(arg0, sendButton, 400, 300, sendButton.getWidth(), sendButton.getHeight());
+		if(moa.isMouseOver() && Mouse.isButtonDown(0) && !(txt.getText().equals(""))){
 			System.out.println("PRESSED! Message is: "+ txt.getText());
 			byte[] command = Conversions.intToByteArray(SENDMESSAGE);
 			byte[] length = Conversions.intToByteArray(txt.getText().length());
@@ -107,7 +106,7 @@ public class Client extends BasicGame {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+			txt.setText("");
 		}
 		
 	}
