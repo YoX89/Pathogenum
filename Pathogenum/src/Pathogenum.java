@@ -76,10 +76,12 @@ public class Pathogenum extends BasicGame{
 
 		Circle circle = new Circle(100, 100, Dimensions.meterToPixel(0.5f));
 		shapes.add(circle);
-		play = new Player("Player1",circle, 100, world);
+		play = new Player("Player1",circle, 100, world,0.5f);
 		//play = new Player(0,0,"Player1",images.get(0), 100, world);
 		entities.add(play);
-		entities.add(new Player("Stand still",new Circle(200, 200, Dimensions.meterToPixel(0.4f)), 100, world));
+		entities.add(new Player("Stand still",new Circle(200, 200, Dimensions.meterToPixel(0.4f)), 100, world,0.4f));
+		entities.add(new Player("Stand still2",new Circle(400, 200, Dimensions.meterToPixel(0.6f)), 100, world,0.5f));
+		entities.add(new Player("Stand still3",new Circle(200, 500, Dimensions.meterToPixel(0.7f)), 100, world,0.6f));
 	}
 
 	private void readImages(String dir) throws SlickException {

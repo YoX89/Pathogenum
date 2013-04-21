@@ -21,14 +21,14 @@ public class Player extends Entity{
 //		img = rep;
 //	}
 	
-	public Player( String name, Shape sh, int speed, PathogenumWorld world){
+	public Player( String name, Shape sh, int speed, PathogenumWorld world, float radius){
 		super(name, sh, world);
 		BodyDef bd = new BodyDef();
 		bd.position = new Vec2(Dimensions.pixelToMeter(sh.getX()), Dimensions.pixelToMeter(sh.getY()));
 		
 		bd.type = BodyType.DYNAMIC;
 		CircleShape cs = new CircleShape();
-		cs.m_radius = 0.5f;
+		cs.m_radius = radius;
 		FixtureDef fd = new FixtureDef();
 		fd.shape = cs;
 		fd.density = 0.5f;
