@@ -44,26 +44,29 @@ public class Pathogenum extends BasicGame{
 				Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.2f),
 				Dimensions.meterToPixel(0.1f));
 
-		//		Rectangle leftWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.SCREEN_HEIGHT/2,
-		//				Dimensions.meterToPixel(0.1f),
-		//				Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.2f));
-		//		
-		//		Rectangle rightWall = new Rectangle(Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.1f), Dimensions.SCREEN_HEIGHT/2,
-		//				Dimensions.meterToPixel(0.1f),
-		//				Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.2f));
-		//		
-		//		Rectangle bottomWall = new Rectangle(Dimensions.SCREEN_WIDTH/2, Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.1f),
-		//				Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.2f),
-		//				Dimensions.meterToPixel(0.1f));
-		//		
-		entities.add(new Wall(topWall, world));		
+		Rectangle leftWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.meterToPixel(0.1f),
+				Dimensions.meterToPixel(0.1f),
+				Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.2f));
+
+		Rectangle rightWall = new Rectangle(Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.1f), Dimensions.meterToPixel(0.1f),
+				Dimensions.meterToPixel(0.1f),
+				Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.2f));
+
+		Rectangle bottomWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.1f),
+				Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.2f),
+				Dimensions.meterToPixel(0.1f));
+
+		entities.add(new Wall(topWall, world));	
+		entities.add(new Wall(leftWall, world));
+		entities.add(new Wall(rightWall, world));
+		entities.add(new Wall(bottomWall, world));
 
 	}
 
 	@Override
 	public void render(GameContainer arg0, Graphics arg1) throws SlickException {
 		//for(Shape s: shapes){
-		//	arg1.draw(s);
+			//	arg1.draw(s);
 		//}
 		for(Entity e: entities){
 			e.draw(arg1);
