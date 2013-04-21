@@ -6,6 +6,7 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
 
 import utils.Dimensions;
@@ -43,8 +44,15 @@ public class Player extends Entity{
 	
 	public void draw(Graphics arg1){
 		Vec2 pos = body.getPosition();
+		changeShapeSize();
 		sh.setLocation(Dimensions.meterToPixel(pos.x) - sh.getWidth()/2, Dimensions.meterToPixel(pos.y) - sh.getHeight()/2);
 		arg1.draw(sh);
+	}
+	
+	public void changeShapeSize(){
+		Circle c = (Circle) sh;
+		float r = body.getFixtureList().getShape().getRadius();
+		c.setRadius(1000*Dimensions.pixelToMeter(r));
 	}
 
 }

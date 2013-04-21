@@ -60,7 +60,7 @@ public class PathogenumWorld extends World {
 					}else{
 						System.out.println("a är störst: ra = " + ra + " rb = " +rb);
 						a.getShape().setRadius((float) (ra + Math.pow(ra, 2)-Math.pow(rb, 2)));
-						removeBodys.add(b.getBody());				
+						removeBodys.add(b.getBody());	
 					}
 				}
 
