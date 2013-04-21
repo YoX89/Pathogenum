@@ -14,7 +14,7 @@ public class Entity {
 	
 	public final static int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
 	protected Body body;
-	private float force = 0.0003f;
+	protected float force = 0.0003f;
 	
 
 	protected Image img;
