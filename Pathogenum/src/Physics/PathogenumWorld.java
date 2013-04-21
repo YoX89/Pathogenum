@@ -46,11 +46,12 @@ public class PathogenumWorld extends World {
 				if(a.getShape().getType().equals(ShapeType.POLYGON) || b.getShape().getType().equals(ShapeType.POLYGON)){
 					System.out.println("wall");
 				}else {
+					System.out.println("a name " + a.getBody().getUserData());
+					System.out.println("b name " + b.getBody().getUserData());
 					float ra = a.getShape().getRadius();
 					float rb = b.getShape().getRadius();
 					if(ra==rb){
 						System.out.println("samma storlek????");
-						a.getShape().setRadius((float) (ra + 0.5));
 					}else if(ra<rb){
 						System.out.println("B är störst: ra = " + ra + " rb = " +rb);
 						b.getShape().setRadius((float) (rb + Math.pow(rb, 2)-Math.pow(ra, 2)));
@@ -67,16 +68,8 @@ public class PathogenumWorld extends World {
 		});
 	}
 
-	public void removeBodys(){
-		if(!removeBodys.isEmpty()){
-			for(int i =0; i< removeBodys.size();++i){
-				destroyBody(removeBodys.get(0));
-			}
-		}
-		removeBodys.clear();
+	public ArrayList<Body> getRemoveBodys(){
+		return removeBodys;
 	}
-
-
-
 
 }

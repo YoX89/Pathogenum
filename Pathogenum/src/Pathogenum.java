@@ -2,6 +2,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -26,10 +27,9 @@ public class Pathogenum extends BasicGame{
 	ArrayList<Shape> shapes;
 	ArrayList<Entity> entities;
 	Player play;
-	//TODO Extend world?
 	PathogenumWorld world;
 	int[] keys = new int[4];
-	
+
 	public Pathogenum(String title) {
 		super(title);
 		images = new ArrayList<Image>();
@@ -43,21 +43,21 @@ public class Pathogenum extends BasicGame{
 		Rectangle topWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.meterToPixel(0.1f),
 				Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.2f),
 				Dimensions.meterToPixel(0.1f));
-		
-//		Rectangle leftWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.SCREEN_HEIGHT/2,
-//				Dimensions.meterToPixel(0.1f),
-//				Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.2f));
-//		
-//		Rectangle rightWall = new Rectangle(Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.1f), Dimensions.SCREEN_HEIGHT/2,
-//				Dimensions.meterToPixel(0.1f),
-//				Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.2f));
-//		
-//		Rectangle bottomWall = new Rectangle(Dimensions.SCREEN_WIDTH/2, Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.1f),
-//				Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.2f),
-//				Dimensions.meterToPixel(0.1f));
-//		
+
+		//		Rectangle leftWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.SCREEN_HEIGHT/2,
+		//				Dimensions.meterToPixel(0.1f),
+		//				Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.2f));
+		//		
+		//		Rectangle rightWall = new Rectangle(Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.1f), Dimensions.SCREEN_HEIGHT/2,
+		//				Dimensions.meterToPixel(0.1f),
+		//				Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.2f));
+		//		
+		//		Rectangle bottomWall = new Rectangle(Dimensions.SCREEN_WIDTH/2, Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.1f),
+		//				Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.2f),
+		//				Dimensions.meterToPixel(0.1f));
+		//		
 		entities.add(new Wall(topWall, world));		
-		
+
 	}
 
 	@Override
@@ -79,6 +79,7 @@ public class Pathogenum extends BasicGame{
 		play = new Player("Player1",circle, 100, world);
 		//play = new Player(0,0,"Player1",images.get(0), 100, world);
 		entities.add(play);
+		entities.add(new Player("Stand still",circle, 100, world));
 	}
 
 	private void readImages(String dir) throws SlickException {
@@ -95,9 +96,26 @@ public class Pathogenum extends BasicGame{
 		int[] acc = checkMovementKey();
 		world.step(arg1, 3, 3);
 		play.addForce(acc, arg1);
-		world.removeBodys();  // Ful lösning
+		bodyChange();
 	}
-	
+
+	private void bodyChange(){
+		ArrayList<Body> rmBodys = world.getRemoveBodys();
+		if(!rmBodys.isEmpty()){
+			for(int i =0; i< rmBodys.size();++i){
+				Body b = rmBodys.get(i);
+				for(int j =0; j< entities.size();++j){
+					if(b.getUserData().equals((entities.get(j).getName()))){
+						entities.remove(j);
+						break;
+					}
+				}
+				world.destroyBody(b);				
+			}
+			rmBodys.clear();
+		}		
+	}
+
 	/**
 	 * @param args
 	 * @throws SlickException 
@@ -113,34 +131,31 @@ public class Pathogenum extends BasicGame{
 	private int[] checkMovementKey(){
 		Input i = new Input(0);
 		if(i.isKeyDown(Input.KEY_UP)){
-//			System.out.println("UP");
+			//			System.out.println("UP");
 			keys[0] = 1;
 		} else {
 			keys[0] = 0; 
 		}
-		
+
 		if(i.isKeyDown(Input.KEY_DOWN)){
-//			System.out.println("DOWN");
+			//			System.out.println("DOWN");
 			keys[1] = 1;
 		} else {
 			keys[1] = 0; 
 		}
 		if(i.isKeyDown(Input.KEY_LEFT)){
-//			System.out.println("LEFT");
+			//			System.out.println("LEFT");
 			keys[2] = 1;
 		} else {
 			keys[2] = 0; 
 		}
 		if(i.isKeyDown(Input.KEY_RIGHT)){
-//			System.out.println("RIGHT");
+			//			System.out.println("RIGHT");
 			keys[3] = 1;
 		} else {
 			keys[3] = 0; 
 		}
 		return keys;
 	}
-	
-	
 
-	
 }
