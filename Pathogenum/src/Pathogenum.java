@@ -56,8 +56,7 @@ public class Pathogenum extends BasicGame{
 //				Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.2f),
 //				Dimensions.meterToPixel(0.1f));
 //		
-		entities.add(new Wall(topWall, world));
-		
+		entities.add(new Wall(topWall, world));		
 		
 	}
 
@@ -96,6 +95,7 @@ public class Pathogenum extends BasicGame{
 		int[] acc = checkMovementKey();
 		world.step(arg1, 3, 3);
 		play.addForce(acc, arg1);
+		world.removeBodys();  // Ful lösning
 	}
 	
 	/**
@@ -113,26 +113,26 @@ public class Pathogenum extends BasicGame{
 	private int[] checkMovementKey(){
 		Input i = new Input(0);
 		if(i.isKeyDown(Input.KEY_UP)){
-			System.out.println("UP");
+//			System.out.println("UP");
 			keys[0] = 1;
 		} else {
 			keys[0] = 0; 
 		}
 		
 		if(i.isKeyDown(Input.KEY_DOWN)){
-			System.out.println("DOWN");
+//			System.out.println("DOWN");
 			keys[1] = 1;
 		} else {
 			keys[1] = 0; 
 		}
 		if(i.isKeyDown(Input.KEY_LEFT)){
-			System.out.println("LEFT");
+//			System.out.println("LEFT");
 			keys[2] = 1;
 		} else {
 			keys[2] = 0; 
 		}
 		if(i.isKeyDown(Input.KEY_RIGHT)){
-			System.out.println("RIGHT");
+//			System.out.println("RIGHT");
 			keys[3] = 1;
 		} else {
 			keys[3] = 0; 
