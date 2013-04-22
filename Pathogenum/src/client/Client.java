@@ -1,50 +1,45 @@
 package client;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Inet6Address;
+
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.UnknownHostException;
 
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.gui.TextField;
 
-import utils.Conversions;
 
 public class Client extends BasicGame {
 	Image sendButton;
+	Image newgameButton;
+	Image joingameButton;
 	TextField txt;
-	public static final int SENDMESSAGE = 100, STARTGAME = 101, LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104;
-	static Socket sock = null;
-	static InputStream is = null;
-	static OutputStream os = null;
 	static AppGameContainer agc;
-	
-	public Client(String title) {
+	ClientConnectionHandler cch;
+	public Client(String title,String host, String port) {
 		super(title);
+		try {
+			cch = new ClientConnectionHandler(InetAddress.getByName(host), Integer.parseInt(port));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 	}
 	//args0 = hostname, args1 = port
 	public static void main(String args[]){
 		
 		try {
-			sock = new Socket(InetAddress.getByName(args[0]) , Integer.parseInt(args[1]));
-			is = sock.getInputStream();
-			os = sock.getOutputStream();
-			Client client = new Client("client");
+			
+			Client client = new Client("client",args[0],args[1]);
 			agc = null;
 			try {
 				agc = new AppGameContainer(client);
@@ -64,12 +59,6 @@ public class Client extends BasicGame {
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 		}
@@ -77,13 +66,8 @@ public class Client extends BasicGame {
 	 @Override
 	    public boolean closeRequested()
 	    {
-		 try {
-			sock.getOutputStream().write(LEAVEGAME);
-			sock.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	       agc.exit();
+		 	cch.closeConnection();
+		 	agc.exit();
 	      return false;
 	    }
 	
@@ -91,14 +75,18 @@ public class Client extends BasicGame {
 	public void render(GameContainer arg0, Graphics arg1) throws SlickException {
 	
 		arg1.drawImage(sendButton, 400, 300);
+		arg1.drawImage(newgameButton, 200, 300);
+		arg1.drawImage(joingameButton, 600, 300);
 		txt.render(arg0, arg1);
 	}
 
 	@Override
 	public void init(GameContainer arg0) throws SlickException {
 		sendButton = new Image("resources/gfx/SendButton.png");
+		joingameButton = new Image("resources/gfx/JoingameButton.png");
+		newgameButton = new Image("resources/gfx/newgameButton.png");
 
-		txt  = new TextField(arg0, arg0.getDefaultFont() , 400, 250, sendButton.getWidth(), 30); //DONT WORK RIGHT!
+		txt  = new TextField(arg0, arg0.getDefaultFont() , 400, 250, sendButton.getWidth(), 30); 
 		txt.setBackgroundColor(new Color(0,0,0));
 		Music bgMusic = new Music("resources/audio/Invincible.ogg");
 		bgMusic.loop();
@@ -106,23 +94,32 @@ public class Client extends BasicGame {
 	}
 
 	@Override
-	public void update(GameContainer arg0, int arg1) throws SlickException {
+	public void update(GameContainer arg0, int arg1) throws SlickException {		
 		
+		/*
+		 * Sends chat message to server
+		 */
 		MouseOverArea moa = new MouseOverArea(arg0, sendButton, 400, 300, sendButton.getWidth(), sendButton.getHeight());
-		if(moa.isMouseOver() && Mouse.isButtonDown(0) && !(txt.getText().equals(""))){
-			System.out.println("PRESSED! Message is: "+ txt.getText());
-			byte[] command = Conversions.intToByteArray(SENDMESSAGE);
-			byte[] length = Conversions.intToByteArray(txt.getText().length());
-			byte[] message = txt.getText().getBytes();
-			try {
-				os.write(command);
-				os.write(length);
-				os.write(message);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		if(moa.isMouseOver() && Mouse.isButtonDown(0) && !(txt.getText().equals(""))){ 
+			System.out.println("PRESSED! Message is: "+ txt.getText()); 
+			cch.sendMessage(txt.getText());
 			txt.setText("");
 		}
-		
+		/*
+		 * Creates new game in server
+		 */
+		moa = new MouseOverArea(arg0, newgameButton, 200, 300, newgameButton.getWidth(), newgameButton.getHeight());
+		if(moa.isMouseOver() && Mouse.isButtonDown(0)){ //Enters several times...
+			System.out.println("PRESSED! NEW GAME"); 
+			//IMPLEMENT
+		}
+		/*
+		 * Joins existing game
+		 */
+		moa = new MouseOverArea(arg0, joingameButton, 600, 300, joingameButton.getWidth(), joingameButton.getHeight());
+		if(moa.isMouseOver() && Mouse.isButtonDown(0)){   //Enters several times...
+			System.out.println("PRESSED! JOIN GAME"); 
+			//IMPLEMENT
+		}
 	}
 }
