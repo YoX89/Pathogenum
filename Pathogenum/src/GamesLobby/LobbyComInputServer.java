@@ -12,6 +12,7 @@ public class LobbyComInputServer extends Thread{
 	InputStream is;
 	Socket conn;
 	LobbyMonitor lm;
+	boolean destroy = false;
 	
 	public LobbyComInputServer(Socket s, LobbyMonitor lm){
 		conn = s;
@@ -25,13 +26,22 @@ public class LobbyComInputServer extends Thread{
 	
 	public void run(){
 		System.out.println("LobbyComInputServer started");
-		while(true){ // ändra t while(!gamestarted)
+		while(!destroy){ // ï¿½ndra t while(!gamestarted)
 			byte[] com = new byte[4];
 			try {
 				is.read(com);
 				System.out.println("Input command read");
 			} catch (IOException e) {
 				e.printStackTrace();
+				try {
+					if(!conn.isClosed()){
+						conn.close();
+						lm.notifyWaiters();
+					}
+					return;	
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 			
 			switch(com[0]){
@@ -41,10 +51,31 @@ public class LobbyComInputServer extends Thread{
 					fetchMessage();
 				} catch (IOException e) {
 					e.printStackTrace();
+					if(!conn.isClosed()){
+						try {
+							conn.close();
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+						lm.notifyWaiters();
+					}
+					System.out.println("LobbyComInputServer stopped");
+					return;
 				}
+			break;
+			case LobbyServer.LEAVEGAME:
+				try {
+					conn.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				lm.notifyWaiters();
+				destroy = true;
 			break;
 			}
 		}
+		System.out.println("LobbyComInputServer stopped");
+		return;
 	}
 
 	private void fetchMessage() throws IOException{

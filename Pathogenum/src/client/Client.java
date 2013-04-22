@@ -32,6 +32,8 @@ public class Client extends BasicGame {
 	static Socket sock = null;
 	static InputStream is = null;
 	static OutputStream os = null;
+	static AppGameContainer agc;
+	
 	public Client(String title) {
 		super(title);
 	}
@@ -43,7 +45,7 @@ public class Client extends BasicGame {
 			is = sock.getInputStream();
 			os = sock.getOutputStream();
 			Client client = new Client("client");
-			AppGameContainer agc = null;
+			agc = null;
 			try {
 				agc = new AppGameContainer(client);
 			} catch (SlickException e1) {
@@ -72,6 +74,19 @@ public class Client extends BasicGame {
 
 		}
 
+	 @Override
+	    public boolean closeRequested()
+	    {
+		 try {
+			sock.getOutputStream().write(LEAVEGAME);
+			sock.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	       agc.exit();
+	      return false;
+	    }
+	
 	@Override
 	public void render(GameContainer arg0, Graphics arg1) throws SlickException {
 	

@@ -16,6 +16,31 @@ import GamesLobby.LobbyServer;
 
 public class TestLobbyServer {
 
+	private void sendMessage(OutputStream os, String message) throws IOException{
+		byte[] buff = Conversions.intToByteArray(LobbyServer.SENDMESSAGE);
+		os.write(buff);
+		buff = Conversions.intToByteArray(message.getBytes().length);
+		os.write(buff);
+		buff = message.getBytes();
+		os.write(buff);
+	}
+	
+	private String readMessage(InputStream is) throws IOException{
+		byte[] buff = new byte[4];
+		is.read(buff);
+		int com = Conversions.ByteArrayToInt(buff);
+		if(com != LobbyServer.SENDMESSAGE){
+			System.out.println("Not sendmessage");
+			return null;
+		}
+		is.read(buff);
+		int mLength = Conversions.ByteArrayToInt(buff);
+		buff = new byte[mLength];
+		is.read(buff);
+		String retmsg = new String(buff);
+		return retmsg;
+	}
+	
 	@Test
 	public void test() {
 		boolean succ = true;
@@ -27,25 +52,15 @@ public class TestLobbyServer {
 			Socket connection = new Socket("localhost",port);
 			InputStream is = connection.getInputStream();
 			OutputStream os = connection.getOutputStream();
-			byte[] buff = Conversions.intToByteArray(LobbyServer.SENDMESSAGE);
-			os.write(buff);
 			String message = "Testphrase";
-			buff = Conversions.intToByteArray(message.getBytes().length);
-			os.write(buff);
-			buff = message.getBytes();
-			os.write(buff);
-			buff = new byte[4];
-			is.read(buff);
-			int com = Conversions.ByteArrayToInt(buff);
-			if(com != LobbyServer.SENDMESSAGE){
+			
+			sendMessage(os, message);
+			String retmsg = readMessage(is);
+			if(retmsg == null){
 				succ = false;
-				System.out.println("Not sendmessage");
+				assertTrue(false);
+				return;
 			}
-			is.read(buff);
-			int mLength = Conversions.ByteArrayToInt(buff);
-			buff = new byte[mLength];
-			is.read(buff);
-			String retmsg = new String(buff);
 			String[] sp = retmsg.split(":");
 			sp[1] = sp[1].trim();
 			if(!sp[1].equals(message)){

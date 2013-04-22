@@ -21,7 +21,7 @@ public class LobbyServer extends Thread{
 	
 	public void run(){
 		System.out.println("LobbyServer started");
-		while(true){//ändra till while(!gamestarted)
+		while(true){//ï¿½ndra till while(!gamestarted)
 			try {
 				Socket conn = s.accept();
 				System.out.println("Client connects");

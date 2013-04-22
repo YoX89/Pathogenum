@@ -26,29 +26,43 @@ public class LobbyComOutputServer extends Thread {
 
 	public void run() {
 		System.out.println("LobbyComOutputServer started");
-		while (true) { // ändra t while(!gamestarted)
-			readAndPrintMsg();
+		while (true) { // ï¿½ndra t while(!gamestarted)
+			try {
+				readAndPrintMsg();
+			} catch (IOException e1) {
+				if(!conn.isClosed()){
+					try {
+						conn.close();
+						System.out.println("LobbyComOutputServer stopped");
+						return;
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					
+				}
+				e1.printStackTrace();
+			}
 			try {
 				lm.waitForEvent(); // wait for event
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			if(conn.isClosed()){
+				System.out.println("LobbyComOutputServer stopped");
+				return;
+			}
 			System.out.println("new turn");
 		}
 	}
 
-	private void readAndPrintMsg() {
+	private void readAndPrintMsg() throws IOException{
 		String msg = lm.getMessage(this);
 		if (msg != null) {
 			byte[] com = Conversions.intToByteArray(LobbyServer.SENDMESSAGE);
-			try {
 				os.write(com);
 				com = Conversions.intToByteArray(msg.getBytes().length);
 				os.write(com);
 				os.write(msg.getBytes());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 }
