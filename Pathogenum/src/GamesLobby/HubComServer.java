@@ -31,10 +31,10 @@ public class HubComServer extends Thread{
 	
 	public void run(){
 		byte[] command = new byte[1];
-		boolean isConnected = true;
-		while(isConnected){
+		int ok = 0;
+		while(ok != -1){
 			try{
-				is.read(command);
+				ok = is.read(command);
 				System.out.println("Command: " + command[0]);
 				switch(command[0]){
 					case ADD:
@@ -48,7 +48,7 @@ public class HubComServer extends Thread{
 						break;
 				}
 			}catch(IOException ie){
-				isConnected = false;
+				ok = -1;
 			}
 		}
 		return;

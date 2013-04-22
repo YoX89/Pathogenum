@@ -25,10 +25,10 @@ public class LobbyServer extends Thread{
 			try {
 				Socket conn = s.accept();
 				System.out.println("Client connects");
-				LobbyComInputServer lcis = new LobbyComInputServer(conn, lm);
 				LobbyComOutputServer lcos = new LobbyComOutputServer(conn, lm);
-				lcis.start();
+				LobbyComInputServer lcis = new LobbyComInputServer(conn, lm);
 				lcos.start();
+				lcis.start();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

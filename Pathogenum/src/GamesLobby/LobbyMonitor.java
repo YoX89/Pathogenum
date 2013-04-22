@@ -57,10 +57,8 @@ public class LobbyMonitor {
 	}
 	
 	public synchronized void waitForEvent() throws InterruptedException{
-		while(messageQueue.size() == 0){//add more stuff as we go along
-			wait();
-		}
-		
+//add more stuff as we go along
+			wait();	
 	}
 	
 	private void setChanged(){

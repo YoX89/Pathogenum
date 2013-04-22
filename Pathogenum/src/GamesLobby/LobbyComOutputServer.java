@@ -28,7 +28,16 @@ public class LobbyComOutputServer extends Thread {
 		System.out.println("LobbyComOutputServer started");
 		while (true) { // �ndra t while(!gamestarted)
 			try {
+				lm.waitForEvent(); // wait for event
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			try {
 				readAndPrintMsg();
+				if(conn.isClosed()){
+					System.out.println("LobbyComOutputServer stopped");
+					return;
+				}
 			} catch (IOException e1) {
 				if(!conn.isClosed()){
 					try {
@@ -39,14 +48,12 @@ public class LobbyComOutputServer extends Thread {
 						e.printStackTrace();
 					}
 					
+				}else{
+					System.out.println("LobbyComOutputServer stopped");
+					return;
 				}
-				e1.printStackTrace();
 			}
-			try {
-				lm.waitForEvent(); // wait for event
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			
 			if(conn.isClosed()){
 				System.out.println("LobbyComOutputServer stopped");
 				return;

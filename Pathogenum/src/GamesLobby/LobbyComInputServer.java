@@ -12,7 +12,6 @@ public class LobbyComInputServer extends Thread{
 	InputStream is;
 	Socket conn;
 	LobbyMonitor lm;
-	boolean destroy = false;
 	
 	public LobbyComInputServer(Socket s, LobbyMonitor lm){
 		conn = s;
@@ -26,10 +25,11 @@ public class LobbyComInputServer extends Thread{
 	
 	public void run(){
 		System.out.println("LobbyComInputServer started");
-		while(!destroy){ // �ndra t while(!gamestarted)
+		int ok = 0;
+		while(ok != -1){ // �ndra t while(!gamestarted)
 			byte[] com = new byte[4];
 			try {
-				is.read(com);
+				ok = is.read(com);
 				System.out.println("Input command read");
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -58,8 +58,10 @@ public class LobbyComInputServer extends Thread{
 							e1.printStackTrace();
 						}
 						lm.notifyWaiters();
+					}else{
+						lm.notifyWaiters();
 					}
-					System.out.println("LobbyComInputServer stopped");
+					System.out.println("LobbyComInputServer stopped1");
 					return;
 				}
 			break;
@@ -70,11 +72,11 @@ public class LobbyComInputServer extends Thread{
 					e.printStackTrace();
 				}
 				lm.notifyWaiters();
-				destroy = true;
+				ok = -1;
 			break;
 			}
 		}
-		System.out.println("LobbyComInputServer stopped");
+		System.out.println("LobbyComInputServer stopped2");
 		return;
 	}
 
