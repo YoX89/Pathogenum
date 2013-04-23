@@ -93,7 +93,7 @@ public class Client extends BasicGame {
 		newgameButton = new Image("resources/gfx/NewgameButton.png");
 		inputText = new TextField(arg0, arg0.getDefaultFont(), 400, 250,
 				sendButton.getWidth(), 30);
-		outputText = new TextField(arg0, arg0.getDefaultFont(), 400, 100, 200,
+		outputText = new TextField(arg0, arg0.getDefaultFont(), 400, 100, 500,
 				100);
 		outputText.setAcceptingInput(false);
 		inputText.setBackgroundColor(new Color(0, 0, 0));

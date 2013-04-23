@@ -30,12 +30,15 @@ public class InputThread extends Thread {
 				case ClientConnectionHandler.SENDMESSAGE:
 					
 					int check = is.read(command);		
-					checkInput(check);
+					if(checkInput(check))
+						return;
 					intCommand = Conversions.ByteArrayToInt(command);
 					byte[] input = new byte[intCommand];
 					check = is.read(input);	
-					checkInput(check);
-					chatBuffer.offer(new String(input));
+					if(checkInput(check))
+						return;
+					String text = new String(input);
+					chatBuffer.offer(text);
 					break;
 				}
 				
@@ -46,15 +49,16 @@ public class InputThread extends Thread {
 		}
 	}
 	
-	private void checkInput(int check) {
+	private boolean checkInput(int check) {
 		if(check == -1){
 			try {
 				sock.close();
+				return true;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		
+		return false;
 	}
 	public ArrayList<String> getChatMessages() {
 
