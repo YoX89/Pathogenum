@@ -6,7 +6,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class LobbyHubState extends BasicGameState{
+public class ClientLobbyState extends BasicGameState{
 
 	public static final int ID = 1;
 	

@@ -75,13 +75,14 @@ public class Client extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer arg0) throws SlickException {
 		BasicGameState Hub = new ClientHubState();
-		//BasicGameState Lobby = new ClientLobbyState();
-		//BasicGameState Game = new ClientGameState();
+		BasicGameState Lobby = new ClientLobbyState();
+		BasicGameState Game = new ClientGameState();
 		
 		addState(Hub);
-//		addState(Lobby);
-//		addState(Game);
+		addState(Lobby);
+		addState(Game);
 		bgs = Hub;
+		
 	}
 	
 	@Override
@@ -90,4 +91,5 @@ public class Client extends StateBasedGame {
 		agc.exit();
 		return false;
 	}
+	
 }

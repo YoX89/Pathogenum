@@ -106,7 +106,7 @@ public class ClientHubState extends BasicGameState{
 		if (moa.isMouseOver() && Mouse.isButtonDown(0)&& !pressedNew) { // Enters several	times...
 			System.out.println("PRESSED! NEW GAME");
 			pressedNew = true;
-			arg1.enterState(1); //LobbyGameState
+			arg1.enterState(ClientLobbyState.ID); //LobbyGameState
 			// IMPLEMENT
 		}
 		/*
@@ -116,8 +116,10 @@ public class ClientHubState extends BasicGameState{
 				joingameButton.getWidth(), joingameButton.getHeight());
 		if (moa.isMouseOver() && Mouse.isButtonDown(0)&& !pressedJoin) { // Enters several
 															// times...
-			System.out.println("PRESSED! JOIN GAME");
+			
 			pressedJoin = true;
+			System.out.println("PRESSED! JOIN GAME");
+			arg1.enterState(ClientGameState.ID);
 			// IMPLEMENT
 		}
 		ArrayList<String> chatList = cch.getMessage();
