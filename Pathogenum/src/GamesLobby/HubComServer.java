@@ -56,12 +56,16 @@ public class HubComServer extends Thread{
 					case SENDMESSAGE:
 						fetchMessage();
 						break;
+					default:
+						connection.close();
+						ok = -1;
+						break;
 				}
 			}catch(IOException ie){
 				ok = -1;
 			}
 		}
-		cm.notifyAll();
+		cm.notifyWaiters();
 		return;
 	}
 

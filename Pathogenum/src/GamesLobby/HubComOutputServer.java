@@ -29,8 +29,7 @@ public class HubComOutputServer extends Thread{
 			try {
 				lm.waitForEvent();
 				if(conn.isClosed()){
-					ok = -1;
-					
+					ok = -1;	
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();

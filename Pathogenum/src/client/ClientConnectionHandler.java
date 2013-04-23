@@ -14,6 +14,8 @@ public class ClientConnectionHandler {
 	private OutputStream os;
 	private InputThread iThread;
 	public static final int SENDMESSAGE = 100, STARTGAME = 101, LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104;
+	
+	
 	public ClientConnectionHandler(InetAddress host, int port){
 		try {
 			sock = new Socket(host , port);

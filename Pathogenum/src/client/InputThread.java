@@ -44,8 +44,8 @@ public class InputThread extends Thread {
                 }
                
             } catch (IOException e) {
-                e.printStackTrace();
-                ok = false;
+                //e.printStackTrace();
+                return;
             }
         }
     }
@@ -53,6 +53,8 @@ public class InputThread extends Thread {
     private boolean checkInput(int check) {
         if(check == -1){
             try {
+            	if(sock.isClosed())
+            		return true;
                 sock.close();
                 return true;
             } catch (IOException e) {

@@ -39,7 +39,9 @@ public void run(){
 				hcos.start();
 				HCS.start();
 			} catch (IOException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
+				System.out.println("Shutting down Hub");
+				return;
 			}
 		}
 		
