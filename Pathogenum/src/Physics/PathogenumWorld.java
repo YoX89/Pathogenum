@@ -51,15 +51,15 @@ public class PathogenumWorld extends World {
 					float ra = a.getShape().getRadius();
 					float rb = b.getShape().getRadius();
 					if(ra==rb){
-						System.out.println("samma storlek????");
+						System.out.println("samma storlek, vad h√§nder????");
 					}else if(ra<rb){
-						System.out.println("B ‰r stˆrst: ra = " + ra + " rb = " +rb);
-						b.getShape().setRadius((float) (rb + Math.pow(rb, 2)-Math.pow(ra, 2)));
-						System.out.println("Efter ˆk: ra = " + a.getShape().getRadius() + " rb = " + b.getShape().getRadius());
+						System.out.println("B ÔøΩr stÔøΩrst: ra = " + ra + " rb = " +rb);
+						b.getShape().setRadius((float) (Math.sqrt(Math.pow(rb, 2)+Math.pow(ra, 2))));
+						System.out.println("Efter ÔøΩk: ra = " + a.getShape().getRadius() + " rb = " + b.getShape().getRadius());
 						removeBodys.add(a.getBody());
 					}else{
-						System.out.println("a ‰r stˆrst: ra = " + ra + " rb = " +rb);
-						a.getShape().setRadius((float) (ra + Math.pow(ra, 2)-Math.pow(rb, 2)));
+						System.out.println("a ÔøΩr stÔøΩrst: ra = " + ra + " rb = " +rb);
+						a.getShape().setRadius((float) (Math.sqrt(Math.pow(ra, 2)+Math.pow(rb, 2))));
 						removeBodys.add(b.getBody());	
 					}
 				}
