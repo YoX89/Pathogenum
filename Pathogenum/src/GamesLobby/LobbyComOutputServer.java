@@ -12,7 +12,8 @@ public class LobbyComOutputServer extends Thread {
 	OutputStream os;
 	Socket conn;
 	LobbyMonitor lm;
-
+	int ok = 0;
+	
 	public LobbyComOutputServer(Socket s, LobbyMonitor lm) {
 		conn = s;
 		try {
@@ -24,44 +25,28 @@ public class LobbyComOutputServer extends Thread {
 		lm.registerOT(this);
 	}
 
-	public void run() {
+	public void run(){
 		System.out.println("LobbyComOutputServer started");
-		while (true) { // �ndra t while(!gamestarted)
+		while(ok != -1){
 			try {
-				lm.waitForEvent(); // wait for event
+				lm.waitForEvent();
+				if(conn.isClosed()){
+					ok = -1;
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			try {
 				readAndPrintMsg();
-				if(conn.isClosed()){
-					System.out.println("LobbyComOutputServer stopped");
-					return;
-				}
-			} catch (IOException e1) {
-				if(!conn.isClosed()){
-					try {
-						conn.close();
-						System.out.println("LobbyComOutputServer stopped");
-						return;
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					
-				}else{
-					System.out.println("LobbyComOutputServer stopped");
-					return;
-				}
+			} catch (IOException e) {
+				//e.printStackTrace();
+				ok = -1;
 			}
-			
-			if(conn.isClosed()){
-				System.out.println("LobbyComOutputServer stopped");
-				return;
-			}
-			System.out.println("new turn");
 		}
+		System.out.println("LobbyComOutputServer stopped");
+		return;
 	}
-
+	
 	private void readAndPrintMsg() throws IOException{
 		String msg = lm.getMessage(this);
 		if (msg != null) {

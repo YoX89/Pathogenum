@@ -57,7 +57,6 @@ public class LobbyMonitor {
 	}
 	
 	public synchronized void waitForEvent() throws InterruptedException{
-//add more stuff as we go along
 			wait();	
 	}
 	

@@ -12,6 +12,7 @@ public class LobbyComInputServer extends Thread{
 	InputStream is;
 	Socket conn;
 	LobbyMonitor lm;
+	int ok = 0;
 	
 	public LobbyComInputServer(Socket s, LobbyMonitor lm){
 		conn = s;
@@ -25,67 +26,44 @@ public class LobbyComInputServer extends Thread{
 	
 	public void run(){
 		System.out.println("LobbyComInputServer started");
-		int ok = 0;
-		while(ok != -1){ // �ndra t while(!gamestarted)
+		while(ok != -1){
 			byte[] com = new byte[4];
 			try {
 				ok = is.read(com);
-				System.out.println("Input command read");
-			} catch (IOException e) {
+			}catch(IOException e){
 				e.printStackTrace();
-				try {
-					if(!conn.isClosed()){
-						conn.close();
-						lm.notifyWaiters();
-					}
-					return;	
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
 			}
 			
 			switch(com[0]){
 			case LobbyServer.SENDMESSAGE:
 				try {
-					System.out.println("\tCommand was SENDMESSAGE");
 					fetchMessage();
 				} catch (IOException e) {
-					e.printStackTrace();
-					if(!conn.isClosed()){
-						try {
-							conn.close();
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-						lm.notifyWaiters();
-					}else{
-						lm.notifyWaiters();
-					}
-					System.out.println("LobbyComInputServer stopped1");
-					return;
+					ok = -1;
 				}
 			break;
 			case LobbyServer.LEAVEGAME:
-				try {
-					conn.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				lm.notifyWaiters();
 				ok = -1;
 			break;
 			}
 		}
+		try {
+			if(!conn.isClosed())
+			conn.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		System.out.println("LobbyComInputServer stopped2");
+		lm.notifyWaiters();
 		return;
 	}
 
 	private void fetchMessage() throws IOException{
 		byte[] buff = new byte[4];
-			is.read(buff);
+			ok = is.read(buff);
 		int mLength = Conversions.ByteArrayToInt(buff);
 		buff = new byte[mLength];
-			is.read(buff);
+			ok = is.read(buff);
 		String message = new String(buff);
 		lm.putMessage(conn.getInetAddress().getHostAddress(),message);
 	}
