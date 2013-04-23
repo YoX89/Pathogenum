@@ -46,6 +46,7 @@ public class NPC extends Entity {
 
 	public void draw(Graphics arg1){
 		Vec2 pos = body.getPosition();
+		changeShapeSize();
 		sh.setLocation(Dimensions.meterToPixel(pos.x) - sh.getWidth()/2, Dimensions.meterToPixel(pos.y) - sh.getHeight()/2);
 		arg1.draw(sh);
 	}
@@ -58,7 +59,7 @@ public class NPC extends Entity {
 				acc[i] = rand.nextInt(2);
 			}
 		} 
-		changeShapeSize();
+		
 		Vec2 f = new Vec2( (force * ms) * (acc[3]-acc[2]), (force* ms) * (acc[1] - acc[0]));
 		Vec2 curr_vec = body.getLinearVelocity();
 		Vec2 new_vec = new Vec2(curr_vec.x + (f.x) , curr_vec.y + (f.y));		
@@ -66,13 +67,5 @@ public class NPC extends Entity {
 		forceCount--;
 
 	}
-	
-	public void changeShapeSize(){
-		Circle c = (Circle) sh;
-		float r = body.getFixtureList().getShape().getRadius();
-		c.setRadius(1000*Dimensions.pixelToMeter(r));
-	}
-
-
 
 }

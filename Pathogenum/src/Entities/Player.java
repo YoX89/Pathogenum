@@ -48,11 +48,5 @@ public class Player extends Entity{
 		sh.setLocation(Dimensions.meterToPixel(pos.x) - sh.getWidth()/2, Dimensions.meterToPixel(pos.y) - sh.getHeight()/2);
 		arg1.draw(sh);
 	}
-	
-	public void changeShapeSize(){
-		Circle c = (Circle) sh;
-		float r = body.getFixtureList().getShape().getRadius();
-		c.setRadius(1000*Dimensions.pixelToMeter(r));
-	}
 
 }

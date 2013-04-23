@@ -4,6 +4,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
@@ -69,6 +70,12 @@ public class Entity {
 			arg1.draw(sh);
 		}
 		
+	}
+	
+	public void changeShapeSize(){
+		Circle c = (Circle) sh;
+		float r = body.getFixtureList().getShape().getRadius();
+		c.setRadius(1000*Dimensions.pixelToMeter(r));
 	}
 	
 	public Vec2 getPos() {
