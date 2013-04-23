@@ -32,6 +32,7 @@ public class LobbyComOutputServer extends Thread {
 				lm.waitForEvent();
 				if(conn.isClosed()){
 					ok = -1;
+					
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -44,6 +45,7 @@ public class LobbyComOutputServer extends Thread {
 			}
 		}
 		System.out.println("LobbyComOutputServer stopped");
+		lm.deRegister(this);
 		return;
 	}
 	
@@ -55,6 +57,7 @@ public class LobbyComOutputServer extends Thread {
 				com = Conversions.intToByteArray(msg.getBytes().length);
 				os.write(com);
 				os.write(msg.getBytes());
+				System.out.println("Sending message: " + msg);
 		}
 	}
 }

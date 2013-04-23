@@ -17,7 +17,6 @@ public class ClientConnectionHandler {
 	public ClientConnectionHandler(InetAddress host, int port){
 		try {
 			sock = new Socket(host , port);
-			is = sock.getInputStream();
 			os = sock.getOutputStream();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -37,14 +36,20 @@ public class ClientConnectionHandler {
 			e.printStackTrace();
 		}
 	}
-	public void closeConnection() {
+	
+	public boolean closeConnection() {
+		if(sock.isClosed())
+			return true;
 		try {
 			sock.getOutputStream().write(LEAVEGAME);
 			sock.close();
+			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	
+		return false;
 	}
+	
 	public ArrayList<String> getMessage(){
 		ArrayList<String> list = iThread.getChatMessages();
 		return list;
