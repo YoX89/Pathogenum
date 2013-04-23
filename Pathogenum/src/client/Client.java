@@ -21,7 +21,8 @@ public class Client extends BasicGame {
 	Image sendButton;
 	Image newgameButton;
 	Image joingameButton;
-	TextField txt;
+	TextField inputText;
+	TextField outputText;
 	static AppGameContainer agc;
 	ClientConnectionHandler cch;
 	public Client(String title,String host, String port) {
@@ -77,17 +78,19 @@ public class Client extends BasicGame {
 		arg1.drawImage(sendButton, 400, 300);
 		arg1.drawImage(newgameButton, 200, 300);
 		arg1.drawImage(joingameButton, 600, 300);
-		txt.render(arg0, arg1);
+		inputText.render(arg0, arg1);
 	}
 
 	@Override
 	public void init(GameContainer arg0) throws SlickException {
 		sendButton = new Image("resources/gfx/SendButton.png");
 		joingameButton = new Image("resources/gfx/JoingameButton.png");
-		newgameButton = new Image("resources/gfx/newgameButton.png");
-
-		txt  = new TextField(arg0, arg0.getDefaultFont() , 400, 250, sendButton.getWidth(), 30); 
-		txt.setBackgroundColor(new Color(0,0,0));
+		newgameButton = new Image("resources/gfx/NewgameButton.png");
+		inputText  = new TextField(arg0, arg0.getDefaultFont() , 400, 250, sendButton.getWidth(), 30); 
+		outputText = new TextField(arg0, arg0.getDefaultFont(), 400, 100, 200, 100);
+		outputText.setAcceptingInput(false);
+		inputText.setBackgroundColor(new Color(0,0,0));
+		outputText.setBackgroundColor(new Color(0,0,0));
 		Music bgMusic = new Music("resources/audio/Invincible.ogg");
 		bgMusic.loop();
 		
@@ -100,10 +103,10 @@ public class Client extends BasicGame {
 		 * Sends chat message to server
 		 */
 		MouseOverArea moa = new MouseOverArea(arg0, sendButton, 400, 300, sendButton.getWidth(), sendButton.getHeight());
-		if(moa.isMouseOver() && Mouse.isButtonDown(0) && !(txt.getText().equals(""))){ 
-			System.out.println("PRESSED! Message is: "+ txt.getText()); 
-			cch.sendMessage(txt.getText());
-			txt.setText("");
+		if(moa.isMouseOver() && Mouse.isButtonDown(0) && !(inputText.getText().equals(""))){ 
+			System.out.println("PRESSED! Message is: "+ inputText.getText()); 
+			cch.sendMessage(inputText.getText());
+			inputText.setText("");
 		}
 		/*
 		 * Creates new game in server
