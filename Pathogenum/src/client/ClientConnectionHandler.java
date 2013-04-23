@@ -11,7 +11,6 @@ import utils.Conversions;
 
 public class ClientConnectionHandler {
 	private Socket sock;
-	private InputStream is;
 	private OutputStream os;
 	private InputThread iThread;
 	public static final int SENDMESSAGE = 100, STARTGAME = 101, LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104;

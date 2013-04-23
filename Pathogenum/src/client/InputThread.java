@@ -11,6 +11,7 @@ import utils.Conversions;
 public class InputThread extends Thread {
 	Socket sock;
 	InputStream is;
+	int check = 0;
 	LinkedList<String> chatBuffer = new LinkedList<String>();
 	public InputThread(Socket sock){
 		this.sock = sock;
@@ -24,15 +25,18 @@ public class InputThread extends Thread {
 		while(true){
 			byte[] command = new byte[4];
 			try {
-				is.read(command);
+				
+				check = is.read(command);
+				checkInput(check);
 				int intCommand = Conversions.ByteArrayToInt(command);
 				switch(intCommand){
 				case ClientConnectionHandler.SENDMESSAGE:
-					
-					int check = is.read(command);		
+					checkInput(check);
+					check = is.read(command);		
 					checkInput(check);
 					intCommand = Conversions.ByteArrayToInt(command);
 					byte[] input = new byte[intCommand];
+					
 					check = is.read(input);	
 					checkInput(check);
 					chatBuffer.offer(new String(input));
