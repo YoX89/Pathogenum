@@ -1,5 +1,6 @@
 package client;
 
+import java.awt.Font;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.gui.TextField;
 
@@ -25,7 +28,9 @@ public class Client extends BasicGame {
 	String[] chatMessages;
 	static AppGameContainer agc;
 	ClientConnectionHandler cch;
-
+	boolean pressedSend = false;
+	boolean pressedJoin = false;
+	boolean pressedNew = false;
 	public Client(String title, String host, String port) {
 		super(title);
 		chatMessages = new String[5];
@@ -91,8 +96,7 @@ public class Client extends BasicGame {
 		sendButton = new Image("resources/gfx/SendButton.png");
 		joingameButton = new Image("resources/gfx/JoingameButton.png");
 		newgameButton = new Image("resources/gfx/NewgameButton.png");
-		inputText = new TextField(arg0, arg0.getDefaultFont(), 400, 250,
-				sendButton.getWidth(), 30);
+		inputText = new TextField(arg0, arg0.getDefaultFont(), 400, 250, sendButton.getWidth(), 30);
 		outputText = new TextField(arg0, arg0.getDefaultFont(), 400, 100, 500,
 				100);
 		outputText.setAcceptingInput(false);
@@ -105,15 +109,26 @@ public class Client extends BasicGame {
 
 	@Override
 	public void update(GameContainer arg0, int arg1) throws SlickException {
-
+		
 		/*
 		 * Sends chat message to server
 		 */
+		if(pressedSend && !Mouse.isButtonDown(0)){
+			pressedSend = false;
+		}
+		if(pressedNew && !Mouse.isButtonDown(0)){
+			pressedNew = false;
+		}
+		if(pressedJoin && !Mouse.isButtonDown(0)){
+			pressedJoin = false;
+		}
+		
 		MouseOverArea moa = new MouseOverArea(arg0, sendButton, 400, 300,
 				sendButton.getWidth(), sendButton.getHeight());
 		if (moa.isMouseOver() && Mouse.isButtonDown(0)
-				&& !(inputText.getText().equals(""))) {
+				&& !(inputText.getText().equals("")) && !pressedSend) {
 			System.out.println("PRESSED! Message is: " + inputText.getText());
+			pressedSend = true;
 			cch.sendMessage(inputText.getText());
 			inputText.setText("");
 		}
@@ -122,9 +137,10 @@ public class Client extends BasicGame {
 		 */
 		moa = new MouseOverArea(arg0, newgameButton, 200, 300,
 				newgameButton.getWidth(), newgameButton.getHeight());
-		if (moa.isMouseOver() && Mouse.isButtonDown(0)) { // Enters several
-															// times...
+		
+		if (moa.isMouseOver() && Mouse.isButtonDown(0)&& !pressedNew) { // Enters several	times...
 			System.out.println("PRESSED! NEW GAME");
+			pressedNew = true;
 			// IMPLEMENT
 		}
 		/*
@@ -132,9 +148,10 @@ public class Client extends BasicGame {
 		 */
 		moa = new MouseOverArea(arg0, joingameButton, 600, 300,
 				joingameButton.getWidth(), joingameButton.getHeight());
-		if (moa.isMouseOver() && Mouse.isButtonDown(0)) { // Enters several
+		if (moa.isMouseOver() && Mouse.isButtonDown(0)&& !pressedJoin) { // Enters several
 															// times...
 			System.out.println("PRESSED! JOIN GAME");
+			pressedJoin = true;
 			// IMPLEMENT
 		}
 		ArrayList<String> chatList = cch.getMessage();
@@ -143,8 +160,6 @@ public class Client extends BasicGame {
 
 	private void popMessages(ArrayList<String> chatList) {
 	
-		
-		
 		int clSize = chatList.size();
 		for (int t = 0; t < clSize; t++) {
 			

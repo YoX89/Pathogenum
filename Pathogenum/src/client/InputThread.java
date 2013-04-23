@@ -12,6 +12,7 @@ public class InputThread extends Thread {
     Socket sock;
     InputStream is;
     LinkedList<String> chatBuffer = new LinkedList<String>();
+    boolean ok = true;
     public InputThread(Socket sock){
         this.sock = sock;
         try {
@@ -21,7 +22,7 @@ public class InputThread extends Thread {
         }
     }
     public void run(){
-        while(true){
+        while(ok){
             byte[] command = new byte[4];
             try {
                 is.read(command);
@@ -43,8 +44,8 @@ public class InputThread extends Thread {
                 }
                
             } catch (IOException e) {
-       
                 e.printStackTrace();
+                ok = false;
             }
         }
     }
