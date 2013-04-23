@@ -15,7 +15,7 @@ public class Entity {
 	
 	public final static int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
 	protected Body body;
-	protected float force = 0.0003f;
+	protected float force = 0.00001f;
 	
 
 	protected Image img;
@@ -85,13 +85,13 @@ public class Entity {
 	public void addForce(int[] acc, int ms){
 		//System.out.println(acc[0] + " " + acc[1] + " " + acc[2] + " " + acc[3]);
 		//System.out.println(body.getMass() + " ");
-		Vec2 f = new Vec2( (force * ms) * (acc[3]-acc[2]), (force* ms) * (acc[1] - acc[0]));
-//		System.out.println("x: " + f.x + " y: " + f.y);
+		Vec2 f = new Vec2( (force) * (acc[3]-acc[2]), (force) * (acc[1] - acc[0]));
 		
-		Vec2 curr_vec = body.getLinearVelocity();
-		Vec2 new_vec = new Vec2(curr_vec.x + (f.x) , curr_vec.y + (f.y));
+		System.out.println("Velocity is: x: " + body.getLinearVelocity().x + " y: " + body.getLinearVelocity().y);
 		
-		body.setLinearVelocity(new_vec);
+		body.applyForceToCenter(f);
+		System.out.println("After force; Velocity is: x: " + body.getLinearVelocity().x + " y: " + body.getLinearVelocity().y);
+//		body.setLinearVelocity(new_vec);
 //		System.out.println(curr_vec.x + " " + new_vec.x);
 //		System.out.println("The difference in velocity is = x: " + (new_vec.x - curr_vec.x) + " and y: " + (new_vec.y - curr_vec.y));
 	}

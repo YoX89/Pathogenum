@@ -37,7 +37,7 @@ public class Player extends Entity{
 		
 		body = world.createBody(bd);
 		body.createFixture(fd);
-		body.setLinearDamping(0.0015f);
+//		body.setLinearDamping(0.0015f);
 		body.setUserData(name);
 	}
 	
