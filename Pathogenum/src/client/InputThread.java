@@ -7,7 +7,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import utils.Conversions;
-
+/**
+ * an inputthread responsible for getting input to the client from the server.
+ * @author BigFarmor, Mardrey
+ *
+ */
 public class InputThread extends Thread {
     Socket sock;
     InputStream is;
@@ -49,7 +53,11 @@ public class InputThread extends Thread {
             }
         }
     }
-   
+   /**
+    * check to see if the input could be read, otherwise close socket
+    * @param check
+    * @return
+    */
     private boolean checkInput(int check) {
         if(check == -1){
             try {
@@ -63,6 +71,10 @@ public class InputThread extends Thread {
         }
         return false;
     }
+    /**
+     * returns the available chatmessages.
+     * @return
+     */
     public ArrayList<String> getChatMessages() {
 
         ArrayList<String> list = new ArrayList<String>();

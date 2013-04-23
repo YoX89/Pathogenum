@@ -23,7 +23,11 @@ import Entities.NPC;
 import Entities.Player;
 import Entities.Wall;
 import Physics.PathogenumWorld;
-
+/**
+ * A gamestate representing the main game window
+ * @author Mardrey, Mynta90, YoX89, BigFarmor
+ *
+ */
 public class ClientGameState extends BasicGameState{
 
 	ArrayList<Image> images;
@@ -103,7 +107,9 @@ public class ClientGameState extends BasicGameState{
 			rmBodys.clear();
 		}		
 	}
-	
+	/**
+	 * returns the id of this gamestate (must not have a duplicate)
+	 */
 	@Override
 	public int getID() {
 		// TODO Auto-generated method stub

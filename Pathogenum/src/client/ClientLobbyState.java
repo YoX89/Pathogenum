@@ -5,7 +5,11 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-
+/**
+ * A gamestate representing the lobby state
+ * @author Mardrey
+ *
+ */
 public class ClientLobbyState extends BasicGameState{
 
 	public static final int ID = 1;
@@ -30,7 +34,9 @@ public class ClientLobbyState extends BasicGameState{
 		// TODO Auto-generated method stub
 		
 	}
-
+	/**
+	 * returns the id of this gamestate (must not have a duplicate)
+	 */
 	@Override
 	public int getID() {
 		return ID;

@@ -16,7 +16,11 @@ import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-
+/**
+ * A gamestate representing the Hub menu, where the list of lobbys will be displayed amongst a global chat window.
+ * @author Mardrey
+ *
+ */
 public class ClientHubState extends BasicGameState{
 
 	public static final int ID = 0;
@@ -32,23 +36,22 @@ public class ClientHubState extends BasicGameState{
 	boolean pressedSend = false;
 	boolean pressedJoin = false;
 	boolean pressedNew = false;
-	
-	public ClientHubState(){
-		
+	/**
+	 * creates a clientConnectionHandler for handling connections to the server.. durr
+	 * @param ia
+	 * @param port
+	 */
+	public ClientHubState(InetAddress ia, int port){
+		try {
+			cch = new ClientConnectionHandler(ia,port);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		try {
-			Client c = (Client)(arg1);
-			cch = new ClientConnectionHandler(InetAddress.getByName(c.getHost()),
-					c.getPort());
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
 		chatMessages = new String[5];
 		sendButton = new Image("resources/gfx/SendButton.png");
 		joingameButton = new Image("resources/gfx/JoingameButton.png");
@@ -78,7 +81,6 @@ public class ClientHubState extends BasicGameState{
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 			throws SlickException {
-
 		/*
 		 * Sends chat message to server
 		 */
@@ -131,13 +133,18 @@ public class ClientHubState extends BasicGameState{
 		popMessages(chatList);
 		
 	}
-
+	/**
+	 * returns the id of this gamestate (must not have a duplicate)
+	 */
 	@Override
 	public int getID() {
 		// TODO Auto-generated method stub
 		return ID;
 	}
-	
+	/**
+	 * outputs the text returned by the inputthread to the 
+	 * @param chatList
+	 */
 	private void popMessages(ArrayList<String> chatList) {
 		
 		int clSize = chatList.size();
@@ -159,16 +166,10 @@ public class ClientHubState extends BasicGameState{
 		System.out.println(messages);
 		outputText.setText(messages);
 	}
-
+	/**
+	 * tells the CCH to close the connection 
+	 */
 	public void closeConnection() {
 		cch.closeConnection();
-	}
-	
-	public void enter(GameContainer container, StateBasedGame stateBasedGame) throws SlickException {
-		  System.out.println("Entering state " + getID());
-	}
-	
-	public void leave(GameContainer container, StateBasedGame stateBasedGame) throws SlickException {
-		  System.out.println("Leaving state " + getID());
 	}
 }

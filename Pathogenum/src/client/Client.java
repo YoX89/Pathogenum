@@ -1,5 +1,8 @@
 package client;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -8,30 +11,34 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+/**
+ * Class that starts the client program and initializes the states.
+ */
 public class Client extends StateBasedGame {
-	
+
 	static AppGameContainer agc;
 	String host;
 	int port;
+	BasicGameState Hub;
+	BasicGameState Lobby;
+	BasicGameState Game;
 	BasicGameState bgs;
 	private boolean init = false;
-	
+
 	public Client(String title, String host, String port) {
 		super(title);
 		this.host = host;
 		this.port = Integer.parseInt(port);
-		
-		
-		
 	}
 
-	public String getHost(){
+	public String getHost() {
 		return host;
 	}
-	public int getPort(){
+
+	public int getPort() {
 		return port;
 	}
-	
+
 	// args0 = hostname, args1 = port
 	public static void main(String args[]) {
 
@@ -61,46 +68,60 @@ public class Client extends StateBasedGame {
 
 	}
 
-
-
 	@Override
 	public void render(GameContainer arg0, Graphics arg1) throws SlickException {
-		if(init)
-		bgs.render(arg0, this, arg1);
+		if (init)
+			bgs.render(arg0, this, arg1);
 
 	}
 
 	@Override
 	public void update(GameContainer arg0, int arg1) throws SlickException {
-		if(init)
-		bgs.update(arg0,this,arg1);
+		if (init)
+			bgs.update(arg0, this, arg1);
 	}
 
-	
-
+	/**
+	 * Initiates state list by adding the states that have been constructed in
+	 * the constructor to the built in list, this runst the states init(). (also
+	 * set bgs to be the first state)
+	 */
 	@Override
 	public void initStatesList(GameContainer arg0) throws SlickException {
-		BasicGameState Hub = new ClientHubState();
-		BasicGameState Lobby = new ClientLobbyState();
-		BasicGameState Game = new ClientGameState();
-		
+		Hub = null;
+		try {
+			Hub = new ClientHubState(InetAddress.getByName(host), port);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		Lobby = new ClientLobbyState();
+		Game = new ClientGameState();
+
 		addState(Hub);
 		addState(Lobby);
 		addState(Game);
-		//Hub.init(arg0, this);
-		//Lobby.init(arg0, this);
-		//Game.init(arg0, this);
 		bgs = Hub;
-		init  = true;
+		init = true;
 	}
-	
+
+	/**
+	 * When the window is about to close, this method is run, it tells the
+	 * connection handler that it should close the connection with the server.
+	 * The server is not able to detect this on its own yet, should be fixed
+	 * hopefully.
+	 */
 	@Override
 	public boolean closeRequested() {
-		//((ClientHubState) bgs).closeConnection();
+		ClientHubState chs = (ClientHubState) (Hub);
+		chs.closeConnection();
 		agc.exit();
 		return false;
 	}
-	
+
+	/**
+	 * To be able to switch states, I hade to override this method, if you find
+	 * a better way. Let me know.
+	 */
 	@Override
 	public void enterState(int id) {
 		try {
@@ -111,5 +132,5 @@ public class Client extends StateBasedGame {
 			e.printStackTrace();
 		}
 	}
-	
+
 }
