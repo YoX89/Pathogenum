@@ -5,12 +5,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
+
 import utils.Conversions;
 
 public class ClientConnectionHandler {
 	private Socket sock;
 	private InputStream is;
 	private OutputStream os;
+	private InputThread iThread;
 	public static final int SENDMESSAGE = 100, STARTGAME = 101, LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104;
 	public ClientConnectionHandler(InetAddress host, int port){
 		try {
@@ -20,6 +23,8 @@ public class ClientConnectionHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		iThread = new InputThread(sock);
+		iThread.start();
 	}
 	public void sendMessage(String message){
 		byte[] command = Conversions.intToByteArray(SENDMESSAGE);
@@ -40,6 +45,10 @@ public class ClientConnectionHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	
+	}
+	public ArrayList<String> getMessage(){
+		ArrayList<String> list = iThread.getChatMessages();
+		return list;
 	}
 	
 }
