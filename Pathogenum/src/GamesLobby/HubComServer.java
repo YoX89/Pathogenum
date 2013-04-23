@@ -11,6 +11,11 @@ import java.util.ArrayList;
 
 import utils.Conversions;
 
+/**
+ * A server that sends and receives data related to the hub
+ * @author Mardrey
+ *
+ */
 public class HubComServer extends Thread{
 	
 	public final static byte ADD = 1, REM = 2, LIST = 3;
@@ -69,6 +74,10 @@ public class HubComServer extends Thread{
 		return;
 	}
 
+	/**
+	 * Lists the name, host and port of all games currently available 
+	 * @param os2
+	 */
 	private void listCommand(OutputStream os2) {
 		ArrayList<GameAddress> addresses = gm.getGameAddresses();
 		int gameNbr = addresses.size();
@@ -96,6 +105,9 @@ public class HubComServer extends Thread{
 		
 	}
 
+	/**Reads a message and puts it in the chat monitor
+	 * @throws IOException
+	 */
 	private void fetchMessage() throws IOException{
 		byte[] buff = new byte[4];
 			ok = is.read(buff);
@@ -106,6 +118,11 @@ public class HubComServer extends Thread{
 		cm.putMessage(connection.getInetAddress().getHostAddress(),message);
 	}
 	
+	/**
+	 * Reads a game address and removes the corresponding game from currently available games
+	 * @param connection2
+	 * @param is2
+	 */
 	private void removeCommand(Socket connection2, InputStream is2) {
 		InetAddress ia = connection2.getInetAddress();
 		String ip = ia.getHostAddress();
@@ -129,6 +146,11 @@ public class HubComServer extends Thread{
 		//skicka conf kanske?
 	}
 
+	/**
+	 * Reads a game address and adds the corresponding game to currently available games
+	 * @param connection2
+	 * @param is2
+	 */
 	private void addCommand(Socket connection2,InputStream is2) {
 		InetAddress ia = connection2.getInetAddress();
 		String ip = ia.getHostAddress();

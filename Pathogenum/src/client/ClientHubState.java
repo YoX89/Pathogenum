@@ -18,7 +18,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 /**
  * A gamestate representing the Hub menu, where the list of lobbys will be displayed amongst a global chat window.
- * @author Mardrey
+ * @author Mardrey, BigFarmor
  *
  */
 public class ClientHubState extends BasicGameState{
@@ -62,7 +62,7 @@ public class ClientHubState extends BasicGameState{
 		outputText.setAcceptingInput(false);
 		inputText.setBackgroundColor(new Color(0, 0, 0));
 		outputText.setBackgroundColor(new Color(0, 0, 0));
-		//Music bgMusic = new Music("resources/audio/Invincible.ogg");
+		//Music bgMusic = new Music("resources/audio/Invincible.ogg"); //:(
 		//bgMusic.loop();
 	}
 
@@ -84,13 +84,13 @@ public class ClientHubState extends BasicGameState{
 		/*
 		 * Sends chat message to server
 		 */
-		if(pressedSend && !Mouse.isButtonDown(0)){
+		if(pressedSend && !Mouse.isButtonDown(0)){ //Prevents clicks being counted several times
 			pressedSend = false;
 		}
-		if(pressedNew && !Mouse.isButtonDown(0)){
+		if(pressedNew && !Mouse.isButtonDown(0)){ // --||--
 			pressedNew = false;
 		}
-		if(pressedJoin && !Mouse.isButtonDown(0)){
+		if(pressedJoin && !Mouse.isButtonDown(0)){// --||--
 			pressedJoin = false;
 		}
 		
@@ -109,7 +109,7 @@ public class ClientHubState extends BasicGameState{
 		moa = new MouseOverArea(arg0, newgameButton, 200, 300,
 				newgameButton.getWidth(), newgameButton.getHeight());
 		
-		if (moa.isMouseOver() && Mouse.isButtonDown(0)&& !pressedNew) { // Enters several	times...
+		if (moa.isMouseOver() && Mouse.isButtonDown(0)&& !pressedNew) { 
 			System.out.println("PRESSED! NEW GAME");
 			pressedNew = true;
 			arg1.enterState(ClientLobbyState.ID);
@@ -121,8 +121,7 @@ public class ClientHubState extends BasicGameState{
 		 */
 		moa = new MouseOverArea(arg0, joingameButton, 600, 300,
 				joingameButton.getWidth(), joingameButton.getHeight());
-		if (moa.isMouseOver() && Mouse.isButtonDown(0)&& !pressedJoin) { // Enters several
-															// times...
+		if (moa.isMouseOver() && Mouse.isButtonDown(0)&& !pressedJoin) { 
 			
 			pressedJoin = true;
 			System.out.println("PRESSED! JOIN GAME");
@@ -142,7 +141,7 @@ public class ClientHubState extends BasicGameState{
 		return ID;
 	}
 	/**
-	 * outputs the text returned by the inputthread to the 
+	 * outputs the text returned by the inputthread to the chat window, pushes older messages down the list
 	 * @param chatList
 	 */
 	private void popMessages(ArrayList<String> chatList) {

@@ -3,7 +3,11 @@ package GamesLobby;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
+/**
+ * A server representing the lobby that starts a corresponding input and output server
+ * @author Mardrey
+ *
+ */
 public class LobbyServer extends Thread{
 	
 	public static final int SENDMESSAGE = 100, STARTGAME = 101, LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104;

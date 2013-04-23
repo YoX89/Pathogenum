@@ -6,6 +6,11 @@ import java.net.Socket;
 
 import utils.Conversions;
 
+/**
+ * A server that handles output from hub to client
+ * @author Mardrey
+ *
+ */
 public class HubComOutputServer extends Thread{
 	OutputStream os;
 	Socket conn;
@@ -22,6 +27,7 @@ public class HubComOutputServer extends Thread{
 		this.lm = lm;
 		lm.registerOT(this);
 	}
+
 
 	public void run(){
 		System.out.println("HubComOutputServer started");
@@ -46,6 +52,10 @@ public class HubComOutputServer extends Thread{
 		return;
 	}
 	
+	/**
+	 * Reads input from monitor and writes to clients 
+	 * @throws IOException
+	 */
 	private void readAndPrintMsg() throws IOException{
 		String msg = lm.getMessage(this);
 		if (msg != null) {

@@ -7,6 +7,11 @@ import java.net.Socket;
 
 import utils.Conversions;
 
+/**
+ * A server that reads input to the lobby and writes it to the monitor
+ * @author Mardrey
+ *
+ */
 public class LobbyComInputServer extends Thread{
 	
 	InputStream is;
@@ -58,6 +63,10 @@ public class LobbyComInputServer extends Thread{
 		return;
 	}
 
+	/**
+	 * Reads messages and puts them in the monitor
+	 * @throws IOException
+	 */
 	private void fetchMessage() throws IOException{
 		byte[] buff = new byte[4];
 			ok = is.read(buff);

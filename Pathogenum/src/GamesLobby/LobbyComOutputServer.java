@@ -7,6 +7,10 @@ import java.net.Socket;
 
 import utils.Conversions;
 
+/**A server that writes output from the monitor and writes it to the clients
+ * @author Mardrey
+ *
+ */
 public class LobbyComOutputServer extends Thread {
 
 	OutputStream os;
@@ -49,6 +53,10 @@ public class LobbyComOutputServer extends Thread {
 		return;
 	}
 	
+	/**
+	 * Reads message from monitor and writes to client
+	 * @throws IOException
+	 */
 	private void readAndPrintMsg() throws IOException{
 		String msg = lm.getMessage(this);
 		if (msg != null) {

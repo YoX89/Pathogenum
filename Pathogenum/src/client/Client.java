@@ -13,6 +13,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 /**
  * Class that starts the client program and initializes the states.
+ * @author Mardrey, BigFarmor
  */
 public class Client extends StateBasedGame {
 
@@ -40,6 +41,10 @@ public class Client extends StateBasedGame {
 	}
 
 	// args0 = hostname, args1 = port
+	/**
+	 * Main method starting client
+	 * @param args
+	 */
 	public static void main(String args[]) {
 
 		try {

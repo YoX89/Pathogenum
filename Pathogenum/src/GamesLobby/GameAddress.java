@@ -1,5 +1,10 @@
 package GamesLobby;
 
+/**
+ * A class that maps a game name, a host address and a port number to each other 
+ * @author Mardrey, BigFarmor
+ *
+ */
 public class GameAddress implements Comparable{
 	private String gameName;
 	private String host;
@@ -22,6 +27,10 @@ public class GameAddress implements Comparable{
 		return gameName;
 	}
 
+	/**
+	 * Compares GameAddresses, returns 0 if equal, -1 if name host or port is smaller than specified object, 1 otherwise
+	 *
+	 */
 	@Override
 	public int compareTo(Object arg0) {
 		GameAddress ga = (GameAddress)arg0;
@@ -46,6 +55,10 @@ public class GameAddress implements Comparable{
 		}
 	}
 	
+	/**
+	 * Compares GameAddresses, returns true if equal, false otherwise
+	 *
+	 */
 	public boolean equals(Object arg0){
 		return (compareTo(arg0) == 0);
 	}
