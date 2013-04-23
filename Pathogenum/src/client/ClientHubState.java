@@ -33,6 +33,10 @@ public class ClientHubState extends BasicGameState{
 	boolean pressedJoin = false;
 	boolean pressedNew = false;
 	
+	public ClientHubState(){
+		
+	}
+	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
@@ -55,8 +59,8 @@ public class ClientHubState extends BasicGameState{
 		outputText.setAcceptingInput(false);
 		inputText.setBackgroundColor(new Color(0, 0, 0));
 		outputText.setBackgroundColor(new Color(0, 0, 0));
-		Music bgMusic = new Music("resources/audio/Invincible.ogg");
-		bgMusic.loop();
+		//Music bgMusic = new Music("resources/audio/Invincible.ogg");
+		//bgMusic.loop();
 	}
 
 	@Override
@@ -106,7 +110,8 @@ public class ClientHubState extends BasicGameState{
 		if (moa.isMouseOver() && Mouse.isButtonDown(0)&& !pressedNew) { // Enters several	times...
 			System.out.println("PRESSED! NEW GAME");
 			pressedNew = true;
-			arg1.enterState(ClientLobbyState.ID); //LobbyGameState
+			arg1.enterState(ClientLobbyState.ID);
+			return;//LobbyGameState
 			// IMPLEMENT
 		}
 		/*
@@ -157,5 +162,13 @@ public class ClientHubState extends BasicGameState{
 
 	public void closeConnection() {
 		cch.closeConnection();
+	}
+	
+	public void enter(GameContainer container, StateBasedGame stateBasedGame) throws SlickException {
+		  System.out.println("Entering state " + getID());
+	}
+	
+	public void leave(GameContainer container, StateBasedGame stateBasedGame) throws SlickException {
+		  System.out.println("Leaving state " + getID());
 	}
 }

@@ -5,6 +5,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class Client extends StateBasedGame {
@@ -13,11 +14,14 @@ public class Client extends StateBasedGame {
 	String host;
 	int port;
 	BasicGameState bgs;
+	private boolean init = false;
 	
 	public Client(String title, String host, String port) {
 		super(title);
 		this.host = host;
 		this.port = Integer.parseInt(port);
+		
+		
 		
 	}
 
@@ -61,12 +65,14 @@ public class Client extends StateBasedGame {
 
 	@Override
 	public void render(GameContainer arg0, Graphics arg1) throws SlickException {
+		if(init)
 		bgs.render(arg0, this, arg1);
 
 	}
 
 	@Override
 	public void update(GameContainer arg0, int arg1) throws SlickException {
+		if(init)
 		bgs.update(arg0,this,arg1);
 	}
 
@@ -81,15 +87,29 @@ public class Client extends StateBasedGame {
 		addState(Hub);
 		addState(Lobby);
 		addState(Game);
+		//Hub.init(arg0, this);
+		//Lobby.init(arg0, this);
+		//Game.init(arg0, this);
 		bgs = Hub;
-		
+		init  = true;
 	}
 	
 	@Override
 	public boolean closeRequested() {
-		((ClientHubState) bgs).closeConnection();
+		//((ClientHubState) bgs).closeConnection();
 		agc.exit();
 		return false;
+	}
+	
+	@Override
+	public void enterState(int id) {
+		try {
+			GameState gs = getState(id);
+			gs.init(agc, this);
+			bgs = (BasicGameState) gs;
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

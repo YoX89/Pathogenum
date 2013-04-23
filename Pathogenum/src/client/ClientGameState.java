@@ -37,8 +37,8 @@ public class ClientGameState extends BasicGameState{
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		System.out.println("HERE");
-		leave(arg0, arg1);
+		//System.out.println("HERE");
+		//leave(arg0, arg1);
 		images = new ArrayList<Image>();
 		shapes = new ArrayList<Shape>();
 		entities = new ArrayList<Entity>();
