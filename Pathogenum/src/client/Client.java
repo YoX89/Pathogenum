@@ -143,6 +143,8 @@ public class Client extends BasicGame {
 
 	private void popMessages(ArrayList<String> chatList) {
 	
+		
+		
 		int clSize = chatList.size();
 		for (int t = 0; t < clSize; t++) {
 			
