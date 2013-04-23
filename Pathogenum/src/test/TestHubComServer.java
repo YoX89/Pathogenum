@@ -18,7 +18,7 @@ import utils.Conversions;
 
 import GamesLobby.GameAddress;
 import GamesLobby.GamesMonitor;
-import GamesLobby.HubComServer;
+import GamesLobby.HubComInputServer;
 import GamesLobby.HubServer;
 
 public class TestHubComServer {
@@ -42,7 +42,7 @@ public class TestHubComServer {
 	
 	private void addGame(String name) throws IOException{
 		byte[] cm = new byte[1];
-		byte com = HubComServer.ADD;
+		byte com = HubComInputServer.ADD;
 		cm[0] = com;
 		os.write(cm[0]);
 		byte[] arr = Conversions.intToByteArray(name.getBytes().length);
@@ -54,7 +54,7 @@ public class TestHubComServer {
 	
 	private ArrayList<GameAddress> listGames() throws IOException{
 		byte[] cm = new byte[1];
-		byte com = HubComServer.LIST;
+		byte com = HubComInputServer.LIST;
 		cm[0] = com;
 		os.write(cm[0]);
 		os.flush();
@@ -82,7 +82,7 @@ public class TestHubComServer {
 	
 	private void removeGame(String name) throws IOException{
 		byte[] cm = new byte[1];
-		byte com = HubComServer.REM;
+		byte com = HubComInputServer.REM;
 		cm[0] = com;
 		os.write(cm[0]);
 		os.write(Conversions.intToByteArray(name.getBytes().length));

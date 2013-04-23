@@ -22,7 +22,7 @@ public class ChatMonitor {
 		ready = new HashMap<String, Boolean>();
 		// register = new HashSet<LobbyComOutputServer>();
 		register = new HashMap<Thread, Boolean>();
-		System.out.println("LobbyMonitor created");
+		System.out.println("ChatMonitor created");
 	}
 
 	/**
@@ -69,7 +69,10 @@ public class ChatMonitor {
 		}
 		return msg;
 	}
-
+	/**
+	 * wait for an event, for example a message being put in the buffer
+	 * @throws InterruptedException
+	 */
 	public synchronized void waitForEvent() throws InterruptedException {
 		wait();
 	}
@@ -95,7 +98,9 @@ public class ChatMonitor {
 		}
 		return true;
 	}
-
+	/**
+	 * notifies all waiting threads
+	 */
 	public synchronized void notifyWaiters() {
 		notifyAll();
 	}

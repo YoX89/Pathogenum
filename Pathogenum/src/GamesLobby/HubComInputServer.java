@@ -16,7 +16,7 @@ import utils.Conversions;
  * @author Mardrey
  *
  */
-public class HubComServer extends Thread{
+public class HubComInputServer extends Thread{
 	
 	public final static byte ADD = 1, REM = 2, LIST = 3;
 	public static final int SENDMESSAGE = 100;
@@ -27,7 +27,7 @@ public class HubComServer extends Thread{
 	ChatMonitor cm;
 	int ok;
 	
-	public HubComServer(Socket connection,GamesMonitor gm, ChatMonitor cm){
+	public HubComInputServer(Socket connection,GamesMonitor gm, ChatMonitor cm){
 		this.connection = connection;
 		this.gm = gm;
 		this.cm = cm;

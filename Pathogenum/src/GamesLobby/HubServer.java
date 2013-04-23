@@ -40,7 +40,7 @@ public void run(){
 			try{
 				Socket conn = Ssock.accept();
 				HubComOutputServer hcos = new HubComOutputServer(conn, cm);
-				HubComServer HCS = new HubComServer(conn, gm, cm);
+				HubComInputServer HCS = new HubComInputServer(conn, gm, cm);
 				hcos.start();
 				HCS.start();
 			} catch (IOException e) {

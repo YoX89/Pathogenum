@@ -17,10 +17,7 @@ public class LobbyMonitor extends ChatMonitor{
 	//HashSet<LobbyComOutputServer> register;
 	
 	public LobbyMonitor(){
-		messageQueue = new LinkedList<String>();
-		ready = new HashMap<String, Boolean>();
-		//register = new HashSet<LobbyComOutputServer>();
-		register = new HashMap<LobbyComOutputServer, Boolean>();
+		super();
 		System.out.println("LobbyMonitor created");
 	}
 
