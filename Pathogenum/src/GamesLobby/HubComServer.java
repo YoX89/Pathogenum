@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 
 import utils.Conversions;
@@ -13,14 +14,18 @@ import utils.Conversions;
 public class HubComServer extends Thread{
 	
 	public final static byte ADD = 1, REM = 2, LIST = 3;
+	public static final int SENDMESSAGE = 100;
 	Socket connection;
 	GamesMonitor gm;
 	InputStream is;
 	OutputStream os;
+	ChatMonitor cm;
+	int ok;
 	
-	public HubComServer(Socket connection,GamesMonitor gm){
+	public HubComServer(Socket connection,GamesMonitor gm, ChatMonitor cm){
 		this.connection = connection;
 		this.gm = gm;
+		this.cm = cm;
 		try {
 			is = connection.getInputStream();
 			os = connection.getOutputStream();
@@ -30,13 +35,15 @@ public class HubComServer extends Thread{
 	}
 	
 	public void run(){
-		byte[] command = new byte[1];
-		int ok = 0;
+		byte[] command = new byte[4];
+		
+		ok = 0;
 		while(ok != -1){
 			try{
 				ok = is.read(command);
+				int com = Conversions.ByteArrayToInt(command);
 				System.out.println("Command: " + command[0]);
-				switch(command[0]){
+				switch(com){
 					case ADD:
 						addCommand(connection,is);
 						break;
@@ -46,11 +53,15 @@ public class HubComServer extends Thread{
 					case LIST:
 						listCommand(os);
 						break;
+					case SENDMESSAGE:
+						fetchMessage();
+						break;
 				}
 			}catch(IOException ie){
 				ok = -1;
 			}
 		}
+		cm.notifyAll();
 		return;
 	}
 
@@ -81,6 +92,16 @@ public class HubComServer extends Thread{
 		
 	}
 
+	private void fetchMessage() throws IOException{
+		byte[] buff = new byte[4];
+			ok = is.read(buff);
+		int mLength = Conversions.ByteArrayToInt(buff);
+		buff = new byte[mLength];
+			ok = is.read(buff);
+		String message = new String(buff);
+		cm.putMessage(connection.getInetAddress().getHostAddress(),message);
+	}
+	
 	private void removeCommand(Socket connection2, InputStream is2) {
 		InetAddress ia = connection2.getInetAddress();
 		String ip = ia.getHostAddress();
@@ -124,7 +145,7 @@ public class HubComServer extends Thread{
 		String gameName = new String(name);
 		GameAddress ga = new GameAddress(gameName, ip, port);
 		gm.addGame(ga);
-		//skicka conf här med maybe?
+		//skicka conf hï¿½r med maybe?
 	}
 
 }
