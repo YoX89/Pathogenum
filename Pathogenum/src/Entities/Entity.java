@@ -21,6 +21,8 @@ public class Entity {
 	protected Image img;
 	protected Shape sh;
 	protected String name;
+	protected Vec2 speed;
+	
 	
 //	public Entity(int x, int y, String name, Image img, PathogenumWorld world){
 //		this.name = name;
@@ -42,6 +44,7 @@ public class Entity {
 //		body.setLinearDamping(0.0015f);
 //	}
 	public Entity(String name, Shape sh, PathogenumWorld world){
+		speed = new Vec2();
 		this.name = name;
 		this.sh = sh;
 		
@@ -86,10 +89,10 @@ public class Entity {
 		//System.out.println(acc[0] + " " + acc[1] + " " + acc[2] + " " + acc[3]);
 		//System.out.println(body.getMass() + " ");
 		Vec2 f = new Vec2( (force) * (acc[3]-acc[2]), (force) * (acc[1] - acc[0]));
-		
+		speed = speed.add(f);
 		System.out.println("Velocity is: x: " + body.getLinearVelocity().x + " y: " + body.getLinearVelocity().y);
 		
-		body.applyForceToCenter(f);
+		body.applyLinearImpulse(speed,getPos());
 		System.out.println("After force; Velocity is: x: " + body.getLinearVelocity().x + " y: " + body.getLinearVelocity().y);
 //		body.setLinearVelocity(new_vec);
 //		System.out.println(curr_vec.x + " " + new_vec.x);
