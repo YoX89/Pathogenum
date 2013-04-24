@@ -1,10 +1,10 @@
 package client;
-
 import java.io.File;
 import java.util.ArrayList;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.World;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -17,7 +17,6 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import utils.Dimensions;
-
 import Entities.Entity;
 import Entities.NPC;
 import Entities.Player;
@@ -34,7 +33,7 @@ public class ClientGameState extends BasicGameState{
 	ArrayList<Shape> shapes;
 	ArrayList<Entity> entities;
 	Player play;
-	PathogenumWorld world;
+	World world;
 	int[] keys = new int[4];
 	public static final int ID = 2;
 	
@@ -46,6 +45,7 @@ public class ClientGameState extends BasicGameState{
 		images = new ArrayList<Image>();
 		shapes = new ArrayList<Shape>();
 		entities = new ArrayList<Entity>();
+//		world = new PathogenumWorld(new Vec2(0f,9.82f));
 		world = new PathogenumWorld(new Vec2(0f,0f));
 		createWalls();
 		
@@ -82,7 +82,8 @@ public class ClientGameState extends BasicGameState{
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 			throws SlickException {
 		int[] acc = checkMovementKey();
-		world.step(arg2, 3, 3);
+		System.out.println(arg2);
+		world.step(arg2 * 0.001f, 8, 3);
 		for (int i = 3; i<entities.size();++i){
 			entities.get(i).addForce(acc, arg2);
 		}
@@ -92,7 +93,7 @@ public class ClientGameState extends BasicGameState{
 	}
 
 	private void bodyChange(){
-		ArrayList<Body> rmBodys = world.getRemoveBodys();
+		ArrayList<Body> rmBodys = ((PathogenumWorld)world).getRemoveBodys();
 		if(!rmBodys.isEmpty()){
 			for(int i =0; i< rmBodys.size();++i){
 				Body b = rmBodys.get(i);

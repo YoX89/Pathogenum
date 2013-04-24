@@ -43,8 +43,14 @@ public class PathogenumWorld extends World {
 				System.out.println("----------------begin contackt--------------");
 				Fixture a = con.getFixtureA();
 				Fixture b = con.getFixtureB();
+				Body ab = a.getBody();
+				Body bb = b.getBody();
+				System.out.println("AB: " + ab.getLinearVelocity());
+				System.out.println("BB: " + bb.getLinearVelocity());
 				if(a.getShape().getType().equals(ShapeType.POLYGON) || b.getShape().getType().equals(ShapeType.POLYGON)){
 					System.out.println("wall");
+					Vec2 locV = bb.getLinearVelocityFromLocalPoint(ab.getPosition());
+					System.out.println("LinVeclX: " + locV.x + ", LinVecY: " + locV.y);
 				}else {
 					System.out.println("a name " + a.getBody().getUserData());
 					System.out.println("b name " + b.getBody().getUserData());

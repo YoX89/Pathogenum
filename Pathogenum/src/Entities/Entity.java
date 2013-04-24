@@ -2,6 +2,7 @@ package Entities;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.World;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Circle;
@@ -9,19 +10,17 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 import utils.Dimensions;
-import Physics.PathogenumWorld;
 
 public class Entity {
 	
 	public final static int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
 	protected Body body;
-	protected float force = 0.00001f;
-	
+	protected float force = 0.0001f;
 
 	protected Image img;
 	protected Shape sh;
 	protected String name;
-	protected Vec2 speed;
+	//protected Vec2 speed;
 	
 	
 //	public Entity(int x, int y, String name, Image img, PathogenumWorld world){
@@ -43,11 +42,10 @@ public class Entity {
 //		body.createFixture(fd);
 //		body.setLinearDamping(0.0015f);
 //	}
-	public Entity(String name, Shape sh, PathogenumWorld world){
-		speed = new Vec2();
+	public Entity(String name, Shape sh, World world){
+		//speed = new Vec2();
 		this.name = name;
 		this.sh = sh;
-		
 	}
 
 	
@@ -88,12 +86,20 @@ public class Entity {
 	public void addForce(int[] acc, int ms){
 		//System.out.println(acc[0] + " " + acc[1] + " " + acc[2] + " " + acc[3]);
 		//System.out.println(body.getMass() + " ");
-		Vec2 f = new Vec2( (force) * (acc[3]-acc[2]), (force) * (acc[1] - acc[0]));
-		speed = speed.add(f);
-		System.out.println("Velocity is: x: " + body.getLinearVelocity().x + " y: " + body.getLinearVelocity().y);
+		Vec2 f = new Vec2((acc[3]-acc[2]),(acc[1] - acc[0]));
+		f.normalize();
+		f = f.mul((force));
+		//speed = speed.add(f);
 		
-		body.applyLinearImpulse(speed,getPos());
-		System.out.println("After force; Velocity is: x: " + body.getLinearVelocity().x + " y: " + body.getLinearVelocity().y);
+		//speed = speed.add(new Vec2(-1*Math.signum(speed.x)*body.getLinearDamping(),-1*Math.signum(speed.y)*body.getLinearDamping()));
+		
+//		System.out.println("Velocity is: x: " + body.getLinearVelocity().x + " y: " + body.getLinearVelocity().y);
+		
+		//body.applyLinearImpulse(speed,getPos());
+		body.applyLinearImpulse(f, getPos());
+		System.out.println(body.getLinearVelocity().x + ";" + body.getLinearVelocity().y);
+		System.out.println("Inertia" + body.getInertia());
+//		System.out.println("After force; Velocity is: x: " + body.getLinearVelocity().x + " y: " + body.getLinearVelocity().y);
 //		body.setLinearVelocity(new_vec);
 //		System.out.println(curr_vec.x + " " + new_vec.x);
 //		System.out.println("The difference in velocity is = x: " + (new_vec.x - curr_vec.x) + " and y: " + (new_vec.y - curr_vec.y));

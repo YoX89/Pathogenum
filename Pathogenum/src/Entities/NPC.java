@@ -7,20 +7,18 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
+import org.jbox2d.dynamics.World;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
 
 import utils.Dimensions;
-
-import Physics.PathogenumWorld;
 
 public class NPC extends Entity {
 	Random rand = new Random();
 	int forceCount =0;
 	int [] acc = new int [4];
 
-	public NPC(String name, Shape sh, int speed, PathogenumWorld world, float radius) {
+	public NPC(String name, Shape sh, int speed, World world, float radius) {
 		super(name, sh, world);
 
 
@@ -32,10 +30,10 @@ public class NPC extends Entity {
 		cs.m_radius = radius;
 		FixtureDef fd = new FixtureDef();
 		fd.shape = cs;
-		fd.density = 0.5f;
+		fd.density = 1f;
 		fd.friction = 0.3f;        
 		fd.restitution = 0.5f;
-
+		force = 0.001f;
 		body = world.createBody(bd);
 		body.createFixture(fd);
 		body.setLinearDamping(0.0015f);
