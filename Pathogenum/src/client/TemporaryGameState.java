@@ -1,5 +1,4 @@
 package client;
-
 import java.io.File;
 import java.util.ArrayList;
 
@@ -28,9 +27,10 @@ import Physics.PathogenumWorld;
  * @author Mardrey, Mynta90, YoX89, BigFarmor
  * 
  * OBS!!! Should be divided and put in ClientGameState and GameServer
+ *
  */
-public class ClientGameState extends BasicGameState{
-	
+public class TemporaryGameState extends BasicGameState{
+
 	ArrayList<Image> images;
 	ArrayList<Shape> shapes;
 	ArrayList<Entity> entities;
@@ -38,11 +38,7 @@ public class ClientGameState extends BasicGameState{
 	World world;
 	int[] keys = new int[4];
 	public static final int ID = 2;
-
-	ClientConnectionHandler cch;
-	public ClientGameState(ClientConnectionHandler cch){
-		this.cch = cch;
-	}
+	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
@@ -56,7 +52,14 @@ public class ClientGameState extends BasicGameState{
 		createWalls();
 		
 		readImages("resources/gfx/");
-		
+		Circle circle = new Circle(100, 100, Dimensions.meterToPixel(0.5f));
+		shapes.add(circle);
+		play = new Player("Player1",circle, 100, world,0.5f);
+		//play = new Player(0,0,"Player1",images.get(0), 100, world);
+		entities.add(play);
+		entities.add(new NPC("Stand still",new Circle(200, 200, Dimensions.meterToPixel(0.4f)), 100, world,0.4f));
+		entities.add(new NPC("Stand still2",new Circle(400, 200, Dimensions.meterToPixel(0.5f)), 100, world,0.5f));
+		entities.add(new NPC("Stand still3",new Circle(200, 500, Dimensions.meterToPixel(0.6f)), 100, world,0.6f));
 	}
 
 	@Override
@@ -81,13 +84,15 @@ public class ClientGameState extends BasicGameState{
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 			throws SlickException {
 		int[] acc = checkMovementKey();
-		cch.sendMovement(acc);
-		byte[] movements = cch.receiveMovements();
+		System.out.println(arg2);
+		world.step(arg2 * 0.001f, 8, 3);
+		for (int i = 3; i<entities.size();++i){
+			entities.get(i).addForce(acc, arg2);
+		}
+//		play.addForce(acc, arg1);
 		bodyChange();
 		
 	}
-
-	
 
 	private void bodyChange(){
 		ArrayList<Body> rmBodys = ((PathogenumWorld)world).getRemoveBodys();
@@ -167,9 +172,5 @@ public class ClientGameState extends BasicGameState{
 		}
 		return keys;
 	}
-	/**The ugliest method
-	 * @param acc
-	 * @return
-	 */
-	
+
 }

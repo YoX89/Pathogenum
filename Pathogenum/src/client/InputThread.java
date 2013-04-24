@@ -2,6 +2,7 @@ package client;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.DatagramSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -14,11 +15,13 @@ import utils.Conversions;
  */
 public class InputThread extends Thread {
     Socket sock;
+    DatagramSocket udpSocket;
     InputStream is;
     LinkedList<String> chatBuffer = new LinkedList<String>();
     boolean ok = true;
-    public InputThread(Socket sock){
+    public InputThread(Socket sock, DatagramSocket udpSocket){
         this.sock = sock;
+        this.udpSocket = udpSocket;
         try {
             is = sock.getInputStream();
         } catch (IOException e) {

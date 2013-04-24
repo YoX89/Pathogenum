@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import publicMonitors.ChatMonitor;
+
 import utils.Conversions;
 
 /**
@@ -59,7 +61,7 @@ public class HubComOutputServer extends Thread{
 	private void readAndPrintMsg() throws IOException{
 		String msg = lm.getMessage(this);
 		if (msg != null) {
-			byte[] com = Conversions.intToByteArray(LobbyServer.SENDMESSAGE);
+			byte[] com = Conversions.intToByteArray(HubServer.SENDMESSAGE);
 				os.write(com);
 				com = Conversions.intToByteArray(msg.getBytes().length);
 				os.write(com);

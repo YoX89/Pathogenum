@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 
+import publicMonitors.ChatMonitor;
+
 /**
  * A server representing the hub that starts a corresponding input and output server
  * @author Mardrey
@@ -16,6 +18,7 @@ import java.util.ArrayList;
  */
 public class HubServer extends Thread{
 private static ArrayList<GameAddress> gameList = new ArrayList<GameAddress>();
+public static final int SENDMESSAGE = 100, STARTGAME = 101, LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104;
 ServerSocket Ssock;
 GamesMonitor gm;
 ChatMonitor cm;

@@ -100,8 +100,8 @@ public class Client extends StateBasedGame {
 			e.printStackTrace();
 		}
 		Lobby = new ClientLobbyState();
-		Game = new ClientGameState();
-
+		Game = new TemporaryGameState(); //Use the temporary (single player) game state
+		//Game = new ClientGameState(); //Use the client-server game state
 		addState(Hub);
 		addState(Lobby);
 		addState(Game);

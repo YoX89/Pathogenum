@@ -1,4 +1,4 @@
-package GamesLobby;
+package publicMonitors;
 
 import java.util.HashMap;
 import java.util.LinkedList;

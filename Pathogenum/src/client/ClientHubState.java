@@ -125,7 +125,7 @@ public class ClientHubState extends BasicGameState{
 			
 			pressedJoin = true;
 			System.out.println("PRESSED! JOIN GAME");
-			arg1.enterState(ClientGameState.ID);
+			arg1.enterState(TemporaryGameState.ID);
 			// IMPLEMENT
 		}
 		ArrayList<String> chatList = cch.getMessage();

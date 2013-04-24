@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import utils.Conversions;
 
-import GamesLobby.LobbyServer;
+import gameServer.LobbyServer;
 
 public class TestLobbyServer {
 
