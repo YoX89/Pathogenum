@@ -76,7 +76,6 @@ public class TemporaryGameState extends BasicGameState{
 		float rad = ((Circle) play.getShape()).getRadius();
 		float scale = rad/15.625f;
 		scale = 1/scale;
-		System.out.println("Rad: " + rad);
 		arg2.translate(Dimensions.meterToPixel(-px*scale) + (Dimensions.SCREEN_WIDTH/2), Dimensions.meterToPixel(-py*scale) + (Dimensions.SCREEN_HEIGHT/2));
 		arg2.scale(scale,scale);
 
@@ -135,7 +134,6 @@ public class TemporaryGameState extends BasicGameState{
 	}
 	
 	private void createWalls(float wScale) {
-		//Rectangle topWall2 = new Rectangle(Dimensions.meterToPixel(0.0f), Dimensions.meterToPixel(0.0f), Dimensions.SCREEN_WIDTH*2, Dimensions.meterToPixel(0.1f));
 		Rectangle topWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.meterToPixel(0.1f),
 				Dimensions.SCREEN_WIDTH*wScale - Dimensions.meterToPixel(0.2f),
 				Dimensions.meterToPixel(0.1f));
@@ -151,7 +149,6 @@ public class TemporaryGameState extends BasicGameState{
 		Rectangle bottomWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.SCREEN_HEIGHT*2 - Dimensions.meterToPixel(0.1f),
 				Dimensions.SCREEN_WIDTH*wScale - Dimensions.meterToPixel(0.2f),
 				Dimensions.meterToPixel(0.1f));
-		//entities.add(new Wall(topWall2, world));
 		entities.add(new Wall(topWall, world));	
 		entities.add(new Wall(leftWall, world));
 		entities.add(new Wall(rightWall, world));
