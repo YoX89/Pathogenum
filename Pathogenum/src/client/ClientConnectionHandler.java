@@ -9,7 +9,10 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import LobbyServer.LobbyServer;
+
 import utils.Conversions;
+import utils.GameAddress;
 
 /**
  * Class for handling the connection between clients and server.
@@ -25,7 +28,7 @@ public class ClientConnectionHandler {
 	private InetAddress gameHost;
 	private int gamePort;
 	public static final int SENDMESSAGE = 100, STARTGAME = 101,
-			LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104;
+			LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104, GAMELISTING = 105;
 	public static final byte SOUTH = 1, NORTH = 2, EAST = 3, WEST = 4, SOUTHEAST = 13, SOUTHWEST = 14, NORTHEAST = 23, NORTHWEST = 24;
 	public ClientConnectionHandler(InetAddress hubHost, int hubPort) {
 
@@ -146,5 +149,25 @@ public class ClientConnectionHandler {
 	public byte[] receiveMovements() {
 		//IMPLEMENT
 		return null;
+	}
+
+	public void createNewGame(String gameName, int port) {
+		
+		try {
+			os.write(STARTGAME);
+			os.write(Conversions.intToByteArray(port));
+			os.write(Conversions.intToByteArray(gameName.length()));
+			os.write(gameName.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		LobbyServer ls = new LobbyServer(gameName, port);
+		
+	}
+
+	public ArrayList<GameAddress> getGames() {
+		ArrayList<GameAddress> list = iThread.getGames();
+		return list;
 	}
 }

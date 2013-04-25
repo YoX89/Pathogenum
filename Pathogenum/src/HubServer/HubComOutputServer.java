@@ -3,10 +3,12 @@ package HubServer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import publicMonitors.ChatMonitor;
 
 import utils.Conversions;
+import utils.GameAddress;
 
 /**
  * A server that handles output from hub to client
@@ -17,9 +19,10 @@ public class HubComOutputServer extends Thread{
 	OutputStream os;
 	Socket conn;
 	ChatMonitor lm;
+	GamesMonitor gm;
 	int ok = 0;
 	
-	public HubComOutputServer(Socket s, ChatMonitor lm) {
+	public HubComOutputServer(Socket s, ChatMonitor lm, GamesMonitor gm) {
 		conn = s;
 		try {
 			os = conn.getOutputStream();
@@ -27,6 +30,7 @@ public class HubComOutputServer extends Thread{
 			e.printStackTrace();
 		}
 		this.lm = lm;
+		this.gm = gm;
 		lm.registerOT(this);
 	}
 
@@ -35,7 +39,7 @@ public class HubComOutputServer extends Thread{
 		System.out.println("HubComOutputServer started");
 		while(ok != -1){
 			try {
-				lm.waitForEvent();
+				lm.waitForEvent(); //Blä linus vad jobbig du är...
 				if(conn.isClosed()){
 					ok = -1;	
 				}
@@ -44,6 +48,7 @@ public class HubComOutputServer extends Thread{
 			}
 			try {
 				readAndPrintMsg();
+				readAndPrintGames();
 			} catch (IOException e) {
 				//e.printStackTrace();
 				ok = -1;
@@ -54,6 +59,28 @@ public class HubComOutputServer extends Thread{
 		return;
 	}
 	
+	private void readAndPrintGames() {
+		ArrayList<GameAddress> games = gm.getGameAddresses();
+		if(games != null && games.size()!=0){		
+			try {
+				System.out.println("writing game");
+				os.write(Conversions.intToByteArray(HubServer.GAMELISTING));
+				os.write(Conversions.intToByteArray(games.size()));
+				for(GameAddress address : games){
+					os.write(Conversions.intToByteArray(address.getGameName().length()));
+					os.write(address.getGameName().getBytes());
+					os.write(Conversions.intToByteArray(address.getHost().length()));
+					os.write(address.getHost().getBytes());
+					os.write(Conversions.intToByteArray(address.getPort()));
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+
+
 	/**
 	 * Reads input from monitor and writes to clients 
 	 * @throws IOException

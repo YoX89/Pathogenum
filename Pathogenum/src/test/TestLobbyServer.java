@@ -46,7 +46,7 @@ public class TestLobbyServer {
 	public void test() {
 		boolean succ = true;
 		int port = 2085;
-		LobbyServer ls = new LobbyServer(port);
+		LobbyServer ls = new LobbyServer("Testserver",port);
 		ls.start();
 		String returnmsg = "";
 		try {

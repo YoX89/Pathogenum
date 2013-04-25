@@ -10,6 +10,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 
 import publicMonitors.ChatMonitor;
+import utils.GameAddress;
 
 /**
  * A server representing the hub that starts a corresponding input and output server
@@ -18,7 +19,7 @@ import publicMonitors.ChatMonitor;
  */
 public class HubServer extends Thread{
 private static ArrayList<GameAddress> gameList = new ArrayList<GameAddress>();
-public static final int SENDMESSAGE = 100, STARTGAME = 101, LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104;
+public static final int SENDMESSAGE = 100, STARTGAME = 101, LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104, GAMELISTING = 105;
 ServerSocket Ssock;
 GamesMonitor gm;
 ChatMonitor cm;
@@ -42,7 +43,7 @@ public void run(){
 		while(true){
 			try{
 				Socket conn = Ssock.accept();
-				HubComOutputServer hcos = new HubComOutputServer(conn, cm);
+				HubComOutputServer hcos = new HubComOutputServer(conn,cm,gm);
 				HubComInputServer HCS = new HubComInputServer(conn, gm, cm);
 				hcos.start();
 				HCS.start();

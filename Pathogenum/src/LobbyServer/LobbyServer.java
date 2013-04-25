@@ -13,8 +13,10 @@ public class LobbyServer extends Thread{
 	public static final int SENDMESSAGE = 100, STARTGAME = 101, LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104;
 	ServerSocket s;
 	LobbyMonitor lm;
+	String name;
 	
-	public LobbyServer(int port){
+	public LobbyServer(String name, int port){
+		this.name = name;
 		try {
 			s = new ServerSocket(port);
 		} catch (IOException e) {

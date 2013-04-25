@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import publicMonitors.ChatMonitor;
 
 import utils.Conversions;
+import utils.GameAddress;
 
 /**
  * A server that sends and receives data related to the hub
@@ -51,7 +52,7 @@ public class HubComInputServer extends Thread{
 				int com = Conversions.ByteArrayToInt(command);
 				System.out.println("Command: " + command[0]);
 				switch(com){
-					case ADD:
+					case HubServer.STARTGAME:
 						addCommand(connection,is);
 						break;
 					case REM: 

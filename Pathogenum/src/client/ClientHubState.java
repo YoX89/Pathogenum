@@ -18,6 +18,8 @@ import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import utils.GameAddress;
 /**
  * A gamestate representing the Hub menu, where the list of lobbys will be displayed amongst a global chat window.
  * @author Mardrey, BigFarmor
@@ -32,7 +34,11 @@ public class ClientHubState extends BasicGameState{
 	Image joingameButton;
 	TextField inputText;
 	TextField outputText;
+	TextField gamesField;
+	TextField newGameNameField;
+	TextField newGamePortField;
 	String[] chatMessages;
+	ArrayList<GameAddress> gamesList;
 	ClientConnectionHandler cch;
 	
 	boolean pressedSend = false;
@@ -55,15 +61,24 @@ public class ClientHubState extends BasicGameState{
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
 		chatMessages = new String[5];
+		gamesList = new ArrayList<GameAddress>();
 		sendButton = new Image("resources/gfx/SendButton.png");
 		joingameButton = new Image("resources/gfx/JoingameButton.png");
 		newgameButton = new Image("resources/gfx/NewgameButton.png");
 		inputText = new TextField(arg0, arg0.getDefaultFont(), 400, 250, sendButton.getWidth(), 30);
 		outputText = new TextField(arg0, arg0.getDefaultFont(), 400, 100, 500,
 				100);
+		gamesField = new TextField(arg0, arg0.getDefaultFont(), 200, 450, 500,
+				100);
+		newGameNameField =  new TextField(arg0, arg0.getDefaultFont(), 200, 200, newgameButton.getWidth(), 30);
+		newGamePortField =  new TextField(arg0, arg0.getDefaultFont(), 200, 250, newgameButton.getWidth(), 30);
+		newGameNameField.setText("Game Name");
+		newGamePortField.setText("Game Port");
 		outputText.setAcceptingInput(false);
+		gamesField.setAcceptingInput(false);
 		inputText.setBackgroundColor(new Color(0, 0, 0));
 		outputText.setBackgroundColor(new Color(0, 0, 0));
+		gamesField.setBackgroundColor(new Color(0, 0, 0));
 		//Music bgMusic = new Music("resources/audio/Invincible.ogg"); //:(
 		//bgMusic.loop();
 	}
@@ -77,7 +92,9 @@ public class ClientHubState extends BasicGameState{
 		arg2.drawImage(joingameButton, 600, 300);
 		inputText.render(arg0, arg2);
 		outputText.render(arg0, arg2);
-		
+		gamesField.render(arg0,arg2);
+		newGameNameField.render(arg0,arg2);
+		newGamePortField.render(arg0,arg2);
 	}
 
 	@Override
@@ -114,8 +131,14 @@ public class ClientHubState extends BasicGameState{
 		if (moa.isMouseOver() && Mouse.isButtonDown(0)&& !pressedNew) { 
 			System.out.println("PRESSED! NEW GAME");
 			pressedNew = true;
-			arg1.enterState(ClientLobbyState.ID);
-			return;//LobbyGameState
+			int port = checkPortValidity();
+			
+			if(!newGameNameField.getText().equals("") && !newGamePortField.getText().equals("") && port!=-1){
+				cch.createNewGame(newGameNameField.getText(),port);
+				arg1.enterState(ClientLobbyState.ID);
+				return;
+			}
+			//LobbyGameState
 			// IMPLEMENT
 		}
 		/*
@@ -132,8 +155,36 @@ public class ClientHubState extends BasicGameState{
 		}
 		ArrayList<String> chatList = cch.getMessage();
 		popMessages(chatList);
+		gamesList = cch.getGames();
+		printGames(gamesList);
 		
 	}
+	private void printGames(ArrayList<GameAddress> list) {
+		String text = "";
+		for(GameAddress address : list){
+			text+=address.getGameName();
+			text+="  :  ";
+			text+=address.getHost();
+			text+="  :  ";
+			text+=address.getPort();
+			text+="\n";
+		}
+		gamesField.setText(text);
+	}
+
+	private int checkPortValidity() {
+		int port = 0;
+		try{
+			port = Integer.parseInt(newGamePortField.getText());
+			if(port<1024 || port>65535){
+				return -1;
+			}
+		}catch(NumberFormatException e){
+			return -1;
+		}
+		return port;
+	}
+
 	/**
 	 * returns the id of this gamestate (must not have a duplicate)
 	 */

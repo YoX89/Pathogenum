@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import utils.Conversions;
+import utils.GameAddress;
 /**
  * an inputthread responsible for getting input to the client from the server.
  * @author BigFarmor, Mardrey
@@ -18,6 +19,7 @@ public class InputThread extends Thread {
     DatagramSocket udpSocket;
     InputStream is;
     LinkedList<String> chatBuffer = new LinkedList<String>();
+    ArrayList<GameAddress> gameList = new ArrayList<GameAddress>();
     boolean ok = true;
     public InputThread(Socket sock, DatagramSocket udpSocket){
         this.sock = sock;
@@ -36,7 +38,6 @@ public class InputThread extends Thread {
                 int intCommand = Conversions.ByteArrayToInt(command);
                 switch(intCommand){
                 case ClientConnectionHandler.SENDMESSAGE:
-                   
                     int check = is.read(command);       
                     if(checkInput(check))
                         return;
@@ -48,10 +49,42 @@ public class InputThread extends Thread {
                     String text = new String(input);
                     chatBuffer.offer(text);
                     break;
+                case ClientConnectionHandler.GAMELISTING:
+                	System.out.println("gets game");
+                	gameList = new ArrayList<GameAddress>();
+                	int check2 = is.read(command);
+                	 if(checkInput(check2))
+                         return;
+                	 int nbrGames = Conversions.ByteArrayToInt(command);
+                	 for(int i = 0; i < nbrGames; i++){
+                		 check2 = is.read(command);
+                		 if(checkInput(check2))
+                             return;
+                		 int nameLength = Conversions.ByteArrayToInt(command);
+                		 byte[] nameArray = new byte[nameLength];
+                		 check2 = is.read(nameArray);
+                		 if(checkInput(check2))
+                             return;
+                		 String name = new String(nameArray);
+                		 check2 = is.read(command);
+                		 if(checkInput(check2))
+                             return;
+                		 int hostLength = Conversions.ByteArrayToInt(command);
+                		 byte[] hostArray = new byte[hostLength];
+                		 check2 = is.read(hostArray);
+                		 if(checkInput(check2))
+                             return;
+                		 String host = new String(hostArray);
+                		 check2 = is.read(command);
+                		 if(checkInput(check2))
+                             return;
+                		 int port = Conversions.ByteArrayToInt(command);
+                		 gameList.add(new GameAddress(name,host,port));
+                		 break;
+                	 }
                 }
                
             } catch (IOException e) {
-                //e.printStackTrace();
                 return;
             }
         }
@@ -87,5 +120,8 @@ public class InputThread extends Thread {
         }
         return list;
     }
+	public ArrayList<GameAddress> getGames() {
+		return gameList;
+	}
    
 }

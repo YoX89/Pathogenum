@@ -1,6 +1,9 @@
 package HubServer;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
+
+import utils.GameAddress;
 /**
  * a monitor used to store known games for the HubServer
  * @author Mardrey
@@ -9,9 +12,10 @@ import java.util.ArrayList;
 public class GamesMonitor {
 	
 	ArrayList<GameAddress> games;
-	
+	int sentSize = 0;
 	public GamesMonitor(){
 		games = new ArrayList<GameAddress>();
+		games.add(new GameAddress("testgame","localhost",12345));
 	}
 	/**
 	 * add a game address to the known list
@@ -32,6 +36,11 @@ public class GamesMonitor {
 	 * @return
 	 */
 	public synchronized ArrayList<GameAddress> getGameAddresses(){
-		return games;
+		System.out.println("gets game addresses");
+		if(sentSize != games.size()){
+			sentSize = games.size();
+			return games;
+		}
+		return null;
 	}
 }

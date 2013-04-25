@@ -15,8 +15,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import utils.Conversions;
+import utils.GameAddress;
 
-import HubServer.GameAddress;
 import HubServer.GamesMonitor;
 import HubServer.HubComInputServer;
 import HubServer.HubServer;
