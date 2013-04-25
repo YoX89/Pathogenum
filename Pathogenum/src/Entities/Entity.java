@@ -84,7 +84,7 @@ public class Entity {
 	}
 	
 	public void addForce(int[] acc, int ms){
-		//System.out.println(acc[0] + " " + acc[1] + " " + acc[2] + " " + acc[3]);
+//		System.out.println(acc[0] + " " + acc[1] + " " + acc[2] + " " + acc[3]);
 		//System.out.println(body.getMass() + " ");
 		Vec2 f = new Vec2((acc[3]-acc[2]),(acc[1] - acc[0]));
 		f.normalize();
@@ -97,8 +97,8 @@ public class Entity {
 		
 		//body.applyLinearImpulse(speed,getPos());
 		body.applyLinearImpulse(f, getPos());
-		System.out.println(body.getLinearVelocity().x + ";" + body.getLinearVelocity().y);
-		System.out.println("Inertia" + body.getInertia());
+//		System.out.println(body.getLinearVelocity().x + ";" + body.getLinearVelocity().y);
+//		System.out.println("Inertia" + body.getInertia());
 //		System.out.println("After force; Velocity is: x: " + body.getLinearVelocity().x + " y: " + body.getLinearVelocity().y);
 //		body.setLinearVelocity(new_vec);
 //		System.out.println(curr_vec.x + " " + new_vec.x);

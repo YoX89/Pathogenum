@@ -20,7 +20,9 @@ public class NPC extends Entity {
 
 	public NPC(String name, Shape sh, int speed, World world, float radius) {
 		super(name, sh, world);
-
+		for(int i = 0; i<4 ; ++i){
+			acc[i]=0;
+		}
 
 		BodyDef bd = new BodyDef();
 		bd.position = new Vec2(Dimensions.pixelToMeter(sh.getX()), Dimensions.pixelToMeter(sh.getY()));
@@ -33,7 +35,7 @@ public class NPC extends Entity {
 		fd.density = 1f;
 		fd.friction = 0.3f;        
 		fd.restitution = 0.5f;
-		force = 0.001f;
+		force = 0.04f;
 		body = world.createBody(bd);
 		body.createFixture(fd);
 		body.setLinearDamping(0.0015f);
@@ -55,13 +57,9 @@ public class NPC extends Entity {
 			forceCount = rand.nextInt(20);
 			for(int i =0; i<4;++i){
 				acc[i] = rand.nextInt(2);
-			}
-		} 
-		
-		Vec2 f = new Vec2( (force * ms) * (acc[3]-acc[2]), (force* ms) * (acc[1] - acc[0]));
-		Vec2 curr_vec = body.getLinearVelocity();
-		Vec2 new_vec = new Vec2(curr_vec.x + (f.x) , curr_vec.y + (f.y));		
-		body.setLinearVelocity(new_vec);
+			}	
+		}
+		super.addForce(acc, ms);
 		forceCount--;
 
 	}

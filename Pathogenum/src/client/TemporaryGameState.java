@@ -57,9 +57,15 @@ public class TemporaryGameState extends BasicGameState{
 		play = new Player("Player1",circle, 100, world,0.5f);
 		//play = new Player(0,0,"Player1",images.get(0), 100, world);
 		entities.add(play);
-		entities.add(new NPC("Stand still",new Circle(200, 200, Dimensions.meterToPixel(0.4f)), 100, world,0.4f));
-		entities.add(new NPC("Stand still2",new Circle(400, 200, Dimensions.meterToPixel(0.5f)), 100, world,0.5f));
-		entities.add(new NPC("Stand still3",new Circle(200, 500, Dimensions.meterToPixel(0.6f)), 100, world,0.6f));
+		entities.add(new NPC("NPC",new Circle(200, 200, Dimensions.meterToPixel(0.4f)), 100, world,0.4f));
+		entities.add(new NPC("NPC2",new Circle(400, 200, Dimensions.meterToPixel(0.5f)), 100, world,0.5f));
+		entities.add(new NPC("NPC3",new Circle(200, 500, Dimensions.meterToPixel(0.6f)), 100, world,0.6f));
+		entities.add(new NPC("NPC4",new Circle(200, 100, Dimensions.meterToPixel(0.4f)), 100, world,0.4f));
+		entities.add(new NPC("NPC5",new Circle(400, 400, Dimensions.meterToPixel(0.3f)), 100, world,0.3f));
+		entities.add(new NPC("NPC6",new Circle(800, 500, Dimensions.meterToPixel(0.7f)), 100, world,0.7f));
+		entities.add(new NPC("NPC7",new Circle(200, 600, Dimensions.meterToPixel(0.5f)), 100, world,0.5f));
+		entities.add(new NPC("NPC8",new Circle(600, 400, Dimensions.meterToPixel(0.9f)), 100, world,0.9f));
+		entities.add(new NPC("NPC9",new Circle(300, 700, Dimensions.meterToPixel(0.1f)), 100, world,0.1f));
 	}
 
 	@Override
