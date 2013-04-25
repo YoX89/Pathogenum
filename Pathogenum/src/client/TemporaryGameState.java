@@ -49,7 +49,7 @@ public class TemporaryGameState extends BasicGameState{
 		entities = new ArrayList<Entity>();
 //		world = new PathogenumWorld(new Vec2(0f,9.82f));
 		world = new PathogenumWorld(new Vec2(0f,0f));
-		createWalls();
+		createWalls(2);
 		
 		readImages("resources/gfx/");
 		Circle circle = new Circle(100, 100, Dimensions.meterToPixel(0.5f));
@@ -71,10 +71,19 @@ public class TemporaryGameState extends BasicGameState{
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 			throws SlickException {
+		float px = play.getPos().x;
+		float py = play.getPos().y;
+		float rad = ((Circle) play.getShape()).getRadius();
+		float scale = rad/15.625f;
+		scale = 1/scale;
+		System.out.println("Rad: " + rad);
+		arg2.translate(Dimensions.meterToPixel(-px*scale) + (Dimensions.SCREEN_WIDTH/2), Dimensions.meterToPixel(-py*scale) + (Dimensions.SCREEN_HEIGHT/2));
+		arg2.scale(scale,scale);
+
 		for(Entity e: entities){
 			e.draw(arg2);
 		}
-		
+		arg2.resetTransform();
 	}
 	
 	private void readImages(String dir) throws SlickException {
@@ -125,23 +134,24 @@ public class TemporaryGameState extends BasicGameState{
 		return ID;
 	}
 	
-	private void createWalls() {
+	private void createWalls(float wScale) {
+		//Rectangle topWall2 = new Rectangle(Dimensions.meterToPixel(0.0f), Dimensions.meterToPixel(0.0f), Dimensions.SCREEN_WIDTH*2, Dimensions.meterToPixel(0.1f));
 		Rectangle topWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.meterToPixel(0.1f),
-				Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.2f),
+				Dimensions.SCREEN_WIDTH*wScale - Dimensions.meterToPixel(0.2f),
 				Dimensions.meterToPixel(0.1f));
 
 		Rectangle leftWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.meterToPixel(0.1f),
 				Dimensions.meterToPixel(0.1f),
-				Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.2f));
+				Dimensions.SCREEN_HEIGHT*wScale - Dimensions.meterToPixel(0.2f));
 
-		Rectangle rightWall = new Rectangle(Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.1f), Dimensions.meterToPixel(0.1f),
+		Rectangle rightWall = new Rectangle(Dimensions.SCREEN_WIDTH*2 - Dimensions.meterToPixel(0.1f), Dimensions.meterToPixel(0.1f),
 				Dimensions.meterToPixel(0.1f),
-				Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.2f));
+				Dimensions.SCREEN_HEIGHT*wScale - Dimensions.meterToPixel(0.2f));
 
-		Rectangle bottomWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.SCREEN_HEIGHT - Dimensions.meterToPixel(0.1f),
-				Dimensions.SCREEN_WIDTH - Dimensions.meterToPixel(0.2f),
+		Rectangle bottomWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.SCREEN_HEIGHT*2 - Dimensions.meterToPixel(0.1f),
+				Dimensions.SCREEN_WIDTH*wScale - Dimensions.meterToPixel(0.2f),
 				Dimensions.meterToPixel(0.1f));
-
+		//entities.add(new Wall(topWall2, world));
 		entities.add(new Wall(topWall, world));	
 		entities.add(new Wall(leftWall, world));
 		entities.add(new Wall(rightWall, world));

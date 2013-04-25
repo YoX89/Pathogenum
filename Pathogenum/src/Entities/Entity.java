@@ -83,6 +83,14 @@ public class Entity {
 		return body.getPosition();
 	}
 	
+	public Shape getShape(){
+		return sh;
+	}
+	
+	public Body getBody(){
+		return body;
+	}
+	
 	public void addForce(int[] acc, int ms){
 //		System.out.println(acc[0] + " " + acc[1] + " " + acc[2] + " " + acc[3]);
 		//System.out.println(body.getMass() + " ");
