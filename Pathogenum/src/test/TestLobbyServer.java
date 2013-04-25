@@ -10,9 +10,10 @@ import java.net.UnknownHostException;
 
 import org.junit.Test;
 
+import LobbyServer.LobbyServer;
+
 import utils.Conversions;
 
-import gameServer.LobbyServer;
 
 public class TestLobbyServer {
 

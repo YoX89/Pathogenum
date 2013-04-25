@@ -103,7 +103,7 @@ public class TemporaryGameState extends BasicGameState{
 		for (int i = 3; i<entities.size();++i){
 			entities.get(i).addForce(acc, arg2);
 		}
-//		play.addForce(acc, arg1);
+
 		bodyChange();
 		
 	}

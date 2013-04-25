@@ -1,4 +1,4 @@
-package GamesLobby;
+package HubServer;
 
 
 /**A class containing a main method that starts a hub server

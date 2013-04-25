@@ -16,10 +16,10 @@ import org.junit.Test;
 
 import utils.Conversions;
 
-import GamesLobby.GameAddress;
-import GamesLobby.GamesMonitor;
-import GamesLobby.HubComInputServer;
-import GamesLobby.HubServer;
+import HubServer.GameAddress;
+import HubServer.GamesMonitor;
+import HubServer.HubComInputServer;
+import HubServer.HubServer;
 
 public class TestHubComServer {
 

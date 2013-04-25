@@ -1,4 +1,4 @@
-package gameServer;
+package LobbyServer;
 
 import java.util.HashMap;
 import java.util.HashSet;

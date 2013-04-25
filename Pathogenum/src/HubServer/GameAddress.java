@@ -1,4 +1,4 @@
-package GamesLobby;
+package HubServer;
 
 /**
  * A class that maps a game name, a host address and a port number to each other 

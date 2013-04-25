@@ -1,4 +1,4 @@
-package GamesLobby;
+package HubServer;
 
 import java.util.ArrayList;
 /**
