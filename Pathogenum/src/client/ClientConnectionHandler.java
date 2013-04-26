@@ -1,7 +1,6 @@
 package client;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -9,10 +8,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import LobbyServer.LobbyServer;
-
 import utils.Conversions;
 import utils.GameAddress;
+import LobbyServer.LobbyServer;
 
 /**
  * Class for handling the connection between clients and server.
@@ -110,11 +108,14 @@ public class ClientConnectionHandler {
 	 * @param acc
 	 */
 	public void sendMovement(int[] acc) {
+//		System.out.println("Sending movement " + acc[0] + " " + acc[1]+ " " + acc[2]+ " " + acc[3]);
 		byte[] command = {getCommandFromMovementKey(acc)};
+//		System.out.println("Which is command : " + command[0]);
 		if(command[0]!=-1){
 			DatagramPacket movementPacket = new DatagramPacket(command,1,gameHost,gamePort);
 			try {
 				udpSocket.send(movementPacket);
+				System.out.println("Sending packet");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -152,7 +153,7 @@ public class ClientConnectionHandler {
 		if(acc[3]==1){
 			return EAST;
 		}
-		return -1;
+		return 0;
 	}
 
 	public byte[] receiveMovements() {

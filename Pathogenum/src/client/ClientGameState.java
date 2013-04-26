@@ -20,6 +20,7 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import utils.Conversions;
 import utils.Dimensions;
 import Entities.Entity;
 import Entities.NPC;
@@ -34,7 +35,7 @@ import Physics.PathogenumWorld;
  * OBS!!! Should be divided and put in ClientGameState and GameServer
  */
 public class ClientGameState extends BasicGameState{
-	
+
 	ArrayList<Image> images;
 	ArrayList<Shape> shapes;
 	ArrayList<Entity> entities;
@@ -66,10 +67,10 @@ public class ClientGameState extends BasicGameState{
 		images = new ArrayList<Image>();
 		shapes = new ArrayList<Shape>();
 		entities = new ArrayList<Entity>();
-//		world = new PathogenumWorld(new Vec2(0f,9.82f));
+		//		world = new PathogenumWorld(new Vec2(0f,9.82f));
 		world = new PathogenumWorld(new Vec2(0f,0f));
 		createWalls(boundPoints);
-		
+
 		readImages("resources/gfx/");
 		Random rand = new Random();
 		fac = new NpcFactory(rand.nextLong(), (PathogenumWorld)world, boundPoints);
@@ -101,14 +102,14 @@ public class ClientGameState extends BasicGameState{
 		}
 		arg2.scale(scale,scale);
 		arg2.translate(Dimensions.meterToPixel(-px*scale) + (Dimensions.SCREEN_WIDTH/2), Dimensions.meterToPixel(-py*scale) + (Dimensions.SCREEN_HEIGHT/2));
-//		System.out.println("Scale:  " + scale +"   scale*:  " +scale*Dimensions.pixelToMeter(arg0.getScreenWidth()) + "   Screen:  " + Dimensions.pixelToMeter(Dimensions.SCREEN_WIDTH));
+		//		System.out.println("Scale:  " + scale +"   scale*:  " +scale*Dimensions.pixelToMeter(arg0.getScreenWidth()) + "   Screen:  " + Dimensions.pixelToMeter(Dimensions.SCREEN_WIDTH));
 		for(Entity e: entities){
 			e.draw(arg2);
 		}
 		arg2.resetTransform();
-		
+
 	}
-	
+
 	private void readImages(String dir) throws SlickException {
 		File res_dir = new File(dir);
 		String[] files = res_dir.list();
@@ -124,7 +125,7 @@ public class ClientGameState extends BasicGameState{
 		int[] acc = checkMovementKey();
 		cch.sendMovement(acc);
 		byte[] movements = cch.receiveMovements();
-		doMovements(acc, arg2);
+		doMovements(movements, arg2);
 		if(FSAE > FSTBAOE){
 			entities.add(fac.getNpc());
 			FSAE = 0;
@@ -134,7 +135,7 @@ public class ClientGameState extends BasicGameState{
 		removeBodies();	
 	}
 
-	
+
 
 	private void removeBodies(){
 		ArrayList<Body> rmBodys = ((PathogenumWorld)world).getRemoveBodys();
@@ -160,7 +161,7 @@ public class ClientGameState extends BasicGameState{
 		// TODO Auto-generated method stub
 		return ID;
 	}
-	
+
 	private void createWalls(float[] bp) {
 		Rectangle topWall = new Rectangle(bp[0], bp[2],
 				bp[1] - bp[0],
@@ -183,7 +184,7 @@ public class ClientGameState extends BasicGameState{
 		entities.add(new Wall(bottomWall, world));
 
 	}
-	
+
 	private int[] checkMovementKey(){
 		Input i = new Input(0);
 		if(i.isKeyDown(Input.KEY_UP)){
@@ -213,14 +214,65 @@ public class ClientGameState extends BasicGameState{
 		}
 		return keys;
 	}
-	/**The ugliest method
-	 * @param acc
-	 * @return
-	 */
-	private void doMovements(int[] acc, int s){
+
+	private void doMovements(byte[] b, int s){
+		long frame = extractID(b);
+		int acc[] = extractMovements(b);
 		world.step(s * 0.001f, 8, 3);
 		for (int i = 4; i<entities.size();++i){
 			entities.get(i).addForce(acc, s);
 		}
+	}
+
+	private long extractID(byte[] b){
+		byte[] id = new byte[8];
+		for(int i = 0; i < 8; ++i){
+			id[i] = b[i];
+		}
+
+		return Conversions.byteArrayToLong(id);
+	}
+
+	private int[] extractMovements(byte[] b){
+		int[][] movs = new int[b.length-8][4];
+		for(int i = 0; i < b.length-8; ++i){
+			switch (b[i]) {
+			case ClientConnectionHandler.EAST:
+				movs[i][3] = 1;
+				break;
+			case ClientConnectionHandler.NORTH:
+				movs[i][0] = 1;
+				break;
+			case ClientConnectionHandler.NORTHEAST:
+				movs[i][3] = 1;
+				movs[i][0] = 1;
+				break;
+			case ClientConnectionHandler.NORTHWEST:
+				movs[i][0] = 1;
+				movs[i][2] = 1;
+				break;
+			case ClientConnectionHandler.SOUTH:
+				movs[i][1] = 1;
+				break;
+			case ClientConnectionHandler.SOUTHEAST:
+				movs[i][1] = 1;
+				movs[i][3] = 1;
+				break;
+			case ClientConnectionHandler.SOUTHWEST:
+				movs[i][1] = 1;
+				movs[i][2] = 1;
+				break;
+			case ClientConnectionHandler.WEST:
+				movs[i][2] = 1;
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		//TODO Enable more players
+		return movs[0];
+
 	}
 }
