@@ -1,6 +1,7 @@
 package client;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -19,6 +20,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import utils.Dimensions;
 import Entities.Entity;
 import Entities.NPC;
+import Entities.NpcFactory;
 import Entities.Player;
 import Entities.Wall;
 import Physics.PathogenumWorld;
@@ -36,12 +38,22 @@ public class TemporaryGameState extends BasicGameState{
 	ArrayList<Entity> entities;
 	Player play;
 	World world;
+	float[] boundPoints;
 	int[] keys = new int[4];
 	public static final int ID = 2;
-	
+	int FSAE;
+	int FSTBAOE;
+	NpcFactory fac;
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
+		int scale = 2;
+		FSTBAOE = 60;
+		boundPoints = new float[4];
+		boundPoints[0] = Dimensions.meterToPixel(0.1f); //x coordinate for left corners
+		boundPoints[1] = boundPoints[0] + Dimensions.SCREEN_WIDTH*scale - Dimensions.meterToPixel(0.2f); //x coordinate for right corners
+		boundPoints[2] = Dimensions.meterToPixel(0.1f); //y coordinate for upper corners
+		boundPoints[3] = Dimensions.meterToPixel(0.1f) + Dimensions.SCREEN_HEIGHT*scale - Dimensions.meterToPixel(0.2f); // y coordinate for lower corners
 		//System.out.println("HERE");
 		//leave(arg0, arg1);
 		images = new ArrayList<Image>();
@@ -49,23 +61,21 @@ public class TemporaryGameState extends BasicGameState{
 		entities = new ArrayList<Entity>();
 //		world = new PathogenumWorld(new Vec2(0f,9.82f));
 		world = new PathogenumWorld(new Vec2(0f,0f));
-		createWalls(2);
+		createWalls(boundPoints);
 		
 		readImages("resources/gfx/");
+		Random rand = new Random();
+		fac = new NpcFactory(rand.nextLong(), (PathogenumWorld)world, boundPoints);
 		Circle circle = new Circle(100, 100, Dimensions.meterToPixel(0.5f));
 		shapes.add(circle);
 		play = new Player("Player1",circle, 100, world,0.5f);
 		//play = new Player(0,0,"Player1",images.get(0), 100, world);
 		entities.add(play);
-		entities.add(new NPC("NPC",new Circle(200, 200, Dimensions.meterToPixel(0.4f)), 100, world,0.4f));
-		entities.add(new NPC("NPC2",new Circle(400, 200, Dimensions.meterToPixel(0.5f)), 100, world,0.5f));
-		entities.add(new NPC("NPC3",new Circle(200, 500, Dimensions.meterToPixel(0.6f)), 100, world,0.6f));
-		entities.add(new NPC("NPC4",new Circle(200, 100, Dimensions.meterToPixel(0.4f)), 100, world,0.4f));
-		entities.add(new NPC("NPC5",new Circle(400, 400, Dimensions.meterToPixel(0.3f)), 100, world,0.3f));
-		entities.add(new NPC("NPC6",new Circle(800, 500, Dimensions.meterToPixel(0.7f)), 100, world,0.7f));
-		entities.add(new NPC("NPC7",new Circle(200, 600, Dimensions.meterToPixel(0.5f)), 100, world,0.5f));
-		entities.add(new NPC("NPC8",new Circle(600, 400, Dimensions.meterToPixel(0.9f)), 100, world,0.9f));
-		entities.add(new NPC("NPC9",new Circle(300, 700, Dimensions.meterToPixel(0.1f)), 100, world,0.1f));
+		for(int i = 0; i < 10 + rand.nextInt(40); i++){
+			entities.add(fac.getNpc());
+		}
+
+
 	}
 
 	@Override
@@ -74,12 +84,14 @@ public class TemporaryGameState extends BasicGameState{
 		float px = play.getPos().x;
 		float py = play.getPos().y;
 		float rad = ((Circle) play.getShape()).getRadius();
-		float scale = rad/15.625f;
-		scale = 1/scale;
-		
-		arg2.translate(Dimensions.meterToPixel(-px*scale) + (Dimensions.SCREEN_WIDTH/2), Dimensions.meterToPixel(-py*scale) + (Dimensions.SCREEN_HEIGHT/2));
-		arg2.scale(scale,scale);
+		float scale = 15.625f/rad;
 
+		if(scale*Dimensions.pixelToMeter(arg0.getScreenWidth()) < Dimensions.pixelToMeter(Dimensions.SCREEN_WIDTH)){
+			scale = 0.5f;
+		}
+		arg2.scale(scale,scale);
+		arg2.translate(Dimensions.meterToPixel(-px*scale) + (Dimensions.SCREEN_WIDTH/2), Dimensions.meterToPixel(-py*scale) + (Dimensions.SCREEN_HEIGHT/2));
+		System.out.println("Scale:  " + scale +"   scale*:  " +scale*Dimensions.pixelToMeter(arg0.getScreenWidth()) + "   Screen:  " + Dimensions.pixelToMeter(Dimensions.SCREEN_WIDTH));
 		for(Entity e: entities){
 			e.draw(arg2);
 		}
@@ -99,12 +111,17 @@ public class TemporaryGameState extends BasicGameState{
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 			throws SlickException {
 		int[] acc = checkMovementKey();
-		System.out.println(arg2);
+		//System.out.println(arg2);
 		world.step(arg2 * 0.001f, 8, 3);
 		for (int i = 3; i<entities.size();++i){
 			entities.get(i).addForce(acc, arg2);
 		}
-
+		if(FSAE > FSTBAOE){
+			entities.add(fac.getNpc());
+			FSAE = 0;
+		}else{			
+			FSAE++;
+		}
 		bodyChange();
 		
 	}
@@ -134,21 +151,21 @@ public class TemporaryGameState extends BasicGameState{
 		return ID;
 	}
 	
-	private void createWalls(float wScale) {
-		Rectangle topWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.meterToPixel(0.1f),
-				Dimensions.SCREEN_WIDTH*wScale - Dimensions.meterToPixel(0.2f),
+	private void createWalls(float[] bp) {
+		Rectangle topWall = new Rectangle(bp[0], bp[2],
+				bp[1] - bp[0],
 				Dimensions.meterToPixel(0.1f));
 
-		Rectangle leftWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.meterToPixel(0.1f),
+		Rectangle leftWall = new Rectangle(bp[0], bp[2],
 				Dimensions.meterToPixel(0.1f),
-				Dimensions.SCREEN_HEIGHT*wScale - Dimensions.meterToPixel(0.2f));
+				bp[3] - bp[2]);
 
-		Rectangle rightWall = new Rectangle(Dimensions.SCREEN_WIDTH*2 - Dimensions.meterToPixel(0.1f), Dimensions.meterToPixel(0.1f),
+		Rectangle rightWall = new Rectangle(bp[1]-bp[0], bp[2],
 				Dimensions.meterToPixel(0.1f),
-				Dimensions.SCREEN_HEIGHT*wScale - Dimensions.meterToPixel(0.2f));
+				bp[3] - bp[2]);
 
-		Rectangle bottomWall = new Rectangle(Dimensions.meterToPixel(0.1f), Dimensions.SCREEN_HEIGHT*2 - Dimensions.meterToPixel(0.1f),
-				Dimensions.SCREEN_WIDTH*wScale - Dimensions.meterToPixel(0.2f),
+		Rectangle bottomWall = new Rectangle(bp[0], bp[3] - bp[2],
+				bp[1] - bp[0],
 				Dimensions.meterToPixel(0.1f));
 		entities.add(new Wall(topWall, world));	
 		entities.add(new Wall(leftWall, world));
