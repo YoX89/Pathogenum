@@ -163,6 +163,7 @@ public class ClientHubState extends BasicGameState{
 				errorMessages.setText("Invalid port number");
 			}
 			else{
+				
 				cch.createNewGame(newGameNameField.getText(),port);
 				arg1.enterState(ClientLobbyState.ID);
 				return;
