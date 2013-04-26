@@ -13,16 +13,17 @@ import utils.GameAddress;
 
 /**
  * A server that handles output from hub to client
+ * 
  * @author Mardrey
- *
+ * 
  */
-public class HubComOutputServer extends Thread{
+public class HubComOutputServer extends Thread {
 	OutputStream os;
 	Socket conn;
 	ChatMonitor lm;
 	GamesMonitor gm;
 	int ok = 0;
-	
+
 	public HubComOutputServer(Socket s, ChatMonitor lm, GamesMonitor gm) {
 		conn = s;
 		try {
@@ -35,14 +36,13 @@ public class HubComOutputServer extends Thread{
 		lm.registerOT(this);
 	}
 
-
-	public void run(){
+	public void run() {
 		System.out.println("HubComOutputServer started");
-		while(ok != -1){
+		while (ok != -1) {
 			try {
-				lm.waitForEvent(); //Bl� linus vad jobbig du �r...
-				if(conn.isClosed()){
-					ok = -1;	
+				lm.waitForEvent(); // Bl� linus vad jobbig du �r...
+				if (conn.isClosed()) {
+					ok = -1;
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -51,7 +51,7 @@ public class HubComOutputServer extends Thread{
 				readAndPrintMsg();
 				readAndPrintGames();
 			} catch (IOException e) {
-				//e.printStackTrace();
+				// e.printStackTrace();
 				ok = -1;
 			}
 		}
@@ -59,37 +59,38 @@ public class HubComOutputServer extends Thread{
 		lm.deRegister(this);
 		return;
 	}
-	
-	private void readAndPrintGames() throws IOException{
+
+	private void readAndPrintGames() throws IOException {
 		ArrayList<GameAddress> games = gm.getGameAddresses();
-		if(games != null && games.size()!=0){		
-				System.out.println("writing game");
-				os.write(Conversions.intToByteArray(HubServer.GAMELISTING));
-				os.write(Conversions.intToByteArray(games.size()));
-				for(GameAddress address : games){
-					os.write(Conversions.intToByteArray(address.getGameName().length()));
-					os.write(address.getGameName().getBytes());
-					os.write(Conversions.intToByteArray(address.getHost().length()));
-					os.write(address.getHost().getBytes());
-					os.write(Conversions.intToByteArray(address.getPort()));
-				}
+		if (games != null && games.size() != 0) {
+			System.out.println("writing game");
+			os.write(Conversions.intToByteArray(HubServer.GAMELISTING));
+			os.write(Conversions.intToByteArray(games.size()));
+			for (GameAddress address : games) {
+				os.write(Conversions.intToByteArray(address.getGameName()
+						.length()));
+				os.write(address.getGameName().getBytes());
+				os.write(Conversions.intToByteArray(address.getHost().length()));
+				os.write(address.getHost().getBytes());
+				os.write(Conversions.intToByteArray(address.getPort()));
+			}
 		}
 	}
 
-
 	/**
-	 * Reads input from monitor and writes to clients 
+	 * Reads input from monitor and writes to clients
+	 * 
 	 * @throws IOException
 	 */
-	private void readAndPrintMsg() throws IOException{
+	private void readAndPrintMsg() throws IOException {
 		String msg = lm.getMessage(this);
 		if (msg != null) {
 			byte[] com = Conversions.intToByteArray(HubServer.SENDMESSAGE);
-				os.write(com);
-				com = Conversions.intToByteArray(msg.getBytes().length);
-				os.write(com);
-				os.write(msg.getBytes());
-				System.out.println("Sending message: " + msg);
+			os.write(com);
+			com = Conversions.intToByteArray(msg.getBytes().length);
+			os.write(com);
+			os.write(msg.getBytes());
+			System.out.println("Sending message: " + msg);
 		}
 	}
 }
