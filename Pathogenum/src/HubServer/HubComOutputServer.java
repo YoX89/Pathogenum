@@ -48,7 +48,6 @@ public class HubComOutputServer extends Thread {
 			}
 			try {
 				readAndPrintMsg();
-				readAndPrintGames();
 			} catch (IOException e) {
 				// e.printStackTrace();
 				ok = -1;
@@ -61,24 +60,7 @@ public class HubComOutputServer extends Thread {
 
 	
 
-	private void readAndPrintGames() throws IOException{
-		LinkedList<GameAddress> games = gm.getGameAddresses();
-		if(games != null){		
-				System.out.println("writing game");
-				os.write(Conversions.intToByteArray(HubServer.GAMELISTING));
-				os.write(Conversions.intToByteArray(games.size()));
-				int i = 0;
-				for(GameAddress address : games){
-					System.out.println("rapg::forloop::"+i);
-					i++;
-					os.write(Conversions.intToByteArray(address.getGameName().length()));
-					os.write(address.getGameName().getBytes());
-					os.write(Conversions.intToByteArray(address.getHost().length()));
-					os.write(address.getHost().getBytes());
-					os.write(Conversions.intToByteArray(address.getPort()));
-				}
-			}
-	}
+
 
 	/**
 	 * Reads input from monitor and writes to clients

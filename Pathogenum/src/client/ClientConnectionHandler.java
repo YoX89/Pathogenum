@@ -155,7 +155,6 @@ public class ClientConnectionHandler {
 		if(port != -1){
 		try {
 			LobbyServer ls = new LobbyServer(gameName, port);
-			System.out.println("writing new game");
 			ls.start();
 			os.write(STARTGAME);
 			os.write(Conversions.intToByteArray(port));
@@ -169,8 +168,17 @@ public class ClientConnectionHandler {
 	}
 
 	public ArrayList<GameAddress> getGames() {
-		System.out.println("cch::getgames");
 		ArrayList<GameAddress> list = iThread.getGames();
 		return list;
+	}
+
+	public void refreshGames() {
+		byte[] send = Conversions.intToByteArray(GAMELISTING);
+		try {
+			os.write(send);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }
