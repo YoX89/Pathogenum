@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import publicMonitors.ChatMonitor;
 
@@ -20,7 +21,6 @@ import utils.GameAddress;
 public class HubComOutputServer extends Thread {
 	OutputStream os;
 	Socket conn;
-	ChatMonitor lm;
 	GamesMonitor gm;
 	int ok = 0;
 
@@ -31,7 +31,6 @@ public class HubComOutputServer extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		this.lm = lm;
 		this.gm = gm;
 		lm.registerOT(this);
 	}
@@ -40,50 +39,38 @@ public class HubComOutputServer extends Thread {
 		System.out.println("HubComOutputServer started");
 		while (ok != -1) {
 			try {
-				lm.waitForEvent(); // Bl� linus vad jobbig du �r...
-				if (conn.isClosed()) {
-					ok = -1;
+				gm.waitForEvent(); //Bl� linus vad jobbig du �r...
+				if(conn.isClosed()){
+					ok = -1;	
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			try {
 				readAndPrintMsg();
-				readAndPrintGames();
 			} catch (IOException e) {
 				// e.printStackTrace();
 				ok = -1;
 			}
 		}
 		System.out.println("HubComOutputServer stopped");
-		lm.deRegister(this);
+		gm.deRegister(this);
 		return;
 	}
 
-	private void readAndPrintGames() throws IOException {
-		ArrayList<GameAddress> games = gm.getGameAddresses();
-		if (games != null && games.size() != 0) {
-			System.out.println("writing game");
-			os.write(Conversions.intToByteArray(HubServer.GAMELISTING));
-			os.write(Conversions.intToByteArray(games.size()));
-			for (GameAddress address : games) {
-				os.write(Conversions.intToByteArray(address.getGameName()
-						.length()));
-				os.write(address.getGameName().getBytes());
-				os.write(Conversions.intToByteArray(address.getHost().length()));
-				os.write(address.getHost().getBytes());
-				os.write(Conversions.intToByteArray(address.getPort()));
-			}
-		}
-	}
+	
+
+
 
 	/**
 	 * Reads input from monitor and writes to clients
 	 * 
 	 * @throws IOException
 	 */
-	private void readAndPrintMsg() throws IOException {
-		String msg = lm.getMessage(this);
+
+	private void readAndPrintMsg() throws IOException{
+		String msg = gm.getMessage(this);
+
 		if (msg != null) {
 			byte[] com = Conversions.intToByteArray(HubServer.SENDMESSAGE);
 			os.write(com);

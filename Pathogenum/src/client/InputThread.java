@@ -19,11 +19,12 @@ public class InputThread extends Thread {
     DatagramSocket udpSocket;
     InputStream is;
     LinkedList<String> chatBuffer = new LinkedList<String>();
-    ArrayList<GameAddress> gameList = new ArrayList<GameAddress>();
+    ArrayList<GameAddress> gameList;
     boolean ok = true;
     public InputThread(Socket sock, DatagramSocket udpSocket){
         this.sock = sock;
         this.udpSocket = udpSocket;
+        gameList = new ArrayList<GameAddress>();
         try {
             is = sock.getInputStream();
         } catch (IOException e) {
@@ -50,13 +51,13 @@ public class InputThread extends Thread {
                     chatBuffer.offer(text);
                     break;
                 case ClientConnectionHandler.GAMELISTING:
-                	System.out.println("gets game");
                 	gameList = new ArrayList<GameAddress>();
                 	int check2 = is.read(command);
                 	 if(checkInput(check2))
                          return;
                 	 int nbrGames = Conversions.ByteArrayToInt(command);
                 	 for(int i = 0; i < nbrGames; i++){
+
                 		 check2 = is.read(command);
                 		 if(checkInput(check2))
                              return;

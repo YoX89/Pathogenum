@@ -13,7 +13,7 @@ public class ChatMonitor {
 	
 	LinkedList<String> messageQueue;
 	HashMap<String, Boolean> ready;
-	HashMap<Thread, Boolean> register;
+	protected HashMap<Thread, Boolean> register;
 
 	// HashSet<LobbyComOutputServer> register;
 

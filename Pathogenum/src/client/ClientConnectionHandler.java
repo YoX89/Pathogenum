@@ -171,4 +171,14 @@ public class ClientConnectionHandler {
 		ArrayList<GameAddress> list = iThread.getGames();
 		return list;
 	}
+
+	public void refreshGames() {
+		byte[] send = Conversions.intToByteArray(GAMELISTING);
+		try {
+			os.write(send);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 }
