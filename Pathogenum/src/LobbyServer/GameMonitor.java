@@ -21,9 +21,12 @@ public class GameMonitor {
 		this.players = nbrOfPlayers;
 	}
 	
+	public int getNbrPlayers(){
+		return players;
+	}
 	
 	public synchronized void addIncomingCommand(byte b, int player){
-		incComs[player].add(b);
+		incComs[player-1].add(b);
 	}
 	
 	public synchronized byte getIncomingCommand(int player){
@@ -47,10 +50,15 @@ public class GameMonitor {
 		}
 		
 		Byte[] b = outComs.remove(frame);
-		if(b == null)
+		if(b == null){
 			b = new Byte[players];
-		
+			for(int i = 0; i < players; i++){
+				b[i] = 0;
+			}
+		}
 		for(int i = 0; i < players; ++i){
+			System.out.println("c: " + coms[8+i]);
+			System.out.println("b: " + b[i]);
 			coms[8+i] = b[i];
 		}
 		

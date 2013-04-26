@@ -27,11 +27,11 @@ public class ClientConnectionHandler {
 	private InputThread iThread;
 	private InetAddress gameHost;
 	private int gamePort;
+	private int players;
 	public static final int SENDMESSAGE = 100, STARTGAME = 101,
 			LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104, GAMELISTING = 105;
 	public static final byte SOUTH = 1, NORTH = 2, EAST = 3, WEST = 4, SOUTHEAST = 13, SOUTHWEST = 14, NORTHEAST = 23, NORTHWEST = 24;
 	public ClientConnectionHandler(InetAddress hubHost, int hubPort) {
-
 		try {
 			hubSocket = new Socket(hubHost, hubPort);
 			udpSocket = new DatagramSocket();
@@ -147,8 +147,10 @@ public class ClientConnectionHandler {
 	}
 
 	public byte[] receiveMovements() {
-		//IMPLEMENT
-		return null;
+		players = iThread.getPlayers();
+		byte[] buff = new byte[1*players + 8];
+		buff = iThread.recieveMovements(buff);
+		return buff;
 	}
 
 	public void createNewGame(String gameName, int port) {

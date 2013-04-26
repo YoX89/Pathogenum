@@ -52,12 +52,8 @@ public class ClientHubState extends BasicGameState{
 	 * @param ia
 	 * @param port
 	 */
-	public ClientHubState(InetAddress ia, int port){
-		try {
-			cch = new ClientConnectionHandler(ia,port);
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		}
+	public ClientHubState(ClientConnectionHandler cch){
+		this.cch =cch;
 	}
 	
 	@Override

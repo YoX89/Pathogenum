@@ -24,6 +24,7 @@ public class Client extends StateBasedGame {
 	BasicGameState Lobby;
 	BasicGameState Game;
 	BasicGameState bgs;
+	ClientConnectionHandler cch;
 	private boolean init = false;
 
 	public Client(String title, String host, String port) {
@@ -93,14 +94,16 @@ public class Client extends StateBasedGame {
 	 */
 	@Override
 	public void initStatesList(GameContainer arg0) throws SlickException {
+		
 		Hub = null;
 		try {
-			Hub = new ClientHubState(InetAddress.getByName(host), port);
+			cch = new ClientConnectionHandler(InetAddress.getByName(host), port);
+			Hub = new ClientHubState(cch);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
 		Lobby = new ClientLobbyState();
-		Game = new TemporaryGameState(); //Use the temporary (single player) game state
+		Game = new ClientGameState(cch); //Use the temporary (single player) game state
 		//Game = new ClientGameState(); //Use the client-server game state
 		addState(Hub);
 		addState(Lobby);

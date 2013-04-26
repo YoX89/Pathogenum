@@ -32,6 +32,7 @@ public class Wall extends Entity{
 		body = world.createBody(bd);
 		
 		body.createFixture(fd);		
+		body.setUserData(name);
 	}
 	
 	public void draw(Graphics arg1){
