@@ -1,6 +1,8 @@
 package client;
 
 import java.io.File;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -78,6 +80,11 @@ public class ClientGameState extends BasicGameState{
 		entities.add(play);
 		for(int i = 0; i < 10 + rand.nextInt(40); i++){
 			entities.add(fac.getNpc());
+		}
+		try {
+			cch.connectToGame(InetAddress.getLocalHost(), 30000);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
 		}
 	}
 

@@ -97,8 +97,10 @@ public class Client extends StateBasedGame {
 		
 		Hub = null;
 		try {
-			cch = new ClientConnectionHandler(InetAddress.getByName(host), port);
-			Hub = new ClientHubState(cch);
+			InetAddress ia = InetAddress.getByName(host);
+			cch = ClientConnectionHandler.getCCH(ia, port);
+					//new ClientConnectionHandler(InetAddress.getByName(host), port);
+			Hub = new ClientHubState(ia,port);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
