@@ -16,7 +16,7 @@ public class GamesMonitor extends ChatMonitor{
 	
 
 	LinkedList<GameAddress> games;
-	boolean gamesHaveChanged = false;
+
 
 	public GamesMonitor(){
 		games = new LinkedList<GameAddress>();
@@ -28,7 +28,6 @@ public class GamesMonitor extends ChatMonitor{
 	 */
 	public synchronized void addGame(GameAddress ga){
 		games.offer(ga);
-		gamesHaveChanged = true;
 		notifyWaiters();
 	}
 	/**
@@ -37,7 +36,6 @@ public class GamesMonitor extends ChatMonitor{
 	 */
 	public synchronized void removeGame(GameAddress ga){
 		games.remove(ga);
-		gamesHaveChanged = true;
 		notifyWaiters();
 	}
 	/**
@@ -45,10 +43,6 @@ public class GamesMonitor extends ChatMonitor{
 	 * @return
 	 */
 	public synchronized LinkedList<GameAddress> getGameAddresses(){
-		System.out.println("gets game addresses");
-
-	//	if(gamesHaveChanged){
-			gamesHaveChanged = false;
 			return games;
 	//	}
 	//	return null;

@@ -38,6 +38,7 @@ public class ClientHubState extends BasicGameState{
 	TextField gamesField;
 	TextField newGameNameField;
 	TextField newGamePortField;
+	TextField errorMessages;
 	String[] chatMessages;
 	ArrayList<GameAddress> gamesList;
 	ClientConnectionHandler cch;
@@ -76,15 +77,18 @@ public class ClientHubState extends BasicGameState{
 				100);
 		newGameNameField =  new TextField(arg0, arg0.getDefaultFont(), 200, 200, newgameButton.getWidth(), 30);
 		newGamePortField =  new TextField(arg0, arg0.getDefaultFont(), 200, 250, newgameButton.getWidth(), 30);
+		errorMessages = new TextField(arg0, arg0.getDefaultFont(), 50, 680, 300, 30);
 		newGameNameField.setText("Game Name");
 		newGamePortField.setText("Game Port");
 		outputText.setAcceptingInput(false);
 		gamesField.setAcceptingInput(false);
+		errorMessages.setAcceptingInput(false);
 		inputText.setBackgroundColor(new Color(0, 0, 0));
 		outputText.setBackgroundColor(new Color(0, 0, 0));
 		gamesField.setBackgroundColor(new Color(0, 0, 0));
-		Music bgMusic = new Music("resources/audio/Invincible.ogg"); //:(
-		bgMusic.loop();
+		errorMessages.setBackgroundColor(new Color(0, 0, 0));
+		//Music bgMusic = new Music("resources/audio/Invincible.ogg"); //:(
+		//bgMusic.loop();
 	}
 
 	@Override
@@ -100,6 +104,7 @@ public class ClientHubState extends BasicGameState{
 		gamesField.render(arg0,arg2);
 		newGameNameField.render(arg0,arg2);
 		newGamePortField.render(arg0,arg2);
+		errorMessages.render(arg0, arg2);
 	}
 
 	@Override
@@ -139,8 +144,15 @@ public class ClientHubState extends BasicGameState{
 			System.out.println("PRESSED! NEW GAME");
 			pressedNew = true;
 			int port = checkPortValidity();
-			
-			if(!newGameNameField.getText().equals("") && !newGamePortField.getText().equals("") && port!=-1){
+			if(newGameNameField.getText().equals("")){
+				errorMessages.setText("No game name");
+			}else if(newGamePortField.getText().equals("")){
+				errorMessages.setText("No port number");
+			}
+			else if(port == -1){
+				errorMessages.setText("Invalid port number");
+			}
+			else{
 				cch.createNewGame(newGameNameField.getText(),port);
 				arg1.enterState(ClientLobbyState.ID);
 				return;
@@ -179,7 +191,6 @@ public class ClientHubState extends BasicGameState{
 	private void printGames(ArrayList<GameAddress> list) {
 		cch.refreshGames();
 		gamesList = cch.getGames();
-		System.out.println("CHS::printgames");
 		String text = "";
 		for(GameAddress address : list){
 			text+=address.getGameName();

@@ -86,13 +86,11 @@ public class HubComInputServer extends Thread {
 	private void sendGames(OutputStream os2) {
 		LinkedList<GameAddress> games = gm.getGameAddresses();
 		if (games != null) {
-			System.out.println("writing game");
 			try {
 				os2.write(Conversions.intToByteArray(HubServer.GAMELISTING));
 				os2.write(Conversions.intToByteArray(games.size()));
 				int i = 0;
 				for (GameAddress address : games) {
-					System.out.println("rapg::forloop::" + i);
 					i++;
 					os2.write(Conversions.intToByteArray(address.getGameName()
 							.length()));
