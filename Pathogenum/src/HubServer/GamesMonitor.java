@@ -2,6 +2,9 @@ package HubServer;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.LinkedList;
+
+import publicMonitors.ChatMonitor;
 
 import utils.GameAddress;
 /**
@@ -9,20 +12,22 @@ import utils.GameAddress;
  * @author Mardrey
  *
  */
-public class GamesMonitor {
+public class GamesMonitor extends ChatMonitor{
 	
-	ArrayList<GameAddress> games;
-	int sentSize = 0;
+	LinkedList<GameAddress> games;
+	boolean gamesHaveChanged = false;
 	public GamesMonitor(){
-		games = new ArrayList<GameAddress>();
-		games.add(new GameAddress("testgame","localhost",12345));
+		games = new LinkedList<GameAddress>();
+		addGame(new GameAddress("testgame","localhost",12345));
 	}
 	/**
 	 * add a game address to the known list
 	 * @param ga
 	 */
 	public synchronized void addGame(GameAddress ga){
-		games.add(ga);
+		games.offer(ga);
+		gamesHaveChanged = true;
+		notifyWaiters();
 	}
 	/**
 	 * remove a game from the known list of games
@@ -30,15 +35,17 @@ public class GamesMonitor {
 	 */
 	public synchronized void removeGame(GameAddress ga){
 		games.remove(ga);
+		gamesHaveChanged = true;
+		notifyWaiters();
 	}
 	/**
 	 * returns the list of known games
 	 * @return
 	 */
-	public synchronized ArrayList<GameAddress> getGameAddresses(){
+	public synchronized LinkedList<GameAddress> getGameAddresses(){
 		System.out.println("gets game addresses");
-		if(sentSize != games.size()){
-			sentSize = games.size();
+		if(gamesHaveChanged){
+			gamesHaveChanged = false;
 			return games;
 		}
 		return null;

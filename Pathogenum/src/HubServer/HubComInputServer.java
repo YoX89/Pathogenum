@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import publicMonitors.ChatMonitor;
 
@@ -82,7 +83,7 @@ public class HubComInputServer extends Thread{
 	 * @param os2
 	 */
 	private void listCommand(OutputStream os2) {
-		ArrayList<GameAddress> addresses = gm.getGameAddresses();
+		LinkedList<GameAddress> addresses = gm.getGameAddresses();
 		int gameNbr = addresses.size();
 		try {
 			os2.write(Conversions.intToByteArray(gameNbr));

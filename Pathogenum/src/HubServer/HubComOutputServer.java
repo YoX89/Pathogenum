@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import publicMonitors.ChatMonitor;
 
@@ -18,7 +19,6 @@ import utils.GameAddress;
 public class HubComOutputServer extends Thread{
 	OutputStream os;
 	Socket conn;
-	ChatMonitor lm;
 	GamesMonitor gm;
 	int ok = 0;
 	
@@ -29,7 +29,6 @@ public class HubComOutputServer extends Thread{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		this.lm = lm;
 		this.gm = gm;
 		lm.registerOT(this);
 	}
@@ -39,7 +38,7 @@ public class HubComOutputServer extends Thread{
 		System.out.println("HubComOutputServer started");
 		while(ok != -1){
 			try {
-				lm.waitForEvent(); //Blä linus vad jobbig du är...
+				gm.waitForEvent(); //Blï¿½ linus vad jobbig du ï¿½r...
 				if(conn.isClosed()){
 					ok = -1;	
 				}
@@ -55,12 +54,13 @@ public class HubComOutputServer extends Thread{
 			}
 		}
 		System.out.println("HubComOutputServer stopped");
-		lm.deRegister(this);
+		gm.deRegister(this);
 		return;
 	}
 	
 	private void readAndPrintGames() {
-		ArrayList<GameAddress> games = gm.getGameAddresses();
+	
+		LinkedList<GameAddress> games = gm.getGameAddresses();
 		if(games != null && games.size()!=0){		
 			try {
 				System.out.println("writing game");
@@ -86,7 +86,7 @@ public class HubComOutputServer extends Thread{
 	 * @throws IOException
 	 */
 	private void readAndPrintMsg() throws IOException{
-		String msg = lm.getMessage(this);
+		String msg = gm.getMessage(this);
 		if (msg != null) {
 			byte[] com = Conversions.intToByteArray(HubServer.SENDMESSAGE);
 				os.write(com);
