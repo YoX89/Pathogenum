@@ -50,13 +50,14 @@ public class InputThread extends Thread {
                     chatBuffer.offer(text);
                     break;
                 case ClientConnectionHandler.GAMELISTING:
-                	System.out.println("gets game");
+                	System.out.println("GAMELISTING!!!");
                 	gameList = new ArrayList<GameAddress>();
                 	int check2 = is.read(command);
                 	 if(checkInput(check2))
                          return;
                 	 int nbrGames = Conversions.ByteArrayToInt(command);
                 	 for(int i = 0; i < nbrGames; i++){
+                		 System.out.println("gamelist::forloop");
                 		 check2 = is.read(command);
                 		 if(checkInput(check2))
                              return;

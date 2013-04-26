@@ -3,6 +3,7 @@ package HubServer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -58,25 +59,23 @@ public class HubComOutputServer extends Thread{
 		return;
 	}
 	
-	private void readAndPrintGames() {
-	
+
+	private void readAndPrintGames() throws IOException{
 		LinkedList<GameAddress> games = gm.getGameAddresses();
-		if(games != null && games.size()!=0){		
-			try {
+		if(games != null){		
 				System.out.println("writing game");
 				os.write(Conversions.intToByteArray(HubServer.GAMELISTING));
 				os.write(Conversions.intToByteArray(games.size()));
+				int i = 0;
 				for(GameAddress address : games){
+					System.out.println("rapg::forloop::"+i);
+					i++;
 					os.write(Conversions.intToByteArray(address.getGameName().length()));
 					os.write(address.getGameName().getBytes());
 					os.write(Conversions.intToByteArray(address.getHost().length()));
 					os.write(address.getHost().getBytes());
 					os.write(Conversions.intToByteArray(address.getPort()));
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
 		}
 	}
 

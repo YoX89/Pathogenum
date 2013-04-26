@@ -128,7 +128,7 @@ public class ClientHubState extends BasicGameState{
 		moa = new MouseOverArea(arg0, newgameButton, 200, 300,
 				newgameButton.getWidth(), newgameButton.getHeight());
 		
-		if (moa.isMouseOver() && Mouse.isButtonDown(0)&& !pressedNew) { 
+		if (moa.isMouseOver() && Mouse.isButtonDown(0)&& !pressedNew) {
 			System.out.println("PRESSED! NEW GAME");
 			pressedNew = true;
 			int port = checkPortValidity();
@@ -160,6 +160,7 @@ public class ClientHubState extends BasicGameState{
 		
 	}
 	private void printGames(ArrayList<GameAddress> list) {
+		System.out.println("CHS::printgames");
 		String text = "";
 		for(GameAddress address : list){
 			text+=address.getGameName();
@@ -215,7 +216,7 @@ public class ClientHubState extends BasicGameState{
 					messages += "\n";
 				}
 			}
-		System.out.println(messages);
+		//System.out.println(messages);
 		outputText.setText(messages);
 	}
 	/**

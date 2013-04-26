@@ -14,8 +14,10 @@ import utils.GameAddress;
  */
 public class GamesMonitor extends ChatMonitor{
 	
+
 	LinkedList<GameAddress> games;
 	boolean gamesHaveChanged = false;
+
 	public GamesMonitor(){
 		games = new LinkedList<GameAddress>();
 		addGame(new GameAddress("testgame","localhost",12345));
@@ -44,10 +46,11 @@ public class GamesMonitor extends ChatMonitor{
 	 */
 	public synchronized LinkedList<GameAddress> getGameAddresses(){
 		System.out.println("gets game addresses");
-		if(gamesHaveChanged){
+
+	//	if(gamesHaveChanged){
 			gamesHaveChanged = false;
 			return games;
-		}
-		return null;
+	//	}
+	//	return null;
 	}
 }
