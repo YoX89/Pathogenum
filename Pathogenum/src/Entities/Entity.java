@@ -60,7 +60,7 @@ public class Entity {
 	public void draw(Graphics arg1){
 		Vec2 pos = body.getPosition();
 		if(img != null){
-			System.out.println("img draw");
+			//System.out.println("img draw");
 			img.draw(Dimensions.meterToPixel(pos.x) , Dimensions.meterToPixel(pos.y));
 		}else if(sh != null){
 			if(sh instanceof Rectangle){

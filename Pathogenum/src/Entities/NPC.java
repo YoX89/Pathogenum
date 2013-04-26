@@ -17,13 +17,32 @@ public class NPC extends Entity {
 	Random rand = new Random();
 	int forceCount =0;
 	int [] acc = new int [4];
+	long seed;
+	
+	public NPC(String name, Shape sh, int speed, World world, float radius, long seed) {
+		super(name, sh, world);
+		this.seed = seed;
+		BodyDef bd = new BodyDef();
+		bd.position = new Vec2(Dimensions.pixelToMeter(sh.getX()), Dimensions.pixelToMeter(sh.getY()));
 
+		bd.type = BodyType.DYNAMIC;
+		CircleShape cs = new CircleShape();
+		cs.m_radius = radius;
+		FixtureDef fd = new FixtureDef();
+		fd.shape = cs;
+		fd.density = 1f;
+		fd.friction = 0.3f;        
+		fd.restitution = 0.5f;
+		force = 0.04f;
+		body = world.createBody(bd);
+		body.createFixture(fd);
+		body.setLinearDamping(0.0015f);
+		body.setUserData(name);
+	}
+	
 	public NPC(String name, Shape sh, int speed, World world, float radius) {
 		super(name, sh, world);
-		for(int i = 0; i<4 ; ++i){
-			acc[i]=0;
-		}
-
+		this.seed = seed;
 		BodyDef bd = new BodyDef();
 		bd.position = new Vec2(Dimensions.pixelToMeter(sh.getX()), Dimensions.pixelToMeter(sh.getY()));
 
