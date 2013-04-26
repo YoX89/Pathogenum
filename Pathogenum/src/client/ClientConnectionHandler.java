@@ -152,8 +152,10 @@ public class ClientConnectionHandler {
 	}
 
 	public void createNewGame(String gameName, int port) {
-		
+		if(port != -1){
 		try {
+			LobbyServer ls = new LobbyServer(gameName, port);
+			ls.start();
 			os.write(STARTGAME);
 			os.write(Conversions.intToByteArray(port));
 			os.write(Conversions.intToByteArray(gameName.length()));
@@ -161,9 +163,8 @@ public class ClientConnectionHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		LobbyServer ls = new LobbyServer(gameName, port);
-		
+			
+		}
 	}
 
 	public ArrayList<GameAddress> getGames() {

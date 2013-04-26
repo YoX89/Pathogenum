@@ -3,6 +3,7 @@ package HubServer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 import publicMonitors.ChatMonitor;
@@ -39,7 +40,7 @@ public class HubComOutputServer extends Thread{
 		System.out.println("HubComOutputServer started");
 		while(ok != -1){
 			try {
-				lm.waitForEvent(); //Blä linus vad jobbig du är...
+				lm.waitForEvent(); //Blï¿½ linus vad jobbig du ï¿½r...
 				if(conn.isClosed()){
 					ok = -1;	
 				}
@@ -59,10 +60,9 @@ public class HubComOutputServer extends Thread{
 		return;
 	}
 	
-	private void readAndPrintGames() {
+	private void readAndPrintGames() throws IOException{
 		ArrayList<GameAddress> games = gm.getGameAddresses();
 		if(games != null && games.size()!=0){		
-			try {
 				System.out.println("writing game");
 				os.write(Conversions.intToByteArray(HubServer.GAMELISTING));
 				os.write(Conversions.intToByteArray(games.size()));
@@ -73,10 +73,6 @@ public class HubComOutputServer extends Thread{
 					os.write(address.getHost().getBytes());
 					os.write(Conversions.intToByteArray(address.getPort()));
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
 		}
 	}
 

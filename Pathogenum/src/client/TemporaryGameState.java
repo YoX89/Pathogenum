@@ -76,6 +76,7 @@ public class TemporaryGameState extends BasicGameState{
 		float rad = ((Circle) play.getShape()).getRadius();
 		float scale = rad/15.625f;
 		scale = 1/scale;
+		
 		arg2.translate(Dimensions.meterToPixel(-px*scale) + (Dimensions.SCREEN_WIDTH/2), Dimensions.meterToPixel(-py*scale) + (Dimensions.SCREEN_HEIGHT/2));
 		arg2.scale(scale,scale);
 

@@ -44,7 +44,7 @@ public class HubComInputServer extends Thread{
 	
 	public void run(){
 		byte[] command = new byte[4];
-		
+		System.out.println("HubcomInputServer started");
 		ok = 0;
 		while(ok != -1){
 			try{
@@ -73,6 +73,7 @@ public class HubComInputServer extends Thread{
 				ok = -1;
 			}
 		}
+		System.out.println("HubComInputServer stopped");
 		cm.notifyWaiters();
 		return;
 	}
@@ -157,7 +158,15 @@ public class HubComInputServer extends Thread{
 	private void addCommand(Socket connection2,InputStream is2) {
 		InetAddress ia = connection2.getInetAddress();
 		String ip = ia.getHostAddress();
-		int port = connection2.getPort();
+		byte[] prt = new byte[4];
+		try {
+			is2.read(prt);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		int port = Conversions.ByteArrayToInt(prt);
+//		int port = connection2.getPort();
+		
 		byte[] nameLength = new byte[4];
 		try {
 			is2.read(nameLength);

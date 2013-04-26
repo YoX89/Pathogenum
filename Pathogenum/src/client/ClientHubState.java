@@ -215,7 +215,7 @@ public class ClientHubState extends BasicGameState{
 					messages += "\n";
 				}
 			}
-		System.out.println(messages);
+		//System.out.println(messages);
 		outputText.setText(messages);
 	}
 	/**

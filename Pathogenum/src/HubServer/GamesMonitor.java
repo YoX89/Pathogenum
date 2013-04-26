@@ -12,7 +12,7 @@ import utils.GameAddress;
 public class GamesMonitor {
 	
 	ArrayList<GameAddress> games;
-	int sentSize = 0;
+	//int sentSize = 0;
 	public GamesMonitor(){
 		games = new ArrayList<GameAddress>();
 		games.add(new GameAddress("testgame","localhost",12345));
@@ -37,10 +37,11 @@ public class GamesMonitor {
 	 */
 	public synchronized ArrayList<GameAddress> getGameAddresses(){
 		System.out.println("gets game addresses");
-		if(sentSize != games.size()){
-			sentSize = games.size();
-			return games;
-		}
-		return null;
+//		if(sentSize != games.size()){
+//			sentSize = games.size();
+//			return games;
+//		}
+		return games;
+		//return null;
 	}
 }
