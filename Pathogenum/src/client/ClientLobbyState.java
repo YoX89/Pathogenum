@@ -2,7 +2,9 @@ package client;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 /**
@@ -12,12 +14,18 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class ClientLobbyState extends BasicGameState{
 
+	
+	Image sendButton;
+	TextField inputText;
+	TextField outputText;
+	String[] chatMessages;
+	
 	public static final int ID = 1;
 	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		// TODO Auto-generated method stub
+		chatMessages = new String[5];
 		
 	}
 

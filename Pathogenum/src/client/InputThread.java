@@ -81,8 +81,8 @@ public class InputThread extends Thread {
                              return;
                 		 int port = Conversions.ByteArrayToInt(command);
                 		 gameList.add(new GameAddress(name,host,port));
-                		 break;
                 	 }
+                	 break;
                 }
                
             } catch (IOException e) {

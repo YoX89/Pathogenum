@@ -14,15 +14,16 @@ import utils.GameAddress;
 
 /**
  * A server that handles output from hub to client
+ * 
  * @author Mardrey
- *
+ * 
  */
-public class HubComOutputServer extends Thread{
+public class HubComOutputServer extends Thread {
 	OutputStream os;
 	Socket conn;
 	GamesMonitor gm;
 	int ok = 0;
-	
+
 	public HubComOutputServer(Socket s, ChatMonitor lm, GamesMonitor gm) {
 		conn = s;
 		try {
@@ -34,10 +35,9 @@ public class HubComOutputServer extends Thread{
 		lm.registerOT(this);
 	}
 
-
-	public void run(){
+	public void run() {
 		System.out.println("HubComOutputServer started");
-		while(ok != -1){
+		while (ok != -1) {
 			try {
 				gm.waitForEvent(); //Bl� linus vad jobbig du �r...
 				if(conn.isClosed()){
@@ -50,7 +50,7 @@ public class HubComOutputServer extends Thread{
 				readAndPrintMsg();
 				readAndPrintGames();
 			} catch (IOException e) {
-				//e.printStackTrace();
+				// e.printStackTrace();
 				ok = -1;
 			}
 		}
@@ -58,6 +58,7 @@ public class HubComOutputServer extends Thread{
 		gm.deRegister(this);
 		return;
 	}
+
 	
 
 	private void readAndPrintGames() throws IOException{
@@ -76,23 +77,25 @@ public class HubComOutputServer extends Thread{
 					os.write(address.getHost().getBytes());
 					os.write(Conversions.intToByteArray(address.getPort()));
 				}
-		}
+			}
 	}
 
-
 	/**
-	 * Reads input from monitor and writes to clients 
+	 * Reads input from monitor and writes to clients
+	 * 
 	 * @throws IOException
 	 */
+
 	private void readAndPrintMsg() throws IOException{
 		String msg = gm.getMessage(this);
+
 		if (msg != null) {
 			byte[] com = Conversions.intToByteArray(HubServer.SENDMESSAGE);
-				os.write(com);
-				com = Conversions.intToByteArray(msg.getBytes().length);
-				os.write(com);
-				os.write(msg.getBytes());
-				System.out.println("Sending message: " + msg);
+			os.write(com);
+			com = Conversions.intToByteArray(msg.getBytes().length);
+			os.write(com);
+			os.write(msg.getBytes());
+			System.out.println("Sending message: " + msg);
 		}
 	}
 }
