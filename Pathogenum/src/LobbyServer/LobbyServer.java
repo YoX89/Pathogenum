@@ -15,6 +15,7 @@ public class LobbyServer extends Thread{
 	LobbyMonitor lm;
 	String name;
 	
+	
 	public LobbyServer(String name, int port){
 		this.name = name;
 		try {
@@ -39,5 +40,8 @@ public class LobbyServer extends Thread{
 				e.printStackTrace();
 			}
 		}
+	}
+	public String getGameName(){
+		return name;
 	}
 }

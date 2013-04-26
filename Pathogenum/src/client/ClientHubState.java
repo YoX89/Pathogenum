@@ -47,19 +47,29 @@ public class ClientHubState extends BasicGameState{
 	boolean pressedJoin = false;
 	boolean pressedNew = false;
 	boolean pressedRefresh = false;
+	
+	private static InetAddress ia;
+	private static int port;
 	/**
 	 * creates a clientConnectionHandler for handling connections to the server.. durr
 	 * @param ia
 	 * @param port
 	 */
 	public ClientHubState(InetAddress ia, int port){
+		this.ia = ia;
+		this.port = port;
 		try {
-			cch = new ClientConnectionHandler(ia,port);
+			cch = ClientConnectionHandler.getCCH(ia,port);
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
 	}
-	
+	public static InetAddress getHost(){
+		return ia;
+	}
+	public static int getPort(){
+		return port;
+	}
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
@@ -169,7 +179,7 @@ public class ClientHubState extends BasicGameState{
 			pressedJoin = true;
 			System.out.println("PRESSED! JOIN GAME");
 			arg1.enterState(TemporaryGameState.ID);
-			// IMPLEMENT
+			
 		}
 		
 		/*

@@ -21,6 +21,7 @@ import utils.GameAddress;
  * 
  */
 public class ClientConnectionHandler {
+	private static ClientConnectionHandler myCCH = null;
 	private Socket hubSocket;
 	private DatagramSocket udpSocket;
 	private OutputStream os;
@@ -30,7 +31,16 @@ public class ClientConnectionHandler {
 	public static final int SENDMESSAGE = 100, STARTGAME = 101,
 			LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104, GAMELISTING = 105;
 	public static final byte SOUTH = 1, NORTH = 2, EAST = 3, WEST = 4, SOUTHEAST = 13, SOUTHWEST = 14, NORTHEAST = 23, NORTHWEST = 24;
-	public ClientConnectionHandler(InetAddress hubHost, int hubPort) {
+	LobbyServer ls;
+	
+	public static ClientConnectionHandler getCCH(InetAddress hubHost, int hubPort){
+		if(myCCH==null){
+			myCCH = new ClientConnectionHandler(hubHost, hubPort);
+		}
+		return myCCH;
+	}
+	
+	private ClientConnectionHandler(InetAddress hubHost, int hubPort) {
 
 		try {
 			hubSocket = new Socket(hubHost, hubPort);
@@ -154,7 +164,7 @@ public class ClientConnectionHandler {
 	public void createNewGame(String gameName, int port) {
 		if(port != -1){
 		try {
-			LobbyServer ls = new LobbyServer(gameName, port);
+			ls = new LobbyServer(gameName, port);
 			ls.start();
 			os.write(STARTGAME);
 			os.write(Conversions.intToByteArray(port));
@@ -179,6 +189,14 @@ public class ClientConnectionHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+	}
+
+	public String getGameName() {
+		if(ls!=null){
+			return ls.getGameName();
+		}
+		return "This game does not exist...why are you here?";
 		
 	}
 }

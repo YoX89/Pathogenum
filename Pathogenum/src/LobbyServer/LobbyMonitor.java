@@ -1,5 +1,6 @@
 package LobbyServer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -15,6 +16,7 @@ public class LobbyMonitor extends ChatMonitor{
 	
 	LinkedList<String> messageQueue;
 	HashMap<String, Boolean> ready;
+	ArrayList<String> connectedHosts;
 	HashMap<LobbyComOutputServer, Boolean> register;
 	//HashSet<LobbyComOutputServer> register;
 	
@@ -42,5 +44,14 @@ public class LobbyMonitor extends ChatMonitor{
 	 */
 	public synchronized boolean getReady(String ip){
 		return ready.get(ip);
+	}
+	public synchronized void addHost(String host){
+		connectedHosts.add(host);
+	}
+	public synchronized void removeHost(String host){
+		connectedHosts.remove(host);
+	}
+	public synchronized ArrayList<String>  getHosts(){
+		return connectedHosts;
 	}
 }
