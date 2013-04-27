@@ -35,6 +35,7 @@ public class GameMonitor {
 		if(b == null)
 			b = new Byte((byte) 0x00);
 		
+		System.out.println("Reading incoming command: " + b + " from player " + player);
 		return b;
 	}
 	

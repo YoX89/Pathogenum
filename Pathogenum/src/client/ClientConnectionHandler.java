@@ -114,8 +114,11 @@ public class ClientConnectionHandler {
 		if(command[0]!=-1){
 			DatagramPacket movementPacket = new DatagramPacket(command,1,gameHost,gamePort);
 			try {
-				udpSocket.send(movementPacket);
-				System.out.println("Sending packet");
+				os.write(command);
+				
+				//TODO WHAT IS THIS???
+//				udpSocket.send(movementPacket);
+//				System.out.println("Sending packet");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -153,7 +156,7 @@ public class ClientConnectionHandler {
 		if(acc[3]==1){
 			return EAST;
 		}
-		return 0;
+		return -1;
 	}
 
 	public byte[] receiveMovements() {

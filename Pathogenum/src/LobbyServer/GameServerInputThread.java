@@ -28,12 +28,12 @@ public class GameServerInputThread extends Thread {
 			try {
 				b = (byte) is.read();
 				System.out.println("Getting command: " + (int)b);
+				gm.addIncomingCommand(b, player);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-			gm.addIncomingCommand(b, player);
 			
 		}
 	}
