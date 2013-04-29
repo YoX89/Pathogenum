@@ -1,7 +1,6 @@
 package client;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -9,10 +8,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import LobbyServer.LobbyServer;
-
 import utils.Conversions;
 import utils.GameAddress;
+import LobbyServer.LobbyServer;
 
 /**
  * Class for handling the connection between clients and server.
@@ -28,20 +26,19 @@ public class ClientConnectionHandler {
 	private InputThread iThread;
 	private InetAddress gameHost;
 	private int gamePort;
+	private int players;
 	public static final int SENDMESSAGE = 100, STARTGAME = 101,
 			LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104, GAMELISTING = 105;
 	public static final byte SOUTH = 1, NORTH = 2, EAST = 3, WEST = 4, SOUTHEAST = 13, SOUTHWEST = 14, NORTHEAST = 23, NORTHWEST = 24;
 	LobbyServer ls;
-	
+
 	public static ClientConnectionHandler getCCH(InetAddress hubHost, int hubPort){
 		if(myCCH==null){
 			myCCH = new ClientConnectionHandler(hubHost, hubPort);
 		}
 		return myCCH;
 	}
-	
 	private ClientConnectionHandler(InetAddress hubHost, int hubPort) {
-
 		try {
 			hubSocket = new Socket(hubHost, hubPort);
 			udpSocket = new DatagramSocket();
@@ -49,7 +46,7 @@ public class ClientConnectionHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		iThread = new InputThread(hubSocket,udpSocket);
 		iThread.start();
 	}
@@ -59,12 +56,12 @@ public class ClientConnectionHandler {
 	 * 
 	 * @param message
 	 */
-	
+
 	public void connectToGame(InetAddress host, int port){
 		gameHost = host;
 		gamePort = port;
 	}
-	
+
 	public void sendMessage(String message) {
 		byte[] command = Conversions.intToByteArray(SENDMESSAGE);
 		byte[] length = Conversions.intToByteArray(message.length());
@@ -111,17 +108,23 @@ public class ClientConnectionHandler {
 	 * @param acc
 	 */
 	public void sendMovement(int[] acc) {
+//		System.out.println("Sending movement " + acc[0] + " " + acc[1]+ " " + acc[2]+ " " + acc[3]);
 		byte[] command = {getCommandFromMovementKey(acc)};
+//		System.out.println("Which is command : " + command[0]);
 		if(command[0]!=-1){
 			DatagramPacket movementPacket = new DatagramPacket(command,1,gameHost,gamePort);
 			try {
-				udpSocket.send(movementPacket);
+				os.write(command);
+				
+				//TODO WHAT IS THIS???
+//				udpSocket.send(movementPacket);
+//				System.out.println("Sending packet");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	/**Translates key pressings to 1-byte commands
 	 * @param acc
 	 * @return
@@ -157,23 +160,25 @@ public class ClientConnectionHandler {
 	}
 
 	public byte[] receiveMovements() {
-		//IMPLEMENT
-		return null;
+		players = iThread.getPlayers();
+		byte[] buff = new byte[1*players + 8];
+		buff = iThread.recieveMovements(buff);
+		return buff;
 	}
 
 	public void createNewGame(String gameName, int port) {
 		if(port != -1){
-		try {
-			ls = new LobbyServer(gameName, port);
-			ls.start();
-			os.write(STARTGAME);
-			os.write(Conversions.intToByteArray(port));
-			os.write(Conversions.intToByteArray(gameName.length()));
-			os.write(gameName.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-			
+			try {
+				ls = new LobbyServer(gameName, port);
+				ls.start();
+				os.write(STARTGAME);
+				os.write(Conversions.intToByteArray(port));
+				os.write(Conversions.intToByteArray(gameName.length()));
+				os.write(gameName.getBytes());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 		}
 	}
 
@@ -189,14 +194,14 @@ public class ClientConnectionHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-	}
 
+	}
 	public String getGameName() {
-		if(ls!=null){
-			return ls.getGameName();
+		String re = ls.getGameName();
+		if(re != null){
+			return re;
+		}else{
+			return "";
 		}
-		return "This game does not exist...why are you here?";
-		
 	}
 }

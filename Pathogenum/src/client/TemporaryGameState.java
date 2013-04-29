@@ -91,7 +91,7 @@ public class TemporaryGameState extends BasicGameState{
 		}
 		arg2.scale(scale,scale);
 		arg2.translate(Dimensions.meterToPixel(-px*scale) + (Dimensions.SCREEN_WIDTH/2), Dimensions.meterToPixel(-py*scale) + (Dimensions.SCREEN_HEIGHT/2));
-		System.out.println("Scale:  " + scale +"   scale*:  " +scale*Dimensions.pixelToMeter(arg0.getScreenWidth()) + "   Screen:  " + Dimensions.pixelToMeter(Dimensions.SCREEN_WIDTH));
+//		System.out.println("Scale:  " + scale +"   scale*:  " +scale*Dimensions.pixelToMeter(arg0.getScreenWidth()) + "   Screen:  " + Dimensions.pixelToMeter(Dimensions.SCREEN_WIDTH));
 		for(Entity e: entities){
 			e.draw(arg2);
 		}
@@ -113,7 +113,7 @@ public class TemporaryGameState extends BasicGameState{
 		int[] acc = checkMovementKey();
 		//System.out.println(arg2);
 		world.step(arg2 * 0.001f, 8, 3);
-		for (int i = 3; i<entities.size();++i){
+		for (int i = 4; i<entities.size();++i){
 			entities.get(i).addForce(acc, arg2);
 		}
 		if(FSAE > FSTBAOE){

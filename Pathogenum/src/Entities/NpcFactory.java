@@ -33,7 +33,7 @@ public class NpcFactory {
 		while(radius < 0.1){
 			radius = rand.nextFloat();
 		}
-		Circle c = new Circle(bp[0]+0.2f + rand.nextFloat()*(bp[1] - bp[0]),bp[2]+0.2f + rand.nextFloat()*(bp[3]-bp[2]), Dimensions.meterToPixel(radius));
+		Circle c = new Circle(bp[0]+Dimensions.meterToPixel(0.2f) + rand.nextFloat()*(bp[1] - bp[0]),bp[2]+Dimensions.meterToPixel(0.2f) + rand.nextFloat()*(bp[3]-bp[2]), Dimensions.meterToPixel(radius));
 		NPC ent = new NPC(name, c, 100, world, radius, seed2);
 		id++;
 //		System.out.println("in here: " + id);

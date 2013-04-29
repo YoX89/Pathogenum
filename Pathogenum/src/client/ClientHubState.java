@@ -20,15 +20,18 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import utils.GameAddress;
+
 /**
- * A gamestate representing the Hub menu, where the list of lobbys will be displayed amongst a global chat window.
+ * A gamestate representing the Hub menu, where the list of lobbys will be
+ * displayed amongst a global chat window.
+ * 
  * @author Mardrey, BigFarmor
- *
+ * 
  */
-public class ClientHubState extends BasicGameState{
+public class ClientHubState extends BasicGameState {
 
 	public static final int ID = 0;
-	
+
 	Image sendButton;
 	Image newgameButton;
 	Image joingameButton;
@@ -42,34 +45,41 @@ public class ClientHubState extends BasicGameState{
 	String[] chatMessages;
 	ArrayList<GameAddress> gamesList;
 	ClientConnectionHandler cch;
-	
+
 	boolean pressedSend = false;
 	boolean pressedJoin = false;
 	boolean pressedNew = false;
 	boolean pressedRefresh = false;
-	
+
 	private static InetAddress ia;
 	private static int port;
+
 	/**
-	 * creates a clientConnectionHandler for handling connections to the server.. durr
+	 * creates a clientConnectionHandler for handling connections to the
+	 * server.. durr
+	 * 
 	 * @param ia
 	 * @param port
 	 */
-	public ClientHubState(InetAddress ia, int port){
+
+	public ClientHubState(InetAddress ia, int port) {
 		this.ia = ia;
 		this.port = port;
 		try {
-			cch = ClientConnectionHandler.getCCH(ia,port);
+			cch = ClientConnectionHandler.getCCH(ia, port);
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
 	}
-	public static InetAddress getHost(){
+
+	public static InetAddress getHost() {
 		return ia;
 	}
-	public static int getPort(){
+
+	public static int getPort() {
 		return port;
 	}
+
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
@@ -80,14 +90,18 @@ public class ClientHubState extends BasicGameState{
 		joingameButton = new Image("resources/gfx/JoingameButton.png");
 		newgameButton = new Image("resources/gfx/NewgameButton.png");
 		refreshButton = new Image("resources/gfx/RefreshButton.png");
-		inputText = new TextField(arg0, arg0.getDefaultFont(), 400, 250, sendButton.getWidth(), 30);
+		inputText = new TextField(arg0, arg0.getDefaultFont(), 400, 250,
+				sendButton.getWidth(), 30);
 		outputText = new TextField(arg0, arg0.getDefaultFont(), 400, 100, 500,
 				100);
 		gamesField = new TextField(arg0, arg0.getDefaultFont(), 200, 450, 500,
 				100);
-		newGameNameField =  new TextField(arg0, arg0.getDefaultFont(), 200, 200, newgameButton.getWidth(), 30);
-		newGamePortField =  new TextField(arg0, arg0.getDefaultFont(), 200, 250, newgameButton.getWidth(), 30);
-		errorMessages = new TextField(arg0, arg0.getDefaultFont(), 50, 680, 300, 30);
+		newGameNameField = new TextField(arg0, arg0.getDefaultFont(), 200, 200,
+				newgameButton.getWidth(), 30);
+		newGamePortField = new TextField(arg0, arg0.getDefaultFont(), 200, 250,
+				newgameButton.getWidth(), 30);
+		errorMessages = new TextField(arg0, arg0.getDefaultFont(), 50, 680,
+				300, 30);
 		newGameNameField.setText("Game Name");
 		newGamePortField.setText("Game Port");
 		outputText.setAcceptingInput(false);
@@ -97,8 +111,8 @@ public class ClientHubState extends BasicGameState{
 		outputText.setBackgroundColor(new Color(0, 0, 0));
 		gamesField.setBackgroundColor(new Color(0, 0, 0));
 		errorMessages.setBackgroundColor(new Color(0, 0, 0));
-		//Music bgMusic = new Music("resources/audio/Invincible.ogg"); //:(
-		//bgMusic.loop();
+		// Music bgMusic = new Music("resources/audio/Invincible.ogg"); //:(
+		// bgMusic.loop();
 	}
 
 	@Override
@@ -111,9 +125,9 @@ public class ClientHubState extends BasicGameState{
 		arg2.drawImage(refreshButton, 50, 600);
 		inputText.render(arg0, arg2);
 		outputText.render(arg0, arg2);
-		gamesField.render(arg0,arg2);
-		newGameNameField.render(arg0,arg2);
-		newGamePortField.render(arg0,arg2);
+		gamesField.render(arg0, arg2);
+		newGameNameField.render(arg0, arg2);
+		newGamePortField.render(arg0, arg2);
 		errorMessages.render(arg0, arg2);
 	}
 
@@ -123,16 +137,17 @@ public class ClientHubState extends BasicGameState{
 		/*
 		 * Sends chat message to server
 		 */
-		if(pressedSend && !Mouse.isButtonDown(0)){ //Prevents clicks being counted several times
+		if (pressedSend && !Mouse.isButtonDown(0)) { // Prevents clicks being
+														// counted several times
 			pressedSend = false;
 		}
-		if(pressedNew && !Mouse.isButtonDown(0)){ // --||--
+		if (pressedNew && !Mouse.isButtonDown(0)) { // --||--
 			pressedNew = false;
 		}
-		if(pressedJoin && !Mouse.isButtonDown(0)){// --||--
+		if (pressedJoin && !Mouse.isButtonDown(0)) {// --||--
 			pressedJoin = false;
 		}
-		if(pressedRefresh && !Mouse.isButtonDown(0)){// --||--
+		if (pressedRefresh && !Mouse.isButtonDown(0)) {// --||--
 			pressedRefresh = false;
 		}
 		MouseOverArea moa = new MouseOverArea(arg0, sendButton, 400, 300,
@@ -149,26 +164,26 @@ public class ClientHubState extends BasicGameState{
 		 */
 		moa = new MouseOverArea(arg0, newgameButton, 200, 300,
 				newgameButton.getWidth(), newgameButton.getHeight());
-		
-		if (moa.isMouseOver() && Mouse.isButtonDown(0)&& !pressedNew) {
+
+		if (moa.isMouseOver() && Mouse.isButtonDown(0) && !pressedNew) {
 			System.out.println("PRESSED! NEW GAME");
 			pressedNew = true;
 			int port = checkPortValidity();
-			if(newGameNameField.getText().equals("")){
+			if (newGameNameField.getText().equals("")) {
 				errorMessages.setText("No game name");
-			}else if(newGamePortField.getText().equals("")){
+			} 
+			else if (newGamePortField.getText().equals("")) {
 				errorMessages.setText("No port number");
-			}
-			else if(port == -1){
+			} 
+			else if (port == -1) {
 				errorMessages.setText("Invalid port number");
 			}
-			else{
-				
-				cch.createNewGame(newGameNameField.getText(),port);
+			else {
+				cch.createNewGame(newGameNameField.getText(), port);
 				arg1.enterState(ClientLobbyState.ID);
 				return;
 			}
-			//LobbyGameState
+			// LobbyGameState
 			// IMPLEMENT
 		}
 		/*
@@ -176,52 +191,52 @@ public class ClientHubState extends BasicGameState{
 		 */
 		moa = new MouseOverArea(arg0, joingameButton, 600, 300,
 				joingameButton.getWidth(), joingameButton.getHeight());
-		if (moa.isMouseOver() && Mouse.isButtonDown(0)&& !pressedJoin) { 
+		if (moa.isMouseOver() && Mouse.isButtonDown(0) && !pressedJoin) {
 			pressedJoin = true;
 			System.out.println("PRESSED! JOIN GAME");
 			arg1.enterState(TemporaryGameState.ID);
-			
+
 		}
-		
+
 		/*
 		 * Refreshes game list
 		 */
 		moa = new MouseOverArea(arg0, refreshButton, 50, 600,
 				refreshButton.getWidth(), refreshButton.getHeight());
-		if (moa.isMouseOver() && Mouse.isButtonDown(0)&& !pressedRefresh) { 
+		if (moa.isMouseOver() && Mouse.isButtonDown(0) && !pressedRefresh) {
 			pressedRefresh = true;
-			System.out.println("PRESSED! Refresh");		
+			System.out.println("PRESSED! Refresh");
 			printGames(gamesList);
 		}
-		
+
 		ArrayList<String> chatList = cch.getMessage();
 		popMessages(chatList);
-		
-		
+
 	}
+
 	private void printGames(ArrayList<GameAddress> list) {
 		cch.refreshGames();
 		gamesList = cch.getGames();
 		String text = "";
-		for(GameAddress address : list){
-			text+=address.getGameName();
-			text+="  :  ";
-			text+=address.getHost();
-			text+="  :  ";
-			text+=address.getPort();
-			text+="\n";
+		for (GameAddress address : list) {
+			text += address.getGameName();
+			text += "  :  ";
+			text += address.getHost();
+			text += "  :  ";
+			text += address.getPort();
+			text += "\n";
 		}
 		gamesField.setText(text);
 	}
 
 	private int checkPortValidity() {
 		int port = 0;
-		try{
+		try {
 			port = Integer.parseInt(newGamePortField.getText());
-			if(port<1024 || port>65535){
+			if (port < 1024 || port > 65535) {
 				return -1;
 			}
-		}catch(NumberFormatException e){
+		} catch (NumberFormatException e) {
 			return -1;
 		}
 		return port;
@@ -235,37 +250,40 @@ public class ClientHubState extends BasicGameState{
 		// TODO Auto-generated method stub
 		return ID;
 	}
+
 	/**
-	 * outputs the text returned by the inputthread to the chat window, pushes older messages down the list
+	 * outputs the text returned by the inputthread to the chat window, pushes
+	 * older messages down the list
+	 * 
 	 * @param chatList
 	 */
 	private void popMessages(ArrayList<String> chatList) {
-		
+
 		int clSize = chatList.size();
 		for (int t = 0; t < clSize; t++) {
-			
-			for(int i = chatMessages.length-1; i > 0; i--){
-				chatMessages[i] = chatMessages[i-1];
+
+			for (int i = chatMessages.length - 1; i > 0; i--) {
+				chatMessages[i] = chatMessages[i - 1];
 			}
 			chatMessages[0] = chatList.get(t);
 		}
 		String messages = "";
-		
-			for (int i = 0; i < chatMessages.length; i++) {
-				if (chatMessages[i] != null) {
-					messages += chatMessages[i];
-					messages += "\n";
-				}
+
+		for (int i = 0; i < chatMessages.length; i++) {
+			if (chatMessages[i] != null) {
+				messages += chatMessages[i];
+				messages += "\n";
 			}
-		//System.out.println(messages);
+		}
+		// System.out.println(messages);
 		outputText.setText(messages);
 	}
+
 	/**
-	 * tells the CCH to close the connection 
+	 * tells the CCH to close the connection
 	 */
 	public void closeConnection() {
 		cch.closeConnection();
 	}
-	
 
 }

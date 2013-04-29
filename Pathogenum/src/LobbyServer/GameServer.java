@@ -1,5 +1,6 @@
 package LobbyServer;
 
+import java.net.Socket;
 import java.util.Random;
 
 public class GameServer extends Thread{
@@ -9,19 +10,25 @@ public class GameServer extends Thread{
 	private long time;
 	private GameMonitor gm;
 	private int nbrOfPlayers;
-
-	public GameServer(int nbrOfPlayers){
+	
+	public GameServer(int nbrOfPlayers, Socket s){
 		this.nbrOfPlayers = nbrOfPlayers;
 		Random rand = new Random();
-
+		
 		seed = rand.nextLong(); 
 		gm = new GameMonitor(nbrOfPlayers);
+		GameServerInputThread git = new GameServerInputThread(s, gm, nbrOfPlayers);
+		GameServerOutputThread got = new GameServerOutputThread(s, gm);
+		got.start();
+		git.start();
 		time = System.currentTimeMillis();
 
 	}
 
 	@Override
 	public void run() {
+		
+		
 		long delta = 17;
 		while(true) {
 			Byte[] commands = new Byte[nbrOfPlayers];

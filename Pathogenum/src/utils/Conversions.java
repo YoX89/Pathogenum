@@ -29,4 +29,14 @@ public class Conversions {
 		 bb.order(bo);
 		 return bb.getInt();
 	}
+	
+	public static long byteArrayToLong(byte[] arr){
+		final ByteBuffer bb = ByteBuffer.wrap(arr);
+		 bb.order(ByteOrder.LITTLE_ENDIAN);
+		 return bb.getLong();
+	}
+	
+	public static byte[] longToByteArray(long l){
+		return null;
+	}
 }

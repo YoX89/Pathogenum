@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import utils.Conversions;
+
 public class GameServerOutputThread extends Thread {
 	private OutputStream os;
 	private GameMonitor gm;
@@ -21,18 +23,14 @@ public class GameServerOutputThread extends Thread {
 	
 	@Override
 	public void run(){
+		try {
+			os.write(Conversions.intToByteArray(gm.getNbrPlayers()));
 		while(true){
-			
-			
 			byte[] b = gm.getOutGoingCommand(frameID);
-			
-			try {
 				os.write(b);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+		}
+		}catch(IOException e){
+			e.printStackTrace();
 		}
 	}
 
