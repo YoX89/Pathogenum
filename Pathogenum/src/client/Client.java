@@ -97,6 +97,11 @@ public class Client extends StateBasedGame {
 		
 		Hub = null;
 		try {
+			
+			if(host.equals("localhost")){
+				host = InetAddress.getLocalHost().getHostAddress();
+			}
+			
 			InetAddress ia = InetAddress.getByName(host);
 			cch = ClientConnectionHandler.getCCH(ia, port);
 					//new ClientConnectionHandler(InetAddress.getByName(host), port);

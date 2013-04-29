@@ -68,6 +68,7 @@ public class LobbyComInputServer extends Thread{
 	 * @throws IOException
 	 */
 	private void fetchMessage() throws IOException{
+		System.out.println("fetching messages");
 		byte[] buff = new byte[4];
 			ok = is.read(buff);
 		int mLength = Conversions.ByteArrayToInt(buff);

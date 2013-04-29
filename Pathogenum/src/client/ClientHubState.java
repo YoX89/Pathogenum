@@ -134,11 +134,9 @@ public class ClientHubState extends BasicGameState {
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 			throws SlickException {
-		/*
-		 * Sends chat message to server
-		 */
+		
 		if (pressedSend && !Mouse.isButtonDown(0)) { // Prevents clicks being
-														// counted several times
+													 // counted several times
 			pressedSend = false;
 		}
 		if (pressedNew && !Mouse.isButtonDown(0)) { // --||--
@@ -150,6 +148,9 @@ public class ClientHubState extends BasicGameState {
 		if (pressedRefresh && !Mouse.isButtonDown(0)) {// --||--
 			pressedRefresh = false;
 		}
+		/*
+		 * Sends chat message to server
+		 */
 		MouseOverArea moa = new MouseOverArea(arg0, sendButton, 400, 300,
 				sendButton.getWidth(), sendButton.getHeight());
 		if (moa.isMouseOver() && Mouse.isButtonDown(0)

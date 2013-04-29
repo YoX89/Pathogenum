@@ -20,7 +20,7 @@ import LobbyServer.LobbyServer;
  */
 public class ClientConnectionHandler {
 	private static ClientConnectionHandler myCCH = null;
-	private Socket hubSocket;
+	private Socket socket;
 	private DatagramSocket udpSocket;
 	private OutputStream os;
 	private InputThread iThread;
@@ -40,14 +40,14 @@ public class ClientConnectionHandler {
 	}
 	private ClientConnectionHandler(InetAddress hubHost, int hubPort) {
 		try {
-			hubSocket = new Socket(hubHost, hubPort);
+			socket = new Socket(hubHost, hubPort);
 			udpSocket = new DatagramSocket();
-			os = hubSocket.getOutputStream();
+			os = socket.getOutputStream();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		iThread = new InputThread(hubSocket,udpSocket);
+		iThread = new InputThread(socket,udpSocket);
 		iThread.start();
 	}
 
@@ -63,6 +63,7 @@ public class ClientConnectionHandler {
 	}
 
 	public void sendMessage(String message) {
+		System.out.println("message is: "+message);
 		byte[] command = Conversions.intToByteArray(SENDMESSAGE);
 		byte[] length = Conversions.intToByteArray(message.length());
 		byte[] text = message.getBytes();
@@ -82,11 +83,11 @@ public class ClientConnectionHandler {
 	 * @return
 	 */
 	public boolean closeConnection() {
-		if (hubSocket.isClosed())
+		if (socket.isClosed())
 			return true;
 		try {
-			hubSocket.getOutputStream().write(LEAVEGAME);
-			hubSocket.close();
+			socket.getOutputStream().write(LEAVEGAME);
+			socket.close();
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -175,6 +176,10 @@ public class ClientConnectionHandler {
 				os.write(Conversions.intToByteArray(port));
 				os.write(Conversions.intToByteArray(gameName.length()));
 				os.write(gameName.getBytes());
+				socket = new Socket(InetAddress.getLocalHost(),port);
+				os = socket.getOutputStream();
+				iThread = new InputThread(socket,udpSocket);
+				iThread.start();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

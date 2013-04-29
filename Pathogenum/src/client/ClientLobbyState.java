@@ -1,5 +1,7 @@
 package client;
 
+import java.util.ArrayList;
+
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -11,64 +13,114 @@ import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
 /**
-* A gamestate representing the lobby state
-* @author Mardrey
-*
-*/
-public class ClientLobbyState extends BasicGameState{
+ * A gamestate representing the lobby state
+ * 
+ * @author Mardrey
+ * 
+ */
+public class ClientLobbyState extends BasicGameState {
 
+	Image sendButton;
+	TextField inputText;
+	TextField outputText;
+	TextField nameText;
+	String[] chatMessages;
+	boolean pressedSend = false;
+	ClientConnectionHandler cch = ClientConnectionHandler.getCCH(
+			ClientHubState.getHost(), ClientHubState.getPort());
+	public static final int ID = 1;
 
-Image sendButton;
-TextField inputText;
-TextField outputText;
-TextField nameText;
-String[] chatMessages;
+	@Override
+	public void init(GameContainer arg0, StateBasedGame arg1)
+			throws SlickException {
+		
+		chatMessages = new String[5];
+		sendButton = new Image("resources/gfx/SendButton.png");
+		nameText = new TextField(arg0, arg0.getDefaultFont(), 400, 100,
+				sendButton.getWidth(), 30);
+		inputText = new TextField(arg0, arg0.getDefaultFont(), 100, 250,
+				sendButton.getWidth(), 30);
+		inputText.setBackgroundColor(new Color(0, 0, 0));
+		
+		outputText = new TextField(arg0, arg0.getDefaultFont(), 500, 250,
+				200, 100);
+		outputText.setBackgroundColor(new Color(0, 0, 0));
+	}
 
+	@Override
+	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
+			throws SlickException {
+		if(!inputText.hasFocus()){	//Vad ledande forskare kallar "ett fulhack" 
+			inputText.setFocus(true);
+		}
+		
+		arg2.drawImage(sendButton, 100, 300);
+		inputText.render(arg0, arg2);
+		outputText.render(arg0, arg2);
+		nameText.render(arg0, arg2);
+		nameText.setText(cch.getGameName());
+		// TODO Auto-generated method stub
 
+	}
 
+	@Override
+	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
+			throws SlickException {
+		
+		if (pressedSend && !Mouse.isButtonDown(0)) { 
+			pressedSend = false;
+		}
+		/*
+		 * Sends chat message
+		 */
+		MouseOverArea moa = new MouseOverArea(arg0, sendButton, 100, 300,
+				sendButton.getWidth(), sendButton.getHeight());
+		if (moa.isMouseOver() && Mouse.isButtonDown(0)
+				&& !(inputText.getText().equals("")) && !pressedSend) {
+			System.out.println("PRESSED! Message is: " + inputText.getText());
+			pressedSend = true;
+			cch.sendMessage(inputText.getText());
+			inputText.setText("");
+		}
+		
+		ArrayList<String> chatList = cch.getMessage();
+		popMessages(chatList);
+		for(int i = 0; i < chatMessages.length; i++){
+		//	System.out.println("chatMessages::"+chatMessages[i]);
+		}
+	}
+	
+	
+	private void popMessages(ArrayList<String> chatList) {
 
-ClientConnectionHandler cch = ClientConnectionHandler.getCCH(ClientHubState.getHost(), ClientHubState.getPort());
-public static final int ID = 1;
+		int clSize = chatList.size();
+		for (int t = 0; t < clSize; t++) {
 
-@Override
-public void init(GameContainer arg0, StateBasedGame arg1)
-throws SlickException {
-chatMessages = new String[5];
-sendButton = new Image("resources/gfx/SendButton.png");
-nameText = new TextField(arg0, arg0.getDefaultFont(), 400, 100, sendButton.getWidth(), 30);
-inputText = new TextField(arg0, arg0.getDefaultFont(), 100, 250, sendButton.getWidth(), 30);
-inputText.setBackgroundColor(new Color(0, 0, 0));
-if(inputText.isAcceptingInput()){
-inputText.setText("true");
-}
-else{
-inputText.setText("false");
-}
-}
+			for (int i = chatMessages.length - 1; i > 0; i--) {
+				chatMessages[i] = chatMessages[i - 1];
+			}
+			chatMessages[0] = chatList.get(t);
+		}
+		String messages = "";
 
-@Override
-public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
-throws SlickException {
-arg2.drawImage(sendButton, 100, 300);
-inputText.render(arg0, arg2);
-nameText.render(arg0, arg2);
-nameText.setText(cch.getGameName());
-// TODO Auto-generated method stub
+		for (int i = 0; i < chatMessages.length; i++) {
+			if (chatMessages[i] != null) {
+				messages += chatMessages[i];
+				messages += "\n";
+			}
+		}
+		// System.out.println(messages);
+		outputText.setText(messages);
+	}
+	
 
-}
-
-@Override
-public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
-throws SlickException {
-
-
-}
-/**
-* returns the id of this gamestate (must not have a duplicate)
-*/
-@Override
-public int getID() {
-return ID;
-}
+	/**
+	 * returns the id of this gamestate (must not have a duplicate)
+	 */
+	@Override
+	public int getID() {
+		return ID;
+	}
 }
