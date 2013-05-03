@@ -39,4 +39,13 @@ public class Conversions {
 	public static byte[] longToByteArray(long l){
 		return null;
 	}
+
+	public static byte[] ObjectByteArrayToPrimitiveByteArray(
+			Byte[] array) {
+		byte[] ret = new byte[array.length];
+		for(int i = 0; i < array.length; i++){
+			ret[i] = array[i];
+		}
+		return null;
+	}
 }

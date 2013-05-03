@@ -19,15 +19,15 @@ import utils.GameAddress;
  */
 public class ClientInputThread extends Thread {
 	Socket sock;
+	ClientMonitor cm;
 	InputStream is;
-	LinkedList<String> chatBuffer = new LinkedList<String>();
 	ArrayList<GameAddress> gameList;
 	ArrayList<String> connectedPlayers;
 	boolean ok = true;
-	int players;
 
-	public ClientInputThread(Socket sock) {
+	public ClientInputThread(Socket sock, ClientMonitor cm) {
 		this.sock = sock;
+		this.cm = cm;
 		gameList = new ArrayList<GameAddress>();
 		try {
 			is = sock.getInputStream();
@@ -37,9 +37,6 @@ public class ClientInputThread extends Thread {
 		connectedPlayers = new ArrayList<String>();
 	}
 
-	public int getPlayers(){
-		return players;
-	}
 	
 	public void run() {
 		
@@ -49,8 +46,8 @@ public class ClientInputThread extends Thread {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		players = Conversions.ByteArrayToInt(pl);
-		
+		int players = Conversions.ByteArrayToInt(pl);
+		cm.setNbrOfPlayers(players);
 		while (ok) {
 			
 			byte[] command = new byte[4];
@@ -62,7 +59,7 @@ public class ClientInputThread extends Thread {
 				int intCommand = Conversions.ByteArrayToInt(command);
 				switch (intCommand) {
 				case Constants.SENDMESSAGE:
-					sendMessage();
+					readMessage();
 					break;
 				case Constants.GAMELISTING:
 					gameListing();
@@ -110,19 +107,9 @@ public class ClientInputThread extends Thread {
 	 * 
 	 * @return
 	 */
-	public ArrayList<String> getChatMessages() {
 
-		ArrayList<String> list = new ArrayList<String>();
-		int size = chatBuffer.size();
-		for (int i = 0; i < size; i++) {
-			list.add(chatBuffer.pop());
-		}
-		return list;
-	}
 
-	public ArrayList<GameAddress> getGames() {
-		return gameList;
-	}
+	
 
 	public byte[] recieveMovements(byte[] buff) {
 		try {
@@ -141,7 +128,6 @@ public class ClientInputThread extends Thread {
 	
 	private void gameListing() throws IOException{
 		byte[] command = new byte[4];
-		gameList = new ArrayList<GameAddress>();
 		int check2 = is.read(command);
 		if (checkInput(check2))
 			return;
@@ -170,11 +156,11 @@ public class ClientInputThread extends Thread {
 			if (checkInput(check2))
 				return;
 			int port = Conversions.ByteArrayToInt(command);
-			gameList.add(new GameAddress(name, host, port));
+			cm.addGame(new GameAddress(name, host, port));
 		}
 	}
 	
-	private void sendMessage() throws IOException{
+	private void readMessage() throws IOException{
 		int intCommand = 0;
 		byte[] command = new byte[4];
 		int check = is.read(command);
@@ -187,7 +173,7 @@ public class ClientInputThread extends Thread {
 			return;
 		String text = new String(input);
 		System.out.println("recieved: "+text);
-		chatBuffer.offer(text);
+		cm.addRecievedMessage(text);
 	}
 
 }

@@ -22,12 +22,12 @@ import LobbyServer.LobbyServer;
 public class ClientConnectionHandler {
 	private static ClientConnectionHandler myCCH = null;
 	private Socket socket;
-	private OutputStream os;
 	private ClientInputThread iThread;
-	private int players;
+	private ClientOutputThread oThread;
+	private int nbrOfPlayers;
 	private InetAddress gameHost;
 	private int gamePort;
-	
+	private ClientMonitor cm;
 	LobbyServer ls;
 
 	public static ClientConnectionHandler getCCH(InetAddress hubHost, int hubPort){
@@ -39,13 +39,14 @@ public class ClientConnectionHandler {
 	private ClientConnectionHandler(InetAddress hubHost, int hubPort) {
 		try {
 			socket = new Socket(hubHost, hubPort);
-			os = socket.getOutputStream();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		iThread = new ClientInputThread(socket);
+		cm = new ClientMonitor();
+		iThread = new ClientInputThread(socket,cm);
 		iThread.start();
+		oThread =  new ClientOutputThread(socket,cm);
+		oThread.start();
 	}
 
 	/**
@@ -56,37 +57,10 @@ public class ClientConnectionHandler {
 
 
 	public void sendMessage(String message) {
-		System.out.println("message is: "+message);
-		byte[] command = Conversions.intToByteArray(Constants.SENDMESSAGE);
-		byte[] length = Conversions.intToByteArray(message.length());
-		byte[] text = message.getBytes();
-		try {
-			os.write(command);
-			os.write(length);
-			os.write(text);
-		} catch (IOException e) {
-			// e.printStackTrace();
-			closeConnection();
-		}
+		System.out.println("cch::sendmessage");
+		cm.addMessage(message);
 	}
 
-	/**
-	 * Closes the connection between the CCH and the server.
-	 * 
-	 * @return
-	 */
-	public boolean closeConnection() {
-		if (socket.isClosed())
-			return true;
-		try {
-			socket.getOutputStream().write(Constants.LEAVEGAME);
-			socket.close();
-			return true;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
 
 	/**
 	 * Retrieves the messages from the client.InputThread
@@ -94,7 +68,7 @@ public class ClientConnectionHandler {
 	 * @return
 	 */
 	public ArrayList<String> getMessage() {
-		ArrayList<String> list = iThread.getChatMessages();
+		ArrayList<String> list = cm.getChatMessages();
 		return list;
 	}
 
@@ -102,16 +76,8 @@ public class ClientConnectionHandler {
 	 * @param acc
 	 */
 	public void sendMovement(int[] acc) {
-//		System.out.println("Sending movement " + acc[0] + " " + acc[1]+ " " + acc[2]+ " " + acc[3]);
 		byte[] command = {getCommandFromMovementKey(acc)};
-//		System.out.println("Which is command : " + command[0]);
-		if(command[0]!=-1){
-			try {
-				os.write(command);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		cm.addMovement(command);
 	}
 
 	/**Translates key pressings to 1-byte commands
@@ -149,9 +115,9 @@ public class ClientConnectionHandler {
 	}
 
 	public byte[] receiveMovements() {
-		players = iThread.getPlayers();
-		byte[] buff = new byte[1*players + 8];
-		buff = iThread.recieveMovements(buff);
+		nbrOfPlayers = cm.getNbrOfPlayers();
+		byte[] buff = new byte[1*nbrOfPlayers + 8];
+		buff = cm.recieveMovements(buff);
 		return buff;
 	}
 	/**
@@ -164,15 +130,13 @@ public class ClientConnectionHandler {
 			try {
 				ls = new LobbyServer(gameName, port);
 				ls.start();
-				os.write(Constants.STARTGAME);
-				os.write(Conversions.intToByteArray(port));
-				os.write(Conversions.intToByteArray(gameName.length()));
-				os.write(gameName.getBytes());
+				oThread.startNewGame(gameName, port);
 				socket.close();
 				socket = new Socket(InetAddress.getLocalHost(),port);
-				os = socket.getOutputStream();
-				iThread = new ClientInputThread(socket);
+				iThread = new ClientInputThread(socket,cm);
 				iThread.start();
+				oThread = new ClientOutputThread(socket,cm);
+				oThread.start();
 				System.out.println("New lobby created @: " + gameName + ":" + port);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -182,17 +146,12 @@ public class ClientConnectionHandler {
 	}
 
 	public ArrayList<GameAddress> getGames() {
-		ArrayList<GameAddress> list = iThread.getGames();
+		ArrayList<GameAddress> list = cm.getGames();
 		return list;
 	}
 
 	public void refreshGames() {
-		byte[] send = Conversions.intToByteArray(Constants.GAMELISTING);
-		try {
-			os.write(send);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		oThread.refresh();
 
 	}
 	public String getGameName() {
@@ -204,11 +163,15 @@ public class ClientConnectionHandler {
 		}
 	}
 	public ArrayList<String> getNames() {	
-		return iThread.getNames();
+		return cm.getNames();
 	}
 	public void connectToGame(InetAddress host, int port) {
 		gameHost  = host;
 		gamePort = port;
+		
+	}
+	public void closeConnection() {
+		// TODO Auto-generated method stub
 		
 	}
 }

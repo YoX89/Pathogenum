@@ -20,7 +20,6 @@ public class GamesMonitor extends ChatMonitor{
 
 	public GamesMonitor(){
 		games = new LinkedList<GameAddress>();
-		addGame(new GameAddress("testgame","localhost",12345));
 	}
 	/**
 	 * add a game address to the known list
