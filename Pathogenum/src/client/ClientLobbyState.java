@@ -26,15 +26,21 @@ public class ClientLobbyState extends BasicGameState {
 	TextField inputText;
 	TextField outputText;
 	TextField nameText;
+	TextField[] connectedClients;
 	String[] chatMessages;
 	boolean pressedSend = false;
 	ClientConnectionHandler cch = ClientConnectionHandler.getCCH(
 			ClientHubState.getHost(), ClientHubState.getPort());
 	public static final int ID = 1;
 
+	
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
+		
+		for(int i = 0; i < connectedClients.length;i++){
+			connectedClients[i] = new TextField(arg0,arg0.getDefaultFont(),0,0,0,0);
+		}
 		
 		chatMessages = new String[5];
 		sendButton = new Image("resources/gfx/SendButton.png");
@@ -47,6 +53,7 @@ public class ClientLobbyState extends BasicGameState {
 		outputText = new TextField(arg0, arg0.getDefaultFont(), 500, 250,
 				300, 200);
 		outputText.setBackgroundColor(new Color(0, 0, 0));
+		connectedClients = new TextField[4];
 	}
 
 	@Override
@@ -87,9 +94,9 @@ public class ClientLobbyState extends BasicGameState {
 		
 		ArrayList<String> chatList = cch.getMessage();
 		popMessages(chatList);
-		for(int i = 0; i < chatMessages.length; i++){
+		//for(int i = 0; i < chatMessages.length; i++){
 		//	System.out.println("chatMessages::"+chatMessages[i]);
-		}
+		//}
 	}
 	
 	

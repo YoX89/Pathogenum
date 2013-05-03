@@ -164,7 +164,11 @@ public class ClientConnectionHandler {
 		buff = iThread.recieveMovements(buff);
 		return buff;
 	}
-
+	/**
+	 * creates a new lobby and binds its own socket an output/input to this socket (which in turn is bound to the lobby)
+	 * @param gameName
+	 * @param port
+	 */
 	public void createNewLobby(String gameName, int port) {
 		if(port != -1){
 			try {
@@ -174,10 +178,12 @@ public class ClientConnectionHandler {
 				os.write(Conversions.intToByteArray(port));
 				os.write(Conversions.intToByteArray(gameName.length()));
 				os.write(gameName.getBytes());
+				socket.close();
 				socket = new Socket(InetAddress.getLocalHost(),port);
 				os = socket.getOutputStream();
 				iThread = new InputThread(socket);
 				iThread.start();
+				System.out.println("New lobby created @: " + gameName + ":" + port);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
