@@ -1,7 +1,8 @@
-package LobbyServer;
+package GameServer;
 
 import java.net.Socket;
 import java.util.Random;
+
 
 public class GameServer extends Thread{
 
