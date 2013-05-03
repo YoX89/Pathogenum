@@ -14,10 +14,7 @@ import publicMonitors.ChatMonitor;
  */
 public class LobbyMonitor extends ChatMonitor{
 	
-	LinkedList<String> messageQueue;
-	HashMap<String, Boolean> ready;
 	ArrayList<String> connectedHosts;
-	HashMap<LobbyComOutputServer, Boolean> register;
 	//HashSet<LobbyComOutputServer> register;
 	
 	public LobbyMonitor(){

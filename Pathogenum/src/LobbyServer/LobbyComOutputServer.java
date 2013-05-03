@@ -3,7 +3,9 @@ package LobbyServer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.util.HashMap;
 
 import utils.Conversions;
 
@@ -43,6 +45,7 @@ public class LobbyComOutputServer extends Thread {
 			}
 			try {
 				readAndPrintMsg();
+				getAndPrintConnected();
 			} catch (IOException e) {
 				//e.printStackTrace();
 				ok = -1;
@@ -53,6 +56,22 @@ public class LobbyComOutputServer extends Thread {
 		return;
 	}
 	
+	private void getAndPrintConnected() throws IOException {
+		byte[] com = new byte[4];
+		HashMap<Thread, Boolean> reg = lm.getRegister();
+		com = Conversions.intToByteArray(LobbyServer.SENDCONNECTED);
+		os.write(com);
+		for(Thread t: reg.keySet()){
+			LobbyComOutputServer lcos = (LobbyComOutputServer)t;
+			InetAddress i = lcos.conn.getInetAddress();
+			String in = i.getHostAddress();
+			int l = in.length();
+			com = Conversions.intToByteArray(l);
+			os.write(com);
+			os.write(in.getBytes());
+		}
+	}
+
 	/**
 	 * Reads message from monitor and writes to client
 	 * @throws IOException

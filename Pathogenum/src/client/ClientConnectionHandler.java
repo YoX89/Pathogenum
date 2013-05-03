@@ -27,7 +27,7 @@ public class ClientConnectionHandler {
 	private int gamePort;
 	private int players;
 	public static final int SENDMESSAGE = 100, STARTGAME = 101,
-			LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104, GAMELISTING = 105;
+			LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104, GAMELISTING = 105, SENDCONNECTED = 106;
 	public static final byte SOUTH = 1, NORTH = 2, EAST = 3, WEST = 4, SOUTHEAST = 13, SOUTHWEST = 14, NORTHEAST = 23, NORTHWEST = 24;
 	LobbyServer ls;
 
@@ -111,13 +111,8 @@ public class ClientConnectionHandler {
 		byte[] command = {getCommandFromMovementKey(acc)};
 //		System.out.println("Which is command : " + command[0]);
 		if(command[0]!=-1){
-			DatagramPacket movementPacket = new DatagramPacket(command,1,gameHost,gamePort);
 			try {
 				os.write(command);
-				
-				//TODO WHAT IS THIS???
-//				udpSocket.send(movementPacket);
-//				System.out.println("Sending packet");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -212,5 +207,8 @@ public class ClientConnectionHandler {
 		}else{
 			return "";
 		}
+	}
+	public ArrayList<String> getNames() {	
+		return iThread.getNames();
 	}
 }

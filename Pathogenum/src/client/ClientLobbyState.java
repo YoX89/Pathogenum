@@ -8,7 +8,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
@@ -38,9 +37,6 @@ public class ClientLobbyState extends BasicGameState {
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
 		
-		for(int i = 0; i < connectedClients.length;i++){
-			connectedClients[i] = new TextField(arg0,arg0.getDefaultFont(),0,0,0,0);
-		}
 		
 		chatMessages = new String[10];
 		sendButton = new Image("resources/gfx/SendButton.png");
@@ -54,6 +50,10 @@ public class ClientLobbyState extends BasicGameState {
 				300, 200);
 		outputText.setBackgroundColor(new Color(0, 0, 0));
 		connectedClients = new TextField[4];
+		for(int i = 0; i < connectedClients.length;i++){
+			connectedClients[i] = new TextField(arg0,arg0.getDefaultFont(),100,500+i*50,sendButton.getWidth(),30);
+			connectedClients[i].setAcceptingInput(false);
+		}
 	}
 
 	@Override
@@ -68,6 +68,10 @@ public class ClientLobbyState extends BasicGameState {
 		outputText.render(arg0, arg2);
 		nameText.render(arg0, arg2);
 		nameText.setText(cch.getGameName());
+		ArrayList<String> names = cch.getNames();
+		for(TextField tf : connectedClients){
+			tf.render(arg0,arg2);
+		}
 		// TODO Auto-generated method stub
 
 	}

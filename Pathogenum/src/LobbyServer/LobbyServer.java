@@ -14,7 +14,7 @@ import java.net.Socket;
 public class LobbyServer extends Thread {
 
 	public static final int SENDMESSAGE = 100, STARTGAME = 101,
-			LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104;
+			LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104, SENDCONNECTED = 106;
 	ServerSocket s;
 	LobbyMonitor lm;
 	String name;
@@ -35,7 +35,7 @@ public class LobbyServer extends Thread {
 			try {
 				Socket conn = s.accept();
 				System.out.println("Client connects");
-				if (lm.register.keySet().size() >= 4) {
+				if (lm.getRegister().keySet().size() >= 4) {
 					System.out.println("Maximum size of game");
 					conn.close();
 				} else {

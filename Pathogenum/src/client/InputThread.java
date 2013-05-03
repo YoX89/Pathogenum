@@ -21,6 +21,7 @@ public class InputThread extends Thread {
 	InputStream is;
 	LinkedList<String> chatBuffer = new LinkedList<String>();
 	ArrayList<GameAddress> gameList;
+	ArrayList<String> connectedPlayers;
 	boolean ok = true;
 	int players;
 
@@ -32,6 +33,7 @@ public class InputThread extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		connectedPlayers = new ArrayList<String>();
 	}
 
 	public int getPlayers(){
@@ -50,61 +52,34 @@ public class InputThread extends Thread {
 		while (ok) {
 			byte[] command = new byte[4];
 			try {
-				is.read(command);
+				int okInt = is.read(command);
+				if(okInt == -1){
+					ok = false;
+				}
 				int intCommand = Conversions.ByteArrayToInt(command);
 				switch (intCommand) {
 				case ClientConnectionHandler.SENDMESSAGE:
-					int check = is.read(command);
-					if (checkInput(check))
-						return;
-					intCommand = Conversions.ByteArrayToInt(command);
-					byte[] input = new byte[intCommand];
-					check = is.read(input);
-					if (checkInput(check))
-						return;
-					String text = new String(input);
-					System.out.println("recieved: "+text);
-					chatBuffer.offer(text);
+					sendMessage();
 					break;
 				case ClientConnectionHandler.GAMELISTING:
-					gameList = new ArrayList<GameAddress>();
-					int check2 = is.read(command);
-					if (checkInput(check2))
-						return;
-					int nbrGames = Conversions.ByteArrayToInt(command);
-					for (int i = 0; i < nbrGames; i++) {
-
-						check2 = is.read(command);
-						if (checkInput(check2))
-							return;
-						int nameLength = Conversions.ByteArrayToInt(command);
-						byte[] nameArray = new byte[nameLength];
-						check2 = is.read(nameArray);
-						if (checkInput(check2))
-							return;
-						String name = new String(nameArray);
-						check2 = is.read(command);
-						if (checkInput(check2))
-							return;
-						int hostLength = Conversions.ByteArrayToInt(command);
-						byte[] hostArray = new byte[hostLength];
-						check2 = is.read(hostArray);
-						if (checkInput(check2))
-							return;
-						String host = new String(hostArray);
-						check2 = is.read(command);
-						if (checkInput(check2))
-							return;
-						int port = Conversions.ByteArrayToInt(command);
-						gameList.add(new GameAddress(name, host, port));
-					}
+					gameListing();
 					break;
+				case ClientConnectionHandler.SENDCONNECTED:
+					connectedListing();
+				break;
 				}
 
 			} catch (IOException e) {
-				return;
+				ok = false;
 			}
 		}
+		System.out.println("IThread stopped");
+		return;
+	}
+
+	private void connectedListing() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/**
@@ -154,6 +129,62 @@ public class InputThread extends Thread {
 		}
 		return buff;
 		
+	}
+
+	public ArrayList<String> getNames() {
+		
+		return null;
+	}
+	
+	private void gameListing() throws IOException{
+		byte[] command = new byte[4];
+		gameList = new ArrayList<GameAddress>();
+		int check2 = is.read(command);
+		if (checkInput(check2))
+			return;
+		int nbrGames = Conversions.ByteArrayToInt(command);
+		for (int i = 0; i < nbrGames; i++) {
+
+			check2 = is.read(command);
+			if (checkInput(check2))
+				return;
+			int nameLength = Conversions.ByteArrayToInt(command);
+			byte[] nameArray = new byte[nameLength];
+			check2 = is.read(nameArray);
+			if (checkInput(check2))
+				return;
+			String name = new String(nameArray);
+			check2 = is.read(command);
+			if (checkInput(check2))
+				return;
+			int hostLength = Conversions.ByteArrayToInt(command);
+			byte[] hostArray = new byte[hostLength];
+			check2 = is.read(hostArray);
+			if (checkInput(check2))
+				return;
+			String host = new String(hostArray);
+			check2 = is.read(command);
+			if (checkInput(check2))
+				return;
+			int port = Conversions.ByteArrayToInt(command);
+			gameList.add(new GameAddress(name, host, port));
+		}
+	}
+	
+	private void sendMessage() throws IOException{
+		int intCommand = 0;
+		byte[] command = new byte[4];
+		int check = is.read(command);
+		if (checkInput(check))
+			return;
+		intCommand = Conversions.ByteArrayToInt(command);
+		byte[] input = new byte[intCommand];
+		check = is.read(input);
+		if (checkInput(check))
+			return;
+		String text = new String(input);
+		System.out.println("recieved: "+text);
+		chatBuffer.offer(text);
 	}
 
 }

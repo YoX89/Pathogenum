@@ -11,12 +11,16 @@ import java.util.LinkedList;
 
 public class ChatMonitor {
 	
-	LinkedList<String> messageQueue;
-	HashMap<String, Boolean> ready;
+	protected LinkedList<String> messageQueue;
+	protected HashMap<String, Boolean> ready;
 	protected HashMap<Thread, Boolean> register;
 
 	// HashSet<LobbyComOutputServer> register;
 
+	public HashMap<Thread, Boolean> getRegister(){
+		return register;
+	}
+	
 	public ChatMonitor() {
 		messageQueue = new LinkedList<String>();
 		ready = new HashMap<String, Boolean>();
@@ -31,6 +35,7 @@ public class ChatMonitor {
 	 */
 	public void registerOT(Thread lcos) {
 		register.put(lcos, true);
+		notifyAll();
 	}
 
 	/**
