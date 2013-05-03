@@ -33,7 +33,7 @@ public class ChatMonitor {
 	 * Adds a thread to known threads
 	 * @param lcos
 	 */
-	public void registerOT(Thread lcos) {
+	public synchronized void registerOT(Thread lcos) {
 		register.put(lcos, true);
 		notifyAll();
 	}
@@ -42,8 +42,9 @@ public class ChatMonitor {
 	 * Removes a thread from known threads
 	 * @param lcos
 	 */
-	public void deRegister(Thread lcos) {
+	public synchronized void deRegister(Thread lcos) {
 		register.remove(lcos);
+		notifyAll();
 	}
 
 	/**

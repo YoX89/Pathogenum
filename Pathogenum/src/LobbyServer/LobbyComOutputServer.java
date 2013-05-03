@@ -1,7 +1,6 @@
 package LobbyServer;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -9,9 +8,11 @@ import java.util.HashMap;
 
 import utils.Conversions;
 
-/**A server that writes output from the monitor and writes it to the clients
+/**
+ * A server that writes output from the monitor and writes it to the clients
+ * 
  * @author Mardrey
- *
+ * 
  */
 public class LobbyComOutputServer extends Thread {
 
@@ -19,8 +20,10 @@ public class LobbyComOutputServer extends Thread {
 	Socket conn;
 	LobbyMonitor lm;
 	int ok = 0;
-	
+	boolean runs;
+
 	public LobbyComOutputServer(Socket s, LobbyMonitor lm) {
+		runs = false;
 		conn = s;
 		try {
 			os = conn.getOutputStream();
@@ -31,40 +34,48 @@ public class LobbyComOutputServer extends Thread {
 		lm.registerOT(this);
 	}
 
-	public void run(){
+	public void run() {
 		System.out.println("LobbyComOutputServer started");
-		while(ok != -1){
+		while (ok != -1) {
 			try {
+				runs = true;
 				lm.waitForEvent();
-				if(conn.isClosed()){
+				if (conn.isClosed()) {
 					ok = -1;
-					
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			try {
-				readAndPrintMsg();
-				getAndPrintConnected();
+				if (ok != -1) {
+					readAndPrintMsg();
+					getAndPrintConnected();
+				}
 			} catch (IOException e) {
-				//e.printStackTrace();
+				// e.printStackTrace();
 				ok = -1;
 			}
 		}
 		System.out.println("LobbyComOutputServer stopped");
 		lm.deRegister(this);
+		runs = false;
 		return;
 	}
-	
+
 	private void getAndPrintConnected() throws IOException {
+		System.out.println("Printing Connected");
 		byte[] com = new byte[4];
 		HashMap<Thread, Boolean> reg = lm.getRegister();
 		com = Conversions.intToByteArray(LobbyServer.SENDCONNECTED);
 		os.write(com);
-		for(Thread t: reg.keySet()){
-			LobbyComOutputServer lcos = (LobbyComOutputServer)t;
+		int size = reg.keySet().size();
+		com = Conversions.intToByteArray(size);
+		os.write(com);
+		for (Thread t : reg.keySet()) {
+			LobbyComOutputServer lcos = (LobbyComOutputServer) t;
 			InetAddress i = lcos.conn.getInetAddress();
 			String in = i.getHostAddress();
+			System.out.println(" -sending " + in);
 			int l = in.length();
 			com = Conversions.intToByteArray(l);
 			os.write(com);
@@ -74,17 +85,18 @@ public class LobbyComOutputServer extends Thread {
 
 	/**
 	 * Reads message from monitor and writes to client
+	 * 
 	 * @throws IOException
 	 */
-	private void readAndPrintMsg() throws IOException{
+	private void readAndPrintMsg() throws IOException {
 		String msg = lm.getMessage(this);
 		if (msg != null) {
 			byte[] com = Conversions.intToByteArray(LobbyServer.SENDMESSAGE);
-				os.write(com);
-				com = Conversions.intToByteArray(msg.getBytes().length);
-				os.write(com);
-				os.write(msg.getBytes());
-				System.out.println("Sending message: " + msg);
+			os.write(com);
+			com = Conversions.intToByteArray(msg.getBytes().length);
+			os.write(com);
+			os.write(msg.getBytes());
+			System.out.println("Sending message: " + msg);
 		}
 	}
 }

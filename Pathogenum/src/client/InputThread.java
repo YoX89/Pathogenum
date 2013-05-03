@@ -42,12 +42,13 @@ public class InputThread extends Thread {
 	
 	public void run() {
 		byte[] pl = new byte[4];
-		try {
-			is.read(pl);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		players = Conversions.ByteArrayToInt(pl);
+//		try {
+//			is.read(pl);
+//		} catch (IOException e1) {
+//			System.out.println("IThread stopped1");
+//			return;
+//		}
+//		players = Conversions.ByteArrayToInt(pl);
 		
 		while (ok) {
 			byte[] command = new byte[4];
@@ -73,13 +74,24 @@ public class InputThread extends Thread {
 				ok = false;
 			}
 		}
-		System.out.println("IThread stopped");
+		System.out.println("IThread stopped2");
 		return;
 	}
 
-	private void connectedListing() {
-		// TODO Auto-generated method stub
-		
+	private void connectedListing() throws IOException {
+		connectedPlayers = new ArrayList<String>();
+		byte[] com = new byte[4];
+		is.read(com);
+		int nbrPlayers = Conversions.ByteArrayToInt(com);
+		for(int i = 0; i < nbrPlayers; i++){
+			com = new byte[4];
+			is.read(com);
+			int sl = Conversions.ByteArrayToInt(com);
+			com = new byte[sl];
+			is.read(com);
+			String playName = new String(com);
+			connectedPlayers.add(playName);
+		}	
 	}
 
 	/**
@@ -132,8 +144,7 @@ public class InputThread extends Thread {
 	}
 
 	public ArrayList<String> getNames() {
-		
-		return null;
+		return connectedPlayers;
 	}
 	
 	private void gameListing() throws IOException{

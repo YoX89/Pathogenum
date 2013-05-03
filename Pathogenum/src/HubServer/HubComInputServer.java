@@ -87,9 +87,7 @@ public class HubComInputServer extends Thread {
 			try {
 				os2.write(Conversions.intToByteArray(HubServer.GAMELISTING));
 				os2.write(Conversions.intToByteArray(games.size()));
-				int i = 0;
 				for (GameAddress address : games) {
-					i++;
 					os2.write(Conversions.intToByteArray(address.getGameName()
 							.length()));
 					os2.write(address.getGameName().getBytes());
@@ -99,7 +97,8 @@ public class HubComInputServer extends Thread {
 					os2.write(Conversions.intToByteArray(address.getPort()));
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
+				ok = -1;
 			}
 		}
 	}
@@ -116,6 +115,7 @@ public class HubComInputServer extends Thread {
 			os2.write(Conversions.intToByteArray(gameNbr));
 		} catch (IOException e) {
 			e.printStackTrace();
+			ok = -1;
 		}
 		for (GameAddress ga : addresses) {
 			String host = ga.getHost();
@@ -131,6 +131,7 @@ public class HubComInputServer extends Thread {
 				os2.write(Conversions.intToByteArray(port));
 			} catch (IOException e) {
 				e.printStackTrace();
+				ok = -1;
 			}
 		}
 
@@ -196,6 +197,7 @@ public class HubComInputServer extends Thread {
 			is2.read(prt);
 		} catch (IOException e1) {
 			e1.printStackTrace();
+			ok = -1;
 		}
 		int port = Conversions.ByteArrayToInt(prt);
 		// int port = connection2.getPort();
@@ -205,6 +207,7 @@ public class HubComInputServer extends Thread {
 			is2.read(nameLength);
 		} catch (IOException e) {
 			e.printStackTrace();
+			ok = -1;
 		}
 		int nameL = Conversions.ByteArrayToInt(nameLength);
 		byte[] name = new byte[nameL];
@@ -212,6 +215,7 @@ public class HubComInputServer extends Thread {
 			is2.read(name);
 		} catch (IOException e) {
 			e.printStackTrace();
+			ok = -1;
 		}
 		String gameName = new String(name);
 		GameAddress ga = new GameAddress(gameName, ip, port);

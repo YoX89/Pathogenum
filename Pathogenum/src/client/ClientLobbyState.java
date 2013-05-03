@@ -51,7 +51,7 @@ public class ClientLobbyState extends BasicGameState {
 		outputText.setBackgroundColor(new Color(0, 0, 0));
 		connectedClients = new TextField[4];
 		for(int i = 0; i < connectedClients.length;i++){
-			connectedClients[i] = new TextField(arg0,arg0.getDefaultFont(),100,500+i*50,sendButton.getWidth(),30);
+			connectedClients[i] = new TextField(arg0,arg0.getDefaultFont(),100,500+i*50,sendButton.getWidth()*2,30);
 			connectedClients[i].setAcceptingInput(false);
 		}
 	}
@@ -67,10 +67,18 @@ public class ClientLobbyState extends BasicGameState {
 		inputText.render(arg0, arg2);
 		outputText.render(arg0, arg2);
 		nameText.render(arg0, arg2);
-		nameText.setText(cch.getGameName());
+		//nameText.setText(cch.getGameName());
 		ArrayList<String> names = cch.getNames();
-		for(TextField tf : connectedClients){
-			tf.render(arg0,arg2);
+		//System.out.println("NSIZE: " + names.size());
+		for(int i = 0; i < names.size(); i++){
+			String text = names.get(i);
+			if(text == null){
+				text = "";
+			}
+			connectedClients[i].setText(text);
+		}
+		for(int i = 0; i < connectedClients.length; i++){
+			connectedClients[i].render(arg0, arg2);
 		}
 		// TODO Auto-generated method stub
 
@@ -148,4 +156,5 @@ public class ClientLobbyState extends BasicGameState {
 	public int getID() {
 		return ID;
 	}
+	
 }

@@ -6,6 +6,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import utils.Conversions;
@@ -210,5 +211,24 @@ public class ClientConnectionHandler {
 	}
 	public ArrayList<String> getNames() {	
 		return iThread.getNames();
+	}
+	public void joinGame(String host, int port) {
+		InetAddress ia = null;
+		try {
+			ia = InetAddress.getByName(host);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+			try {
+				socket.close();
+				socket = new Socket(ia, port);
+				os = socket.getOutputStream();
+				iThread = new InputThread(socket);
+				iThread.start();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		
 	}
 }

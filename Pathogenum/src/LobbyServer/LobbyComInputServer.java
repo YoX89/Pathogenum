@@ -37,6 +37,7 @@ public class LobbyComInputServer extends Thread{
 				ok = is.read(com);
 			}catch(IOException e){
 				e.printStackTrace();
+				ok = -1;
 			}
 			
 			switch(com[0]){
