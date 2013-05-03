@@ -211,8 +211,21 @@ public class ClientHubState extends BasicGameState {
 		}
 
 		ArrayList<String> chatList = cch.getMessage();
+		addNewLines(chatList);
 		popMessages(chatList);
 
+	}
+
+	private void addNewLines(ArrayList<String> chatList) {
+		for(int i = 0; i< chatList.size(); i++){
+			String s = chatList.get(i);
+			if(s.length()>50){
+				String firstString = s.substring(0, 49);
+				String lastString = s.substring(49,s.length());
+				String totString = firstString+"\n"+lastString;
+				chatList.set(i, totString);
+			}
+		}		
 	}
 
 	private void printGames(ArrayList<GameAddress> list) {
