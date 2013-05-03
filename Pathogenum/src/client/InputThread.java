@@ -18,16 +18,14 @@ import utils.GameAddress;
  */
 public class InputThread extends Thread {
 	Socket sock;
-	DatagramSocket udpSocket;
 	InputStream is;
 	LinkedList<String> chatBuffer = new LinkedList<String>();
 	ArrayList<GameAddress> gameList;
 	boolean ok = true;
 	int players;
 
-	public InputThread(Socket sock, DatagramSocket udpSocket) {
+	public InputThread(Socket sock) {
 		this.sock = sock;
-		this.udpSocket = udpSocket;
 		gameList = new ArrayList<GameAddress>();
 		try {
 			is = sock.getInputStream();
