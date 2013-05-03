@@ -36,7 +36,7 @@ public class ClientLobbyState extends BasicGameState {
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
 		
-		chatMessages = new String[5];
+		chatMessages = new String[10];
 		sendButton = new Image("resources/gfx/SendButton.png");
 		nameText = new TextField(arg0, arg0.getDefaultFont(), 400, 100,
 				150, 30);
