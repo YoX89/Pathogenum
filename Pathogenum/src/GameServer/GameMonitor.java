@@ -1,4 +1,4 @@
-package LobbyServer;
+package GameServer;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayDeque;

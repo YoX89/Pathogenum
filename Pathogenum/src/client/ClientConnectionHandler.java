@@ -21,7 +21,6 @@ import LobbyServer.LobbyServer;
 public class ClientConnectionHandler {
 	private static ClientConnectionHandler myCCH = null;
 	private Socket socket;
-	private DatagramSocket udpSocket;
 	private OutputStream os;
 	private InputThread iThread;
 	private InetAddress gameHost;
@@ -41,13 +40,12 @@ public class ClientConnectionHandler {
 	private ClientConnectionHandler(InetAddress hubHost, int hubPort) {
 		try {
 			socket = new Socket(hubHost, hubPort);
-			udpSocket = new DatagramSocket();
 			os = socket.getOutputStream();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		iThread = new InputThread(socket,udpSocket);
+		iThread = new InputThread(socket);
 		iThread.start();
 	}
 
@@ -167,7 +165,7 @@ public class ClientConnectionHandler {
 		return buff;
 	}
 
-	public void createNewGame(String gameName, int port) {
+	public void createNewLobby(String gameName, int port) {
 		if(port != -1){
 			try {
 				ls = new LobbyServer(gameName, port);
@@ -178,7 +176,7 @@ public class ClientConnectionHandler {
 				os.write(gameName.getBytes());
 				socket = new Socket(InetAddress.getLocalHost(),port);
 				os = socket.getOutputStream();
-				iThread = new InputThread(socket,udpSocket);
+				iThread = new InputThread(socket);
 				iThread.start();
 			} catch (IOException e) {
 				e.printStackTrace();
