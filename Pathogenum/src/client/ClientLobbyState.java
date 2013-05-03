@@ -42,10 +42,10 @@ public class ClientLobbyState extends BasicGameState {
 			connectedClients[i] = new TextField(arg0,arg0.getDefaultFont(),0,0,0,0);
 		}
 		
-		chatMessages = new String[5];
+		chatMessages = new String[10];
 		sendButton = new Image("resources/gfx/SendButton.png");
 		nameText = new TextField(arg0, arg0.getDefaultFont(), 400, 100,
-				sendButton.getWidth(), 30);
+				150, 30);
 		inputText = new TextField(arg0, arg0.getDefaultFont(), 100, 250,
 				sendButton.getWidth(), 30);
 		inputText.setBackgroundColor(new Color(0, 0, 0));
@@ -93,6 +93,7 @@ public class ClientLobbyState extends BasicGameState {
 		}
 		
 		ArrayList<String> chatList = cch.getMessage();
+		addNewLines(chatList);
 		popMessages(chatList);
 		//for(int i = 0; i < chatMessages.length; i++){
 		//	System.out.println("chatMessages::"+chatMessages[i]);
@@ -100,6 +101,19 @@ public class ClientLobbyState extends BasicGameState {
 	}
 	
 	
+	private void addNewLines(ArrayList<String> chatList) {
+		for(int i = 0; i< chatList.size(); i++){
+			String s = chatList.get(i);
+			if(s.length()>32){
+				String firstString = s.substring(0, 31);
+				String lastString = s.substring(31,s.length());
+				String totString = firstString+"\n"+lastString;
+				chatList.set(i, totString);
+			}
+		}		
+		
+	}
+
 	private void popMessages(ArrayList<String> chatList) {
 
 		int clSize = chatList.size();
