@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import utils.Constants;
 import utils.Conversions;
 
 /**
@@ -40,14 +41,14 @@ public class LobbyComInputServer extends Thread{
 			}
 			
 			switch(com[0]){
-			case LobbyServer.SENDMESSAGE:
+			case Constants.SENDMESSAGE:
 				try {
 					fetchMessage();
 				} catch (IOException e) {
 					ok = -1;
 				}
 			break;
-			case LobbyServer.LEAVEGAME:
+			case Constants.LEAVEGAME:
 				ok = -1;
 			break;
 			}

@@ -21,8 +21,7 @@ import utils.GameAddress;
  */
 public class HubServer extends Thread {
 	//private static ArrayList<GameAddress> gameList = new ArrayList<GameAddress>();
-	public static final int SENDMESSAGE = 100, STARTGAME = 101,
-			LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104, GAMELISTING = 105;
+
 	ServerSocket Ssock;
 	GamesMonitor gm;
 

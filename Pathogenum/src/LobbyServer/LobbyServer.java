@@ -13,8 +13,6 @@ import java.net.Socket;
  */
 public class LobbyServer extends Thread {
 
-	public static final int SENDMESSAGE = 100, STARTGAME = 101,
-			LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104, SENDCONNECTED = 106;
 	ServerSocket s;
 	LobbyMonitor lm;
 	String name;

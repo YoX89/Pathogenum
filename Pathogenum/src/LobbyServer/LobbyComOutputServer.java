@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.HashMap;
 
+import utils.Constants;
 import utils.Conversions;
 
 /**A server that writes output from the monitor and writes it to the clients
@@ -59,7 +60,7 @@ public class LobbyComOutputServer extends Thread {
 	private void getAndPrintConnected() throws IOException {
 		byte[] com = new byte[4];
 		HashMap<Thread, Boolean> reg = lm.getRegister();
-		com = Conversions.intToByteArray(LobbyServer.SENDCONNECTED);
+		com = Conversions.intToByteArray(Constants.SENDCONNECTED);
 		os.write(com);
 		for(Thread t: reg.keySet()){
 			LobbyComOutputServer lcos = (LobbyComOutputServer)t;
@@ -79,7 +80,7 @@ public class LobbyComOutputServer extends Thread {
 	private void readAndPrintMsg() throws IOException{
 		String msg = lm.getMessage(this);
 		if (msg != null) {
-			byte[] com = Conversions.intToByteArray(LobbyServer.SENDMESSAGE);
+			byte[] com = Conversions.intToByteArray(Constants.SENDMESSAGE);
 				os.write(com);
 				com = Conversions.intToByteArray(msg.getBytes().length);
 				os.write(com);

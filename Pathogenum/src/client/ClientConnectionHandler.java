@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import utils.Constants;
 import utils.Conversions;
 import utils.GameAddress;
 import LobbyServer.LobbyServer;
@@ -22,13 +23,11 @@ public class ClientConnectionHandler {
 	private static ClientConnectionHandler myCCH = null;
 	private Socket socket;
 	private OutputStream os;
-	private InputThread iThread;
+	private ClientInputThread iThread;
+	private int players;
 	private InetAddress gameHost;
 	private int gamePort;
-	private int players;
-	public static final int SENDMESSAGE = 100, STARTGAME = 101,
-			LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104, GAMELISTING = 105, SENDCONNECTED = 106;
-	public static final byte SOUTH = 1, NORTH = 2, EAST = 3, WEST = 4, SOUTHEAST = 13, SOUTHWEST = 14, NORTHEAST = 23, NORTHWEST = 24;
+	
 	LobbyServer ls;
 
 	public static ClientConnectionHandler getCCH(InetAddress hubHost, int hubPort){
@@ -45,7 +44,7 @@ public class ClientConnectionHandler {
 			e.printStackTrace();
 		}
 
-		iThread = new InputThread(socket);
+		iThread = new ClientInputThread(socket);
 		iThread.start();
 	}
 
@@ -55,14 +54,10 @@ public class ClientConnectionHandler {
 	 * @param message
 	 */
 
-	public void connectToGame(InetAddress host, int port){
-		gameHost = host;
-		gamePort = port;
-	}
 
 	public void sendMessage(String message) {
 		System.out.println("message is: "+message);
-		byte[] command = Conversions.intToByteArray(SENDMESSAGE);
+		byte[] command = Conversions.intToByteArray(Constants.SENDMESSAGE);
 		byte[] length = Conversions.intToByteArray(message.length());
 		byte[] text = message.getBytes();
 		try {
@@ -84,7 +79,7 @@ public class ClientConnectionHandler {
 		if (socket.isClosed())
 			return true;
 		try {
-			socket.getOutputStream().write(LEAVEGAME);
+			socket.getOutputStream().write(Constants.LEAVEGAME);
 			socket.close();
 			return true;
 		} catch (IOException e) {
@@ -126,29 +121,29 @@ public class ClientConnectionHandler {
 	private byte getCommandFromMovementKey(int[] acc) {
 		if(acc[0]==1){
 			if(acc[2]==1){
-				return NORTHWEST;
+				return Constants.NORTHWEST;
 			}
 			else if(acc[3]==1){
-				return NORTHEAST;
+				return Constants.NORTHEAST;
 			}else{
-				return NORTH;
+				return Constants.NORTH;
 			}
 		}
 		if(acc[1]==1){
 			if(acc[2]==1){
-				return SOUTHWEST;
+				return Constants.SOUTHWEST;
 			}
 			else if(acc[3]==1){
-				return SOUTHEAST;
+				return Constants.SOUTHEAST;
 			}else{
-				return SOUTH;
+				return Constants.SOUTH;
 			}
 		}
 		if(acc[2]==1){
-			return WEST;
+			return Constants.WEST;
 		}
 		if(acc[3]==1){
-			return EAST;
+			return Constants.EAST;
 		}
 		return -1;
 	}
@@ -169,14 +164,14 @@ public class ClientConnectionHandler {
 			try {
 				ls = new LobbyServer(gameName, port);
 				ls.start();
-				os.write(STARTGAME);
+				os.write(Constants.STARTGAME);
 				os.write(Conversions.intToByteArray(port));
 				os.write(Conversions.intToByteArray(gameName.length()));
 				os.write(gameName.getBytes());
 				socket.close();
 				socket = new Socket(InetAddress.getLocalHost(),port);
 				os = socket.getOutputStream();
-				iThread = new InputThread(socket);
+				iThread = new ClientInputThread(socket);
 				iThread.start();
 				System.out.println("New lobby created @: " + gameName + ":" + port);
 			} catch (IOException e) {
@@ -192,7 +187,7 @@ public class ClientConnectionHandler {
 	}
 
 	public void refreshGames() {
-		byte[] send = Conversions.intToByteArray(GAMELISTING);
+		byte[] send = Conversions.intToByteArray(Constants.GAMELISTING);
 		try {
 			os.write(send);
 		} catch (IOException e) {
@@ -210,5 +205,10 @@ public class ClientConnectionHandler {
 	}
 	public ArrayList<String> getNames() {	
 		return iThread.getNames();
+	}
+	public void connectToGame(InetAddress host, int port) {
+		gameHost  = host;
+		gamePort = port;
+		
 	}
 }

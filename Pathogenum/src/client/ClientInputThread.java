@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import utils.Constants;
 import utils.Conversions;
 import utils.GameAddress;
 
@@ -16,7 +17,7 @@ import utils.GameAddress;
  * @author BigFarmor, Mardrey
  * 
  */
-public class InputThread extends Thread {
+public class ClientInputThread extends Thread {
 	Socket sock;
 	InputStream is;
 	LinkedList<String> chatBuffer = new LinkedList<String>();
@@ -25,7 +26,7 @@ public class InputThread extends Thread {
 	boolean ok = true;
 	int players;
 
-	public InputThread(Socket sock) {
+	public ClientInputThread(Socket sock) {
 		this.sock = sock;
 		gameList = new ArrayList<GameAddress>();
 		try {
@@ -41,6 +42,7 @@ public class InputThread extends Thread {
 	}
 	
 	public void run() {
+		
 		byte[] pl = new byte[4];
 		try {
 			is.read(pl);
@@ -50,6 +52,7 @@ public class InputThread extends Thread {
 		players = Conversions.ByteArrayToInt(pl);
 		
 		while (ok) {
+			
 			byte[] command = new byte[4];
 			try {
 				int okInt = is.read(command);
@@ -58,13 +61,13 @@ public class InputThread extends Thread {
 				}
 				int intCommand = Conversions.ByteArrayToInt(command);
 				switch (intCommand) {
-				case ClientConnectionHandler.SENDMESSAGE:
+				case Constants.SENDMESSAGE:
 					sendMessage();
 					break;
-				case ClientConnectionHandler.GAMELISTING:
+				case Constants.GAMELISTING:
 					gameListing();
 					break;
-				case ClientConnectionHandler.SENDCONNECTED:
+				case Constants.SENDCONNECTED:
 					connectedListing();
 				break;
 				}

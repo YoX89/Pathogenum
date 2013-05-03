@@ -12,6 +12,7 @@ import java.util.LinkedList;
 
 import publicMonitors.ChatMonitor;
 
+import utils.Constants;
 import utils.Conversions;
 import utils.GameAddress;
 
@@ -23,8 +24,6 @@ import utils.GameAddress;
  */
 public class HubComInputServer extends Thread {
 
-	public final static byte ADD = 1, REM = 2, LIST = 3;
-	public static final int SENDMESSAGE = 100;
 	Socket connection;
 	GamesMonitor gm;
 	InputStream is;
@@ -52,19 +51,13 @@ public class HubComInputServer extends Thread {
 				int com = Conversions.ByteArrayToInt(command);
 				System.out.println("Command: " + command[0]);
 				switch (com) {
-				case HubServer.STARTGAME:
+				case Constants.STARTGAME:
 					addCommand(connection, is);
 					break;
-				case HubServer.GAMELISTING:
+				case Constants.GAMELISTING:
 					sendGames(os);
 					break;
-				case REM:
-					removeCommand(connection, is);
-					break;
-				case LIST:
-					listCommand(os);
-					break;
-				case SENDMESSAGE:
+				case Constants.SENDMESSAGE:
 					fetchMessage();
 					break;
 				default:
@@ -85,7 +78,7 @@ public class HubComInputServer extends Thread {
 		LinkedList<GameAddress> games = gm.getGameAddresses();
 		if (games != null) {
 			try {
-				os2.write(Conversions.intToByteArray(HubServer.GAMELISTING));
+				os2.write(Conversions.intToByteArray(Constants.GAMELISTING));
 				os2.write(Conversions.intToByteArray(games.size()));
 				int i = 0;
 				for (GameAddress address : games) {
@@ -104,37 +97,6 @@ public class HubComInputServer extends Thread {
 		}
 	}
 
-	/**
-	 * Lists the name, host and port of all games currently available
-	 * 
-	 * @param os2
-	 */
-	private void listCommand(OutputStream os2) {
-		LinkedList<GameAddress> addresses = gm.getGameAddresses();
-		int gameNbr = addresses.size();
-		try {
-			os2.write(Conversions.intToByteArray(gameNbr));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		for (GameAddress ga : addresses) {
-			String host = ga.getHost();
-			String gameName = ga.getGameName();
-			int port = ga.getPort();
-			int hostLength = (host.getBytes()).length;
-			int gameNameLength = (gameName.getBytes()).length;
-			try {
-				os2.write(Conversions.intToByteArray(hostLength));
-				os2.write(host.getBytes());
-				os2.write(Conversions.intToByteArray(gameNameLength));
-				os2.write(gameName.getBytes());
-				os2.write(Conversions.intToByteArray(port));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
 
 	/**
 	 * Reads a message and puts it in the chat monitor
@@ -158,28 +120,6 @@ public class HubComInputServer extends Thread {
 	 * @param connection2
 	 * @param is2
 	 */
-	private void removeCommand(Socket connection2, InputStream is2) {
-		InetAddress ia = connection2.getInetAddress();
-		String ip = ia.getHostAddress();
-		int port = connection2.getPort();
-		byte[] nameLength = new byte[4];
-		try {
-			is2.read(nameLength);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		int nameL = Conversions.ByteArrayToInt(nameLength);
-		byte[] name = new byte[nameL];
-		try {
-			is2.read(name);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		String gameName = new String(name);
-		GameAddress ga = new GameAddress(gameName, ip, port);
-		gm.removeGame(ga);
-		// skicka conf kanske?
-	}
 
 	/**
 	 * Reads a game address and adds the corresponding game to currently

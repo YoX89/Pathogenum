@@ -20,6 +20,7 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import utils.Constants;
 import utils.Conversions;
 import utils.Dimensions;
 import Entities.Entity;
@@ -237,32 +238,32 @@ public class ClientGameState extends BasicGameState{
 		int[][] movs = new int[b.length-8][4];
 		for(int i = 0; i < b.length-8; ++i){
 			switch (b[i]) {
-			case ClientConnectionHandler.EAST:
+			case Constants.EAST:
 				movs[i][3] = 1;
 				break;
-			case ClientConnectionHandler.NORTH:
+			case Constants.NORTH:
 				movs[i][0] = 1;
 				break;
-			case ClientConnectionHandler.NORTHEAST:
+			case Constants.NORTHEAST:
 				movs[i][3] = 1;
 				movs[i][0] = 1;
 				break;
-			case ClientConnectionHandler.NORTHWEST:
+			case Constants.NORTHWEST:
 				movs[i][0] = 1;
 				movs[i][2] = 1;
 				break;
-			case ClientConnectionHandler.SOUTH:
+			case Constants.SOUTH:
 				movs[i][1] = 1;
 				break;
-			case ClientConnectionHandler.SOUTHEAST:
+			case Constants.SOUTHEAST:
 				movs[i][1] = 1;
 				movs[i][3] = 1;
 				break;
-			case ClientConnectionHandler.SOUTHWEST:
+			case Constants.SOUTHWEST:
 				movs[i][1] = 1;
 				movs[i][2] = 1;
 				break;
-			case ClientConnectionHandler.WEST:
+			case Constants.WEST:
 				movs[i][2] = 1;
 				break;
 

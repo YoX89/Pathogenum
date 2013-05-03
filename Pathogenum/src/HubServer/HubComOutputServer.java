@@ -9,6 +9,7 @@ import java.util.LinkedList;
 
 import publicMonitors.ChatMonitor;
 
+import utils.Constants;
 import utils.Conversions;
 import utils.GameAddress;
 
@@ -72,7 +73,7 @@ public class HubComOutputServer extends Thread {
 		String msg = gm.getMessage(this);
 
 		if (msg != null) {
-			byte[] com = Conversions.intToByteArray(HubServer.SENDMESSAGE);
+			byte[] com = Conversions.intToByteArray(Constants.SENDMESSAGE);
 			os.write(com);
 			com = Conversions.intToByteArray(msg.getBytes().length);
 			os.write(com);
