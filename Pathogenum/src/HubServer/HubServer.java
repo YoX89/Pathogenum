@@ -25,11 +25,9 @@ public class HubServer extends Thread {
 			LEAVEGAME = 102, JOINGAME = 103, SETREADY = 104, GAMELISTING = 105;
 	ServerSocket Ssock;
 	GamesMonitor gm;
-	ChatMonitor cm;
 
 	public HubServer(int port) {
 		gm = new GamesMonitor();
-		cm = new ChatMonitor();
 		try {
 			Ssock = new ServerSocket(port);
 		} catch (IOException e) {
@@ -49,8 +47,8 @@ public class HubServer extends Thread {
 		while (true) {
 			try {
 				Socket conn = Ssock.accept();
-				HubComOutputServer hcos = new HubComOutputServer(conn, cm, gm);
-				HubComInputServer HCS = new HubComInputServer(conn, gm, cm);
+				HubComOutputServer hcos = new HubComOutputServer(conn, gm);
+				HubComInputServer HCS = new HubComInputServer(conn, gm);
 				hcos.start();
 				HCS.start();
 			} catch (IOException e) {

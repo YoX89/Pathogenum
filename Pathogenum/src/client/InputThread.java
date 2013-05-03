@@ -65,6 +65,7 @@ public class InputThread extends Thread {
 					if (checkInput(check))
 						return;
 					String text = new String(input);
+					System.out.println("recieved: "+text);
 					chatBuffer.offer(text);
 					break;
 				case ClientConnectionHandler.GAMELISTING:

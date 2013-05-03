@@ -24,7 +24,7 @@ public class HubComOutputServer extends Thread {
 	GamesMonitor gm;
 	int ok = 0;
 
-	public HubComOutputServer(Socket s, ChatMonitor lm, GamesMonitor gm) {
+	public HubComOutputServer(Socket s, GamesMonitor gm) {
 		conn = s;
 		try {
 			os = conn.getOutputStream();
@@ -32,7 +32,7 @@ public class HubComOutputServer extends Thread {
 			e.printStackTrace();
 		}
 		this.gm = gm;
-		lm.registerOT(this);
+		gm.registerOT(this);
 	}
 
 	public void run() {

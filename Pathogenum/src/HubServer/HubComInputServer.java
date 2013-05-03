@@ -29,13 +29,11 @@ public class HubComInputServer extends Thread {
 	GamesMonitor gm;
 	InputStream is;
 	OutputStream os;
-	ChatMonitor cm;
 	int ok;
 
-	public HubComInputServer(Socket connection, GamesMonitor gm, ChatMonitor cm) {
+	public HubComInputServer(Socket connection, GamesMonitor gm) {
 		this.connection = connection;
 		this.gm = gm;
-		this.cm = cm;
 		try {
 			is = connection.getInputStream();
 			os = connection.getOutputStream();
@@ -79,7 +77,7 @@ public class HubComInputServer extends Thread {
 			}
 		}
 		System.out.println("HubComInputServer stopped");
-		cm.notifyWaiters();
+		gm.notifyWaiters();
 		return;
 	}
 
@@ -150,7 +148,7 @@ public class HubComInputServer extends Thread {
 		buff = new byte[mLength];
 		ok = is.read(buff);
 		String message = new String(buff);
-		cm.putMessage(connection.getInetAddress().getHostAddress(), message);
+		gm.putMessage(connection.getInetAddress().getHostAddress(), message);
 	}
 
 	/**

@@ -45,7 +45,7 @@ public class ClientLobbyState extends BasicGameState {
 		inputText.setBackgroundColor(new Color(0, 0, 0));
 		
 		outputText = new TextField(arg0, arg0.getDefaultFont(), 500, 250,
-				200, 100);
+				300, 200);
 		outputText.setBackgroundColor(new Color(0, 0, 0));
 	}
 

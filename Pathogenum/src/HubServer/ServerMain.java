@@ -20,9 +20,5 @@ public class ServerMain {
 		}
 		HubServer server = new HubServer(Integer.parseInt(args[0]));
 		server.start();
-		ServerSocket ss = new ServerSocket(30000);
-		Socket s = ss.accept();
-		GameServer gs = new GameServer(1, s);
-		gs.start();
 	}
 }
