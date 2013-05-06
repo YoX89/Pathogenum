@@ -6,6 +6,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import utils.Constants;
@@ -25,8 +26,6 @@ public class ClientConnectionHandler {
 	private OutputStream os;
 	private ClientInputThread iThread;
 	private int players;
-	private InetAddress gameHost;
-	private int gamePort;
 	
 	LobbyServer ls;
 
@@ -160,6 +159,7 @@ public class ClientConnectionHandler {
 	 * @param port
 	 */
 	public void createNewLobby(String gameName, int port) {
+		System.out.println("Going to create new lobby");
 		if(port != -1){
 			try {
 				ls = new LobbyServer(gameName, port);
@@ -206,9 +206,22 @@ public class ClientConnectionHandler {
 	public ArrayList<String> getNames() {	
 		return iThread.getNames();
 	}
-	public void connectToGame(InetAddress host, int port) {
-		gameHost  = host;
-		gamePort = port;
-		
+
+	public void joinGame(String host, int port) {
+		InetAddress ia = null;
+		try {
+			ia = InetAddress.getByName(host);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+			try {
+				socket.close();
+				socket = new Socket(ia, port);
+				os = socket.getOutputStream();
+				iThread = new ClientInputThread(socket);
+				iThread.start();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 	}
 }

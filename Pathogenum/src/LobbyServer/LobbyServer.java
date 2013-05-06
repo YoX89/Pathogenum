@@ -27,14 +27,14 @@ public class LobbyServer extends Thread {
 			e.printStackTrace();
 		}
 		lm = new LobbyMonitor();
-		
+
 		clients = new ArrayList<Socket>();
-		
+
 		new ConnectionListener().start();
-		
+
 	}
-	
-	
+
+
 	@Override
 	public void run(){
 		while(true){
@@ -46,30 +46,31 @@ public class LobbyServer extends Thread {
 						isReady = false;
 						break;
 					}
+
 				}
-				
+
 				//start gameserver
-				
-				
-				
+
+
+
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
-			
-			
+
+
+
 		}
 	}
 
-	
+
 
 	public String getGameName() {
 		return name;
 	}
-	
-	
+
+
 	private class ConnectionListener extends Thread {
-		
+
 		public void run() {
 			System.out.println("LobbyServer started");
 			while (true) {// �ndra till while(!gamestarted)
@@ -86,12 +87,16 @@ public class LobbyServer extends Thread {
 						LobbyComInputServer lcis = new LobbyComInputServer(conn, lm);
 						lcos.start();
 						lcis.start();
+						while(!lcos.runs){
+
+						}
+						lm.notifyWaiters();
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		
+
 	}
 }
