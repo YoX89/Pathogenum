@@ -57,7 +57,6 @@ public class ClientConnectionHandler {
 
 
 	public void sendMessage(String message) {
-		System.out.println("cch::sendmessage");
 		cm.addMessage(message);
 	}
 

@@ -22,30 +22,29 @@ public class ClientMonitor {
 	}
 	
 	public synchronized void addMessage(String message) {
-		System.out.println("clientmonitor::addMessage");
+
 		messagesToSend.add(message);
 		notifyAll();
 	}
 	public synchronized void waitForEvent() throws InterruptedException {
 		wait();
-		System.out.println("notify'd");
 	}
 	public synchronized ArrayList<String> getMessages(){
-		System.out.println("clientmonitor::getMessages");
+
 		ArrayList<String> temp = (ArrayList<String>)messagesToSend.clone();
 		messagesToSend.clear();
 		return temp;
 	}
 
 	public synchronized ArrayList<String> getChatMessages() {
-		System.out.println("clientMonitor::addChatMessages");
-		ArrayList<String> temp = (ArrayList<String>)recievedMessages.clone();
+
+		ArrayList<String> temp = (ArrayList<String>)recievedMessages.clone(); //Görs väldigt ofta...
 		recievedMessages.clear();
 		return temp;
 	}
 
 	public synchronized void addRecievedMessage(String text) {
-		System.out.println("clientMonitor::addRecievedMessage");
+
 		recievedMessages.add(text);
 	}
 
@@ -84,7 +83,6 @@ public class ClientMonitor {
 	}
 
 	public synchronized ArrayList<String> getNames() {
-		
 		return null;
 	}
 
