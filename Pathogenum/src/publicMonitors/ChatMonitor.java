@@ -42,8 +42,9 @@ public class ChatMonitor {
 	 * Removes a thread from known threads
 	 * @param lcos
 	 */
-	public void deRegister(Thread lcos) {
+	public synchronized void deRegister(Thread lcos) {
 		register.remove(lcos);
+		notifyAll();
 	}
 
 	/**

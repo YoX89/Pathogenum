@@ -42,6 +42,10 @@ public class LobbyServer extends Thread {
 					LobbyComInputServer lcis = new LobbyComInputServer(conn, lm);
 					lcos.start();
 					lcis.start();
+					while(!lcos.runs){
+						
+					}
+					lm.notifyWaiters();
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -1,11 +1,8 @@
 package HubServer;
 
-import java.net.InetAddress;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 import publicMonitors.ChatMonitor;
-
 import utils.GameAddress;
 /**
  * a monitor used to store known games for the HubServer
@@ -20,7 +17,6 @@ public class GamesMonitor extends ChatMonitor{
 
 	public GamesMonitor(){
 		games = new LinkedList<GameAddress>();
-		addGame(new GameAddress("testgame","localhost",12345));
 	}
 	/**
 	 * add a game address to the known list
