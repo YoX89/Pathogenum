@@ -56,8 +56,6 @@ public class LobbyServer extends Thread {
 				}
 
 				//start gameserver
-				//TODO
-				//SHOULDN*T BE USED!!!! WHAT INSTEAD???
 				conListener.interrupt();
 				GameServer gs = new GameServer(clients);
 				gs.start();
@@ -110,6 +108,7 @@ public class LobbyServer extends Thread {
 				
 				if (this.isInterrupted()) {
 					notInterupted = false;
+					//TODO
 					//Clean up
 					
 				}
