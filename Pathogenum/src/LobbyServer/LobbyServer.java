@@ -5,6 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import GameServer.GameServer;
+
 /**
  * A server representing the lobby that starts a corresponding input and output
  * server
@@ -18,6 +20,7 @@ public class LobbyServer extends Thread {
 	private LobbyMonitor lm;
 	private String name;
 	private ArrayList<Socket> clients;
+	private ConnectionListener conListener;
 
 	public LobbyServer(String name, int port) {
 		this.name = name;
@@ -30,19 +33,22 @@ public class LobbyServer extends Thread {
 
 		clients = new ArrayList<Socket>();
 
-		new ConnectionListener().start();
+		conListener = new ConnectionListener();
+		conListener.start();
 
 	}
 
 
 	@Override
 	public void run(){
-		while(true){
+		
+		boolean notReady = true;
+		while(notReady){
 			try {
 				lm.waitForEvent();
 				boolean isReady = true;
 				for(int i = 0; i < clients.size(); ++i){
-					if(!lm.getReady(clients.get(i).getInetAddress().getHostAddress())){
+					if(!lm.getReady(clients.get(i).getInetAddress().getHostName())){
 						isReady = false;
 						break;
 					}
@@ -50,7 +56,12 @@ public class LobbyServer extends Thread {
 				}
 
 				//start gameserver
-
+				//TODO
+				//SHOULDN*T BE USED!!!! WHAT INSTEAD???
+				conListener.interrupt();
+				GameServer gs = new GameServer(clients);
+				gs.start();
+				
 
 
 			} catch (InterruptedException e) {
@@ -73,7 +84,8 @@ public class LobbyServer extends Thread {
 
 		public void run() {
 			System.out.println("LobbyServer started");
-			while (true) {// �ndra till while(!gamestarted)
+			boolean notInterupted = true;
+			while (notInterupted) {// �ndra till while(!gamestarted)
 				try {
 					Socket conn = s.accept();
 					System.out.println("Client connects");
@@ -94,6 +106,12 @@ public class LobbyServer extends Thread {
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
+				}
+				
+				if (this.isInterrupted()) {
+					notInterupted = false;
+					//Clean up
+					
 				}
 			}
 		}
