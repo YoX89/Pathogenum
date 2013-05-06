@@ -15,7 +15,7 @@ public class LobbyServer extends Thread {
 
 	ServerSocket s;
 	LobbyMonitor lm;
-	String name;
+	String name = "This is wrong";
 
 	public LobbyServer(String name, int port) {
 		this.name = name;
@@ -24,7 +24,7 @@ public class LobbyServer extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		lm = new LobbyMonitor();
+		lm = new LobbyMonitor(name);
 	}
 
 	public void run() {
@@ -42,6 +42,10 @@ public class LobbyServer extends Thread {
 					LobbyComInputServer lcis = new LobbyComInputServer(conn, lm);
 					lcos.start();
 					lcis.start();
+					while(!lcos.runs){
+						
+					}
+					lm.notifyWaiters();
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

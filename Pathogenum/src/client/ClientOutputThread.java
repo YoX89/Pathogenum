@@ -36,14 +36,25 @@ public class ClientOutputThread extends Thread {
 		}
 	}
 
+	public void getGameName() {
+		try {
+			os.write(Conversions.intToByteArray(Constants.SENDGAMENAME));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
 	private void getMessages() {
 		ArrayList<String> messages = cm.getMessages();
 		for (int i = 0; i < messages.size(); i++) {
 			String message = messages.get(i);
 			byte[] command = Conversions.intToByteArray(Constants.SENDMESSAGE);
+			System.out.println("opthread::sending command: "+Conversions.ByteArrayToInt(command));
 			byte[] length = Conversions.intToByteArray(message.length());
 			byte[] text = message.getBytes();
 			try {
+				System.out.println("opthread::writing, length: "+message.length());
 				os.write(command);
 				os.write(length);
 				os.write(text);

@@ -83,11 +83,11 @@ public class ClientGameState extends BasicGameState{
 		for(int i = 0; i < 10 + rand.nextInt(40); i++){
 			entities.add(fac.getNpc());
 		}
-		try {
-			cch.connectToGame(InetAddress.getLocalHost(), 30000);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		//try {
+			//cch.joinGame(InetAddress.getLocalHost().getCanonicalHostName(), 30000);
+		//} catch (UnknownHostException e) {
+		//	e.printStackTrace();
+		//}
 	}
 
 	@Override

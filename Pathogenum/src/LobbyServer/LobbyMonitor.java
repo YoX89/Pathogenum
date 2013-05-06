@@ -15,11 +15,14 @@ import publicMonitors.ChatMonitor;
 public class LobbyMonitor extends ChatMonitor{
 	
 	ArrayList<String> connectedHosts;
+	String gameName;
+	boolean shouldSendGameName = false;
 	//HashSet<LobbyComOutputServer> register;
 	
-	public LobbyMonitor(){
+	public LobbyMonitor(String gameName){
 		super();
 		System.out.println("LobbyMonitor created");
+		this.gameName = gameName;
 	}
 
 	
@@ -50,5 +53,22 @@ public class LobbyMonitor extends ChatMonitor{
 	}
 	public synchronized ArrayList<String>  getHosts(){
 		return connectedHosts;
+	}
+
+
+	public synchronized void shouldSendGameName() {
+		System.out.println("shouldSendGameName");
+		shouldSendGameName = true;
+		notifyAll();
+	}
+
+
+	public String writeGameName() {
+		if(shouldSendGameName){
+			System.out.println("writegamename");
+			shouldSendGameName = false;
+			return gameName;
+		}
+		return null;
 	}
 }

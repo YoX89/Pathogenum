@@ -42,10 +42,13 @@ public class ClientHubState extends BasicGameState {
 	TextField newGameNameField;
 	TextField newGamePortField;
 	TextField errorMessages;
+	TextField IpText;
 	String[] chatMessages;
 	ArrayList<GameAddress> gamesList;
 	ClientConnectionHandler cch;
 
+	ArrayList<TextField> tFields;
+	
 	boolean pressedSend = false;
 	boolean pressedJoin = false;
 	boolean pressedNew = false;
@@ -83,6 +86,7 @@ public class ClientHubState extends BasicGameState {
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
+		tFields = new ArrayList<TextField>();
 		cch.refreshGames();
 		chatMessages = new String[5];
 		gamesList = new ArrayList<GameAddress>();
@@ -102,6 +106,7 @@ public class ClientHubState extends BasicGameState {
 				newgameButton.getWidth(), 30);
 		errorMessages = new TextField(arg0, arg0.getDefaultFont(), 50, 680,
 				300, 30);
+		IpText = new TextField(arg0,arg0.getDefaultFont(),600,250,300,30);
 		newGameNameField.setText("Game Name");
 		newGamePortField.setText("Game Port");
 		outputText.setAcceptingInput(false);
@@ -111,6 +116,14 @@ public class ClientHubState extends BasicGameState {
 		outputText.setBackgroundColor(new Color(0, 0, 0));
 		gamesField.setBackgroundColor(new Color(0, 0, 0));
 		errorMessages.setBackgroundColor(new Color(0, 0, 0));
+		
+		tFields.add(inputText);
+		tFields.add(outputText);
+		tFields.add(gamesField);
+		tFields.add(newGameNameField);
+		tFields.add(newGamePortField);
+		tFields.add(errorMessages);
+		tFields.add(IpText);
 		// Music bgMusic = new Music("resources/audio/Invincible.ogg"); //:(
 		// bgMusic.loop();
 	}
@@ -123,12 +136,16 @@ public class ClientHubState extends BasicGameState {
 		arg2.drawImage(newgameButton, 200, 300);
 		arg2.drawImage(joingameButton, 600, 300);
 		arg2.drawImage(refreshButton, 50, 600);
-		inputText.render(arg0, arg2);
-		outputText.render(arg0, arg2);
-		gamesField.render(arg0, arg2);
-		newGameNameField.render(arg0, arg2);
-		newGamePortField.render(arg0, arg2);
-		errorMessages.render(arg0, arg2);
+		for(TextField tf: tFields){
+			tf.render(arg0, arg2);
+		}
+		//inputText.render(arg0, arg2);
+		//outputText.render(arg0, arg2);
+		//gamesField.render(arg0, arg2);
+		//newGameNameField.render(arg0, arg2);
+		//newGamePortField.render(arg0, arg2);
+		//errorMessages.render(arg0, arg2);
+		
 	}
 
 	@Override
@@ -195,8 +212,19 @@ public class ClientHubState extends BasicGameState {
 		if (moa.isMouseOver() && Mouse.isButtonDown(0) && !pressedJoin) {
 			pressedJoin = true;
 			System.out.println("PRESSED! JOIN GAME");
-			arg1.enterState(TemporaryGameState.ID);
-
+			String ipText = IpText.getText();
+			
+			String[] hostAndPort = ipText.split(":");
+			if(hostAndPort.length == 2){
+				String host = hostAndPort[0]; 
+				String portString = hostAndPort[1];
+				int port = Integer.parseInt(portString);
+				cch.joinGame(host,port);
+				arg1.enterState(ClientLobbyState.ID);
+			}else{
+				errorMessages.setText("Incorrect join format");
+			}
+			
 		}
 
 		/*
@@ -291,13 +319,6 @@ public class ClientHubState extends BasicGameState {
 		}
 		// System.out.println(messages);
 		outputText.setText(messages);
-	}
-
-	/**
-	 * tells the CCH to close the connection
-	 */
-	public void closeConnection() {
-		cch.closeConnection();
 	}
 
 }

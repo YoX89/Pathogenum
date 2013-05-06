@@ -101,7 +101,6 @@ public class Client extends StateBasedGame {
 			if(host.equals("localhost")){
 				host = InetAddress.getLocalHost().getHostAddress();
 			}
-			
 			InetAddress ia = InetAddress.getByName(host);
 			cch = ClientConnectionHandler.getCCH(ia, port);
 					//new ClientConnectionHandler(InetAddress.getByName(host), port);
@@ -127,9 +126,9 @@ public class Client extends StateBasedGame {
 	 */
 	@Override
 	public boolean closeRequested() {
-		ClientHubState chs = (ClientHubState) (Hub);
-		chs.closeConnection();
+		cch.closeConnection();
 		agc.exit();
+		System.out.println("CLOSIÖNG");
 		return false;
 	}
 

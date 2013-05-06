@@ -1,11 +1,8 @@
 package HubServer;
 
-import java.net.InetAddress;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 import publicMonitors.ChatMonitor;
-
 import utils.GameAddress;
 /**
  * a monitor used to store known games for the HubServer

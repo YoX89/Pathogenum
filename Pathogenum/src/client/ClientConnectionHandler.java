@@ -6,6 +6,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import utils.Constants;
@@ -23,6 +24,8 @@ public class ClientConnectionHandler {
 	private static ClientConnectionHandler myCCH = null;
 	private Socket socket;
 	private ClientInputThread iThread;
+	private int players;
+
 	private ClientOutputThread oThread;
 	private int nbrOfPlayers;
 	private InetAddress gameHost;
@@ -125,6 +128,7 @@ public class ClientConnectionHandler {
 	 * @param port
 	 */
 	public void createNewLobby(String gameName, int port) {
+		System.out.println("Going to create new lobby");
 		if(port != -1){
 			try {
 				ls = new LobbyServer(gameName, port);
@@ -154,20 +158,37 @@ public class ClientConnectionHandler {
 
 	}
 	public String getGameName() {
-		String re = ls.getGameName();
-		if(re != null){
+		if(ls!=null){			
+			String re = ls.getGameName();
 			return re;
 		}else{
-			return "";
+			return cm.getGameName();
 		}
+		
+		
 	}
 	public ArrayList<String> getNames() {	
 		return cm.getNames();
 	}
-	public void connectToGame(InetAddress host, int port) {
-		gameHost  = host;
-		gamePort = port;
-		
+
+	public void joinGame(String host, int port) {
+		InetAddress ia = null;
+		try {
+			ia = InetAddress.getByName(host);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+			try {
+				socket.close();
+				socket = new Socket(ia, port);
+				iThread = new ClientInputThread(socket,cm);
+				iThread.start();
+				oThread = new ClientOutputThread(socket,cm);
+				oThread.start();
+				oThread.getGameName();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 	}
 	public void closeConnection() {
 		// TODO Auto-generated method stub

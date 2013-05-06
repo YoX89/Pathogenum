@@ -38,6 +38,7 @@ public class LobbyComInputServer extends Thread{
 				ok = is.read(com);
 			}catch(IOException e){
 				e.printStackTrace();
+				ok = -1;
 			}
 			
 			switch(com[0]){
@@ -51,6 +52,9 @@ public class LobbyComInputServer extends Thread{
 			case Constants.LEAVEGAME:
 				ok = -1;
 			break;
+			case Constants.SENDGAMENAME:
+				lm.shouldSendGameName();
+				break;
 			}
 		}
 		try {

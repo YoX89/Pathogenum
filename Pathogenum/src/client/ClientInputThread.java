@@ -49,24 +49,34 @@ public class ClientInputThread extends Thread {
 		int players = Conversions.ByteArrayToInt(pl);
 		cm.setNbrOfPlayers(players);
 		while (ok) {
-			
+			System.out.println("ipthread::startofloop");
 			byte[] command = new byte[4];
 			try {
+				System.out.println("ipthread::trying...");
 				int okInt = is.read(command);
+				System.out.println("ipthread::don isread, command: "+Conversions.ByteArrayToInt(command));
 				if(okInt == -1){
 					ok = false;
 				}
 				int intCommand = Conversions.ByteArrayToInt(command);
 				switch (intCommand) {
 				case Constants.SENDMESSAGE:
+					System.out.println("IPthread::doin readmessage");
 					readMessage();
 					break;
 				case Constants.GAMELISTING:
+					System.out.println("IPthread::doin gamelisting");
 					gameListing();
 					break;
 				case Constants.SENDCONNECTED:
+					System.out.println("IPthread::doin connectedlisting");
 					connectedListing();
 				break;
+				case Constants.SENDGAMENAME:
+					setGameName();
+					break;
+				default:
+					break;
 				}
 
 			} catch (IOException e) {
@@ -77,9 +87,37 @@ public class ClientInputThread extends Thread {
 		return;
 	}
 
-	private void connectedListing() {
-		// TODO Auto-generated method stub
+	private void setGameName() {
+		byte[] lengthArray = new byte[4];
+		try {
+			System.out.println("ClientInputThread::readGameName");
+			is.read(lengthArray);
+			int length = Conversions.ByteArrayToInt(lengthArray);
+			byte[] gameNameArray = new byte[length];
+			is.read(gameNameArray);
+			String gameName = new String(gameNameArray);
+			cm.setGameName(gameName);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
+	}
+
+
+	private void connectedListing() throws IOException {
+		connectedPlayers = new ArrayList<String>();
+		byte[] com = new byte[4];
+		is.read(com);
+		int nbrPlayers = Conversions.ByteArrayToInt(com);
+		for(int i = 0; i < nbrPlayers; i++){
+			com = new byte[4];
+			is.read(com);
+			int sl = Conversions.ByteArrayToInt(com);
+			com = new byte[sl];
+			is.read(com);
+			String playName = new String(com);
+			connectedPlayers.add(playName);
+		}	
 	}
 
 	/**
@@ -122,8 +160,7 @@ public class ClientInputThread extends Thread {
 	}
 
 	public ArrayList<String> getNames() {
-		
-		return null;
+		return connectedPlayers;
 	}
 	
 	private void gameListing() throws IOException{

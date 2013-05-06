@@ -13,12 +13,14 @@ public class ClientMonitor {
 	private LinkedList<Byte[]> recievedMovements;
 	private ArrayList<GameAddress> currentGames;
 	private int nbrOfPlayers;
+	private String gameName;
 	public ClientMonitor(){
 		messagesToSend = new ArrayList<String>();
 		recievedMessages = new ArrayList<String>();
 		movementsToSend = new ArrayList<Byte>();
 		recievedMovements  = new LinkedList<Byte[]>();
 		currentGames = new ArrayList<GameAddress>();
+		gameName = "";
 	}
 	
 	public synchronized void addMessage(String message) {
@@ -44,7 +46,7 @@ public class ClientMonitor {
 	}
 
 	public synchronized void addRecievedMessage(String text) {
-
+		System.out.println("clientmonitor::addrecievedmessage");
 		recievedMessages.add(text);
 	}
 
@@ -92,5 +94,12 @@ public class ClientMonitor {
 	
 	public synchronized void recieveMovement(Byte[] movement){
 		recievedMovements.offer(movement);
+	}
+
+	public String getGameName() {
+		return gameName;	
+	}
+	public void setGameName(String name){
+		gameName = name;
 	}
 }

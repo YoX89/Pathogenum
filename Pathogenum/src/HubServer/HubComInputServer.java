@@ -5,12 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.ArrayList;
 import java.util.LinkedList;
-
-import publicMonitors.ChatMonitor;
 
 import utils.Constants;
 import utils.Conversions;
@@ -60,6 +55,8 @@ public class HubComInputServer extends Thread {
 				case Constants.SENDMESSAGE:
 					fetchMessage();
 					break;
+				case Constants.SENDGAMENAME:
+					break;
 				default:
 					connection.close();
 					ok = -1;
@@ -80,9 +77,7 @@ public class HubComInputServer extends Thread {
 			try {
 				os2.write(Conversions.intToByteArray(Constants.GAMELISTING));
 				os2.write(Conversions.intToByteArray(games.size()));
-				int i = 0;
 				for (GameAddress address : games) {
-					i++;
 					os2.write(Conversions.intToByteArray(address.getGameName()
 							.length()));
 					os2.write(address.getGameName().getBytes());
@@ -92,11 +87,11 @@ public class HubComInputServer extends Thread {
 					os2.write(Conversions.intToByteArray(address.getPort()));
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
+				ok = -1;
 			}
 		}
 	}
-
 
 	/**
 	 * Reads a message and puts it in the chat monitor
@@ -136,6 +131,7 @@ public class HubComInputServer extends Thread {
 			is2.read(prt);
 		} catch (IOException e1) {
 			e1.printStackTrace();
+			ok = -1;
 		}
 		int port = Conversions.ByteArrayToInt(prt);
 		// int port = connection2.getPort();
@@ -145,6 +141,7 @@ public class HubComInputServer extends Thread {
 			is2.read(nameLength);
 		} catch (IOException e) {
 			e.printStackTrace();
+			ok = -1;
 		}
 		int nameL = Conversions.ByteArrayToInt(nameLength);
 		byte[] name = new byte[nameL];
@@ -152,6 +149,7 @@ public class HubComInputServer extends Thread {
 			is2.read(name);
 		} catch (IOException e) {
 			e.printStackTrace();
+			ok = -1;
 		}
 		String gameName = new String(name);
 		GameAddress ga = new GameAddress(gameName, ip, port);
