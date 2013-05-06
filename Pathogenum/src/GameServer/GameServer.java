@@ -1,6 +1,7 @@
 package GameServer;
 
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -12,16 +13,19 @@ public class GameServer extends Thread{
 	private GameMonitor gm;
 	private int nbrOfPlayers;
 	
-	public GameServer(int nbrOfPlayers, Socket s){
-		this.nbrOfPlayers = nbrOfPlayers;
+	public GameServer(ArrayList<Socket> clients){
+		nbrOfPlayers = clients.size();
 		Random rand = new Random();
 		
 		seed = rand.nextLong(); 
 		gm = new GameMonitor(nbrOfPlayers);
-		GameServerInputThread git = new GameServerInputThread(s, gm, nbrOfPlayers);
-		GameServerOutputThread got = new GameServerOutputThread(s, gm);
-		got.start();
-		git.start();
+		for(int i = 0; i < nbrOfPlayers; ++i){
+			GameServerInputThread git = new GameServerInputThread(clients.get(i), gm, nbrOfPlayers);
+			GameServerOutputThread got = new GameServerOutputThread(clients.get(i), gm);
+			got.start();
+			git.start();
+			
+		}
 		time = System.currentTimeMillis();
 
 	}
@@ -53,11 +57,4 @@ public class GameServer extends Thread{
 			delta = System.currentTimeMillis() - time;
 		}
 	}
-
-
-
-
-
-
-
 }
