@@ -24,24 +24,25 @@ public class ClientMonitor {
 	}
 	
 	public synchronized void addMessage(String message) {
-
 		messagesToSend.add(message);
 		notifyAll();
 	}
 	public synchronized void waitForEvent() throws InterruptedException {
 		wait();
 	}
-	public synchronized ArrayList<String> getMessages(){
+	public synchronized ArrayList<String> getChatMessagesToSend(){
 
 		ArrayList<String> temp = (ArrayList<String>)messagesToSend.clone();
 		messagesToSend.clear();
 		return temp;
 	}
 
-	public synchronized ArrayList<String> getChatMessages() {
-
-		ArrayList<String> temp = (ArrayList<String>)recievedMessages.clone(); //Görs väldigt ofta...
-		recievedMessages.clear();
+	public synchronized ArrayList<String> getRecievedChatMessages() {
+		ArrayList<String> temp = new ArrayList<String>();
+		if(recievedMessages.size() != 0){
+			temp = (ArrayList<String>)recievedMessages.clone(); //Gï¿½rs vï¿½ldigt ofta...
+			recievedMessages.clear();
+		}
 		return temp;
 	}
 
@@ -96,10 +97,10 @@ public class ClientMonitor {
 		recievedMovements.offer(movement);
 	}
 
-	public String getGameName() {
+	public synchronized String getGameName() {
 		return gameName;	
 	}
-	public void setGameName(String name){
+	public synchronized void setGameName(String name){
 		gameName = name;
 	}
 }

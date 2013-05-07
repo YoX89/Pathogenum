@@ -52,6 +52,7 @@ public class LobbyComOutputServer extends Thread {
 					readAndPrintMsg();
 					getAndPrintConnected();
 					writeGameName();
+					os.flush();
 				}
 			} catch (IOException e) {
 				// e.printStackTrace();

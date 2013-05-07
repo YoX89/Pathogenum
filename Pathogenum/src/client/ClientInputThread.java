@@ -40,14 +40,14 @@ public class ClientInputThread extends Thread {
 	
 	public void run() {
 		
-		byte[] pl = new byte[4];
-		try {
-			is.read(pl);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		int players = Conversions.ByteArrayToInt(pl);
-		cm.setNbrOfPlayers(players);
+	//	byte[] pl = new byte[4];
+	//	try {
+	//		is.read(pl);
+	//	} catch (IOException e1) {
+	//		e1.printStackTrace();
+	//	}
+	//	int players = Conversions.ByteArrayToInt(pl);
+	//	cm.setNbrOfPlayers(players);
 		while (ok) {
 			System.out.println("ipthread::startofloop");
 			byte[] command = new byte[4];

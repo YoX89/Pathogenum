@@ -39,6 +39,7 @@ public class ClientOutputThread extends Thread {
 	public void getGameName() {
 		try {
 			os.write(Conversions.intToByteArray(Constants.SENDGAMENAME));
+			os.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -46,7 +47,7 @@ public class ClientOutputThread extends Thread {
 	}
 
 	private void getMessages() {
-		ArrayList<String> messages = cm.getMessages();
+		ArrayList<String> messages = cm.getChatMessagesToSend();
 		for (int i = 0; i < messages.size(); i++) {
 			String message = messages.get(i);
 			byte[] command = Conversions.intToByteArray(Constants.SENDMESSAGE);
@@ -58,6 +59,7 @@ public class ClientOutputThread extends Thread {
 				os.write(command);
 				os.write(length);
 				os.write(text);
+				os.flush();
 			} catch (IOException e) {
 				// e.printStackTrace();
 				closeConnection();
@@ -77,7 +79,11 @@ public class ClientOutputThread extends Thread {
 				}
 			}
 		}
-
+		try {
+			os.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public boolean closeConnection() {
@@ -99,6 +105,7 @@ public class ClientOutputThread extends Thread {
 			os.write(Conversions.intToByteArray(port));
 			os.write(Conversions.intToByteArray(gameName.length()));
 			os.write(gameName.getBytes());
+			os.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -109,6 +116,7 @@ public class ClientOutputThread extends Thread {
 		byte[] send = Conversions.intToByteArray(Constants.GAMELISTING);
 		try {
 			os.write(send);
+			os.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

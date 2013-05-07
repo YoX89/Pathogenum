@@ -16,7 +16,6 @@ import GameServer.GameServer;
  */
 public class LobbyServer extends Thread {
 
-
 	private ServerSocket s;
 	private LobbyMonitor lm;
 	private String name;
@@ -30,9 +29,8 @@ public class LobbyServer extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		lm = new LobbyMonitor(name);
 
+		lm = new LobbyMonitor(name);
 
 		clients = new ArrayList<Socket>();
 
@@ -40,45 +38,38 @@ public class LobbyServer extends Thread {
 		conListener.start();
 	}
 
-
 	@Override
-	public void run(){
-		
+	public void run() {
+
 		boolean notReady = true;
-		while(notReady){
+		while (notReady) {
 			try {
 				lm.waitForEvent();
-				boolean isReady = true;
-				for(int i = 0; i < clients.size(); ++i){
-					if(!lm.getReady(clients.get(i).getInetAddress().getHostName())){
-						isReady = false;
+				for (int i = 0; i < clients.size(); ++i) {
+					String hostname = clients.get(i).getInetAddress()
+							.getHostName();
+					System.out.println("Hostname: " + hostname);
+					boolean rdy = lm.getReady(hostname);
+					if (rdy) {
+						notReady = false;
 						break;
 					}
 
 				}
-
-				//start gameserver
-				conListener.interrupt();
-				GameServer gs = new GameServer(clients);
-				gs.start();
-				
-
+				// start gameserver
 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-
-
-
 		}
+		conListener.interrupt();
+		GameServer gs = new GameServer(clients);
+		gs.start();
 	}
-
-
 
 	public String getGameName() {
 		return name;
 	}
-
 
 	private class ConnectionListener extends Thread {
 
@@ -94,25 +85,29 @@ public class LobbyServer extends Thread {
 						conn.close();
 					} else {
 						clients.add(conn);
-						LobbyComOutputServer lcos = new LobbyComOutputServer(conn,
-								lm);
-						LobbyComInputServer lcis = new LobbyComInputServer(conn, lm);
+						LobbyComOutputServer lcos = new LobbyComOutputServer(
+								conn, lm);
+						LobbyComInputServer lcis = new LobbyComInputServer(
+								conn, lm);
 						lcos.start();
 						lcis.start();
-						while(!lcos.runs){
+						while (!lcos.runs) {
 
 						}
+						System.out.println("Set Hostname: "
+								+ conn.getInetAddress().getHostName());
+						lm.setReady(conn.getInetAddress().getHostName(), false);
 						lm.notifyWaiters();
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
+
 				if (this.isInterrupted()) {
 					notInterupted = false;
-					//TODO
-					//Clean up
-					
+					// TODO
+					// Clean up
+
 				}
 			}
 		}

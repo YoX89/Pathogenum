@@ -43,6 +43,9 @@ public class LobbyMonitor extends ChatMonitor{
 	 * @return
 	 */
 	public synchronized boolean getReady(String ip){
+		if(ready.get(ip) == null){
+			return false;
+		}
 		return ready.get(ip);
 	}
 	public synchronized void addHost(String host){

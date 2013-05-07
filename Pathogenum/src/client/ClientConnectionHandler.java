@@ -70,7 +70,7 @@ public class ClientConnectionHandler {
 	 * @return
 	 */
 	public ArrayList<String> getMessage() {
-		ArrayList<String> list = cm.getChatMessages();
+		ArrayList<String> list = cm.getRecievedChatMessages();
 		return list;
 	}
 
@@ -190,6 +190,7 @@ public class ClientConnectionHandler {
 				e.printStackTrace();
 			}
 	}
+	
 	public void closeConnection() {
 		// TODO Auto-generated method stub
 		
