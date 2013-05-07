@@ -165,9 +165,12 @@ public class ClientConnectionHandler {
 		}else{
 			return cm.getGameName();
 		}
-		
-		
 	}
+	
+	public void updateGameName(){
+		oThread.getGameName();
+	}
+	
 	public ArrayList<String> getNames() {	
 		return cm.getNames();
 	}
@@ -186,7 +189,7 @@ public class ClientConnectionHandler {
 				iThread.start();
 				oThread = new ClientOutputThread(socket,cm);
 				oThread.start();
-				oThread.getGameName();
+				updateGameName();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
