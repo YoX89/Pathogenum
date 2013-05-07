@@ -31,9 +31,12 @@ public class ClientOutputThread extends Thread {
 				e.printStackTrace();
 			}
 			getMovements();
+			System.out.println("after movements before messages");
 			getMessages();
+			System.out.println("after messages before ready");
 			//getGameName();
 			getReady();
+			System.out.println("after ready");
 		}
 		System.out.println("ClientOutputThread stopped");
 		return;
@@ -86,10 +89,12 @@ public class ClientOutputThread extends Thread {
 	}
 
 	private void getMovements() {
+		System.out.println("--------------------------I'm here");
 		ArrayList<Byte> movements = cm.getMovements();
 		for (int i = 0; i < movements.size(); i++) {
 			if (movements.get(i) != -1) {
 				try {
+					System.out.println("Sending movement: " + movements.get(i));
 					os.write(movements.get(i));
 				} catch (IOException e) {
 					e.printStackTrace();

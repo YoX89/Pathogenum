@@ -172,7 +172,7 @@ public class ClientConnectionHandler {
 		return cm.getNames();
 	}
 
-	public void joinGame(String host, int port) {
+	public void joinLobby(String host, int port) {
 		InetAddress ia = null;
 		try {
 			ia = InetAddress.getByName(host);

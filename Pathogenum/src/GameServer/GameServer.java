@@ -50,7 +50,10 @@ public class GameServer extends Thread{
 
 			time = System.currentTimeMillis();
 			try {
-				Thread.sleep(17 - (delta - 17));
+				long sleepingTime = 17 - (delta -17);
+				if(sleepingTime > 0){
+					Thread.sleep(sleepingTime);
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

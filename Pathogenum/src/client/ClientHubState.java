@@ -219,7 +219,7 @@ public class ClientHubState extends BasicGameState {
 				String host = hostAndPort[0]; 
 				String portString = hostAndPort[1];
 				int port = Integer.parseInt(portString);
-				cch.joinGame(host,port);
+				cch.joinLobby(host,port);
 				arg1.enterState(ClientLobbyState.ID);
 			}else{
 				errorMessages.setText("Incorrect join format");

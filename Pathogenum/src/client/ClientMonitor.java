@@ -80,8 +80,12 @@ public class ClientMonitor {
 	 * gets movements from input thread to client
 	 */
 	public synchronized byte[] recieveMovements(byte[] buff) {
-		if(recievedMovements.isEmpty()){
-			return buff;
+		while(recievedMovements.isEmpty()){
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		Byte[] oldestMovement = recievedMovements.pop();
 		byte[] primOm = Conversions.ObjectByteArrayToPrimitiveByteArray(oldestMovement);
