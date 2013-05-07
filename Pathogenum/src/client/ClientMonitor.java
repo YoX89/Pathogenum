@@ -14,6 +14,7 @@ public class ClientMonitor {
 	private ArrayList<GameAddress> currentGames;
 	private int nbrOfPlayers;
 	private String gameName;
+	private ArrayList<String> connectedPlayers;
 	public ClientMonitor(){
 		messagesToSend = new ArrayList<String>();
 		recievedMessages = new ArrayList<String>();
@@ -21,9 +22,11 @@ public class ClientMonitor {
 		recievedMovements  = new LinkedList<Byte[]>();
 		currentGames = new ArrayList<GameAddress>();
 		gameName = "";
+		connectedPlayers = new ArrayList<String>();
 	}
 	
 	public synchronized void addMessage(String message) {
+		System.out.println("Message to be sent in monitor: " + message);
 		messagesToSend.add(message);
 		notifyAll();
 	}
@@ -31,7 +34,7 @@ public class ClientMonitor {
 		wait();
 	}
 	public synchronized ArrayList<String> getChatMessagesToSend(){
-
+		System.out.println("Message gotten to be sent from oThread");
 		ArrayList<String> temp = (ArrayList<String>)messagesToSend.clone();
 		messagesToSend.clear();
 		return temp;
@@ -47,8 +50,9 @@ public class ClientMonitor {
 	}
 
 	public synchronized void addRecievedMessage(String text) {
-		System.out.println("clientmonitor::addrecievedmessage");
+		System.out.println("clientmonitor::addrecievedmessage: " + text);
 		recievedMessages.add(text);
+		notifyAll();
 	}
 
 	public synchronized void addMovement(byte[] command) {
@@ -86,7 +90,7 @@ public class ClientMonitor {
 	}
 
 	public synchronized ArrayList<String> getNames() {
-		return null;
+		return connectedPlayers;
 	}
 
 	public synchronized void addGame(GameAddress gameAddress) {
@@ -101,6 +105,11 @@ public class ClientMonitor {
 		return gameName;	
 	}
 	public synchronized void setGameName(String name){
+		System.out.println("CMONITOR:SETTINGGAMENAME");
 		gameName = name;
+	}
+
+	public void setconnectedPlayers(ArrayList<String> connectedPlayers) {
+		this.connectedPlayers = connectedPlayers;
 	}
 }

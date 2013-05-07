@@ -60,15 +60,16 @@ public class LobbyMonitor extends ChatMonitor{
 
 
 	public synchronized void shouldSendGameName() {
-		System.out.println("shouldSendGameName");
+		System.out.println("\tLMONITOR:SHOULDSENDGAME");
 		shouldSendGameName = true;
 		notifyAll();
 	}
 
 
 	public String writeGameName() {
+		System.out.println("\tLMONITOR:WRITEGAMENAME");
 		if(shouldSendGameName){
-			System.out.println("writegamename");
+			System.out.println("\tLMONITOR:WRITINGGAMENAME");
 			shouldSendGameName = false;
 			return gameName;
 		}

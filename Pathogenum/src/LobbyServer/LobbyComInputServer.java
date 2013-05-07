@@ -53,6 +53,7 @@ public class LobbyComInputServer extends Thread{
 				ok = -1;
 			break;
 			case Constants.SENDGAMENAME:
+				System.out.println("LCIS:SENDGAMENAMECASE");
 				lm.shouldSendGameName();
 				break;
 			}

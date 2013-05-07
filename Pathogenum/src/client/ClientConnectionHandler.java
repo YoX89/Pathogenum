@@ -158,6 +158,7 @@ public class ClientConnectionHandler {
 
 	}
 	public String getGameName() {
+		System.out.println("CCH:GETGAMENAME");
 		if(ls!=null){			
 			String re = ls.getGameName();
 			return re;

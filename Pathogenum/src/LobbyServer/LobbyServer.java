@@ -31,7 +31,7 @@ public class LobbyServer extends Thread {
 		}
 
 		lm = new LobbyMonitor(name);
-
+		
 		clients = new ArrayList<Socket>();
 
 		conListener = new ConnectionListener();

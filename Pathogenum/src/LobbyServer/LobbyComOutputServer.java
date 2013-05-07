@@ -66,11 +66,11 @@ public class LobbyComOutputServer extends Thread {
 	}
 
 	private void writeGameName() {
-		System.out.println("LCOS::writeGameName");
+		System.out.println("LCOS:WRITEGAMENAME");
 		String name = lm.writeGameName();
 		if(name!=null){
 			try {
-				System.out.println("LCOS::writing game name");
+				System.out.println("\tLCOS:WRITINGGAMENAMETOSTREAM");
 				os.write(Conversions.intToByteArray(Constants.SENDGAMENAME));
 				os.write(Conversions.intToByteArray(name.length()));
 				os.write(name.getBytes());

@@ -49,27 +49,27 @@ public class ClientInputThread extends Thread {
 	//	int players = Conversions.ByteArrayToInt(pl);
 	//	cm.setNbrOfPlayers(players);
 		while (ok) {
-			System.out.println("ipthread::startofloop");
+			//System.out.println("ipthread::startofloop");
 			byte[] command = new byte[4];
 			try {
-				System.out.println("ipthread::trying...");
+				//System.out.println("ipthread::trying...");
 				int okInt = is.read(command);
-				System.out.println("ipthread::don isread, command: "+Conversions.ByteArrayToInt(command));
+				//System.out.println("ipthread::don isread, command: "+Conversions.ByteArrayToInt(command));
 				if(okInt == -1){
 					ok = false;
 				}
 				int intCommand = Conversions.ByteArrayToInt(command);
 				switch (intCommand) {
 				case Constants.SENDMESSAGE:
-					System.out.println("IPthread::doin readmessage");
+					//System.out.println("IPthread::doin readmessage");
 					readMessage();
 					break;
 				case Constants.GAMELISTING:
-					System.out.println("IPthread::doin gamelisting");
+					//System.out.println("IPthread::doin gamelisting");
 					gameListing();
 					break;
 				case Constants.SENDCONNECTED:
-					System.out.println("IPthread::doin connectedlisting");
+					//System.out.println("IPthread::doin connectedlisting");
 					connectedListing();
 				break;
 				case Constants.SENDGAMENAME:
@@ -88,9 +88,10 @@ public class ClientInputThread extends Thread {
 	}
 
 	private void setGameName() {
+		System.out.println("CLIENTINPUTTHREAD:SETTINGGAMENAME");
 		byte[] lengthArray = new byte[4];
 		try {
-			System.out.println("ClientInputThread::readGameName");
+			//System.out.println("ClientInputThread::readGameName");
 			is.read(lengthArray);
 			int length = Conversions.ByteArrayToInt(lengthArray);
 			byte[] gameNameArray = new byte[length];
@@ -118,6 +119,7 @@ public class ClientInputThread extends Thread {
 			String playName = new String(com);
 			connectedPlayers.add(playName);
 		}	
+		cm.setconnectedPlayers(connectedPlayers);
 	}
 
 	/**
@@ -209,7 +211,7 @@ public class ClientInputThread extends Thread {
 		if (checkInput(check))
 			return;
 		String text = new String(input);
-		System.out.println("recieved: "+text);
+		//System.out.println("recieved: "+text);
 		cm.addRecievedMessage(text);
 	}
 

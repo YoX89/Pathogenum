@@ -24,7 +24,7 @@ public class ClientOutputThread extends Thread {
 	}
 
 	public void run() {
-		while (true) {
+		while (!socket.isClosed()) {
 			try {
 				cm.waitForEvent();
 			} catch (InterruptedException e) {
@@ -32,8 +32,10 @@ public class ClientOutputThread extends Thread {
 			}
 			getMovements();
 			getMessages();
-
+			//getGameName();
 		}
+		System.out.println("ClientOutputThread stopped");
+		return;
 	}
 
 	public void getGameName() {
@@ -51,11 +53,11 @@ public class ClientOutputThread extends Thread {
 		for (int i = 0; i < messages.size(); i++) {
 			String message = messages.get(i);
 			byte[] command = Conversions.intToByteArray(Constants.SENDMESSAGE);
-			System.out.println("opthread::sending command: "+Conversions.ByteArrayToInt(command));
+			//System.out.println("opthread::sending command: "+Conversions.ByteArrayToInt(command));
 			byte[] length = Conversions.intToByteArray(message.length());
 			byte[] text = message.getBytes();
 			try {
-				System.out.println("opthread::writing, length: "+message.length());
+				//System.out.println("opthread::writing, length: "+message.length());
 				os.write(command);
 				os.write(length);
 				os.write(text);
