@@ -75,8 +75,10 @@ public class ClientInputThread extends Thread {
 				case Constants.SENDGAMENAME:
 					setGameName();
 					break;
-					//TODO receive game movement
+				case Constants.SENDMOVEMENT:
+					setMovements();
 				default:
+					System.out.println("Receiveng something...???");
 					break;
 				}
 
@@ -87,6 +89,32 @@ public class ClientInputThread extends Thread {
 		System.out.println("IThread stopped");
 		return;
 	}
+
+	private void setMovements() {
+		System.out.println("Setting movement");
+		byte[] longBuff = new byte[8];
+		
+		try {
+			is.read(longBuff);
+			
+			
+			
+			long frame = Conversions.byteArrayToLong(longBuff);
+			
+			byte[] movements = new byte[connectedPlayers.size()];
+			
+			is.read(movements);
+			cm.addMovement(movements);
+			System.out.println("HEJ");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+
 
 	private void setGameName() {
 		System.out.println("CLIENTINPUTTHREAD:SETTINGGAMENAME");
