@@ -15,6 +15,8 @@ public class ClientMonitor {
 	private int nbrOfPlayers;
 	private String gameName;
 	private ArrayList<String> connectedPlayers;
+	private boolean isReady = false;
+
 	public ClientMonitor(){
 		messagesToSend = new ArrayList<String>();
 		recievedMessages = new ArrayList<String>();
@@ -78,6 +80,9 @@ public class ClientMonitor {
 	 * gets movements from input thread to client
 	 */
 	public synchronized byte[] recieveMovements(byte[] buff) {
+		if(recievedMovements.isEmpty()){
+			return buff;
+		}
 		Byte[] oldestMovement = recievedMovements.pop();
 		byte[] primOm = Conversions.ObjectByteArrayToPrimitiveByteArray(oldestMovement);
 		return primOm;
@@ -109,7 +114,16 @@ public class ClientMonitor {
 		gameName = name;
 	}
 
+
 	public void setconnectedPlayers(ArrayList<String> connectedPlayers) {
 		this.connectedPlayers = connectedPlayers;
+}
+	public synchronized void setReady(boolean b) {
+		isReady = b;
+		notifyAll();
+	}
+
+	public synchronized boolean isReady() {
+		return isReady;
 	}
 }

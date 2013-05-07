@@ -33,6 +33,7 @@ public class ClientOutputThread extends Thread {
 			getMovements();
 			getMessages();
 			//getGameName();
+			getReady();
 		}
 		System.out.println("ClientOutputThread stopped");
 		return;
@@ -68,6 +69,20 @@ public class ClientOutputThread extends Thread {
 			}
 		}
 
+	}
+	
+	private void getReady() {
+		boolean isReady = cm.isReady();
+		if(isReady){
+			byte[] command = Conversions.intToByteArray(Constants.SETREADY);
+			System.out.println("Sending \"I AM READY BIATCH\"");
+			try {
+				os.write(command);
+				os.flush();
+			} catch (IOException e) {
+				closeConnection();
+			}
+		}
 	}
 
 	private void getMovements() {
