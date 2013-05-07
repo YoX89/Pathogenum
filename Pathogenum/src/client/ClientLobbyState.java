@@ -30,6 +30,8 @@ public class ClientLobbyState extends BasicGameState {
 	String[] chatMessages;
 	boolean pressedSend = false;
 	boolean pressedReady = false;
+	String gameName = "";
+	
 	ClientConnectionHandler cch = ClientConnectionHandler.getCCH(
 			ClientHubState.getHost(), ClientHubState.getPort());
 	public static final int ID = 1;
@@ -56,6 +58,8 @@ public class ClientLobbyState extends BasicGameState {
 					100, 500 + i * 50, sendButton.getWidth() * 2, 30);
 			connectedClients[i].setAcceptingInput(false);
 		}
+		cch.updateGameName();
+		gameName = cch.getGameName();
 	}
 
 	@Override
@@ -71,7 +75,11 @@ public class ClientLobbyState extends BasicGameState {
 		inputText.render(arg0, arg2);
 		outputText.render(arg0, arg2);
 		nameText.render(arg0, arg2);
-		nameText.setText(cch.getGameName());
+		String s = cch.getGameName();
+		if(!s.equals("") && s != null){
+			gameName = s;
+		}
+		nameText.setText(gameName);
 		ArrayList<String> names = cch.getNames();
 		// System.out.println("NSIZE: " + names.size());
 		if (names != null) {
