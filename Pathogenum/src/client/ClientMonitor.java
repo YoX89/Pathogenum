@@ -106,8 +106,13 @@ public class ClientMonitor {
 		currentGames.add(gameAddress);		
 	}
 	
-	public synchronized void addMovementToBuffer(Byte[] movement){
-		recievedMovements.offer(movement);
+	public synchronized void addMovementToBuffer(byte[] movement){
+		Byte[] mov = new Byte[movement.length];
+		for(int i=0; i<movement.length;i++){
+			mov[i] = new Byte(movement[i]);
+		}
+		recievedMovements.offer(mov);
+		notifyAll();
 	}
 
 	public synchronized String getGameName() {

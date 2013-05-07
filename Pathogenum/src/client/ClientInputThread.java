@@ -104,7 +104,7 @@ public class ClientInputThread extends Thread {
 			byte[] movements = new byte[connectedPlayers.size()];
 			
 			is.read(movements);
-			cm.addMovement(movements);
+			cm.addMovementToBuffer(movements);
 			System.out.println("HEJ");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
