@@ -75,6 +75,7 @@ public class ClientInputThread extends Thread {
 				case Constants.SENDGAMENAME:
 					setGameName();
 					break;
+					//TODO receive game movement
 				default:
 					break;
 				}
@@ -149,17 +150,6 @@ public class ClientInputThread extends Thread {
 	 */
 
 
-	
-
-	public byte[] recieveMovements(byte[] buff) {
-		try {
-			is.read(buff);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return buff;
-		
-	}
 
 	public ArrayList<String> getNames() {
 		return connectedPlayers;

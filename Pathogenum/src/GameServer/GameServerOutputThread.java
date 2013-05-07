@@ -11,7 +11,7 @@ public class GameServerOutputThread extends Thread {
 	private OutputStream os;
 	private GameMonitor gm;
 	private long frameID = 0;
-	
+
 	public GameServerOutputThread(Socket s, GameMonitor gm){
 		try {
 			this.os = s.getOutputStream();
@@ -21,15 +21,16 @@ public class GameServerOutputThread extends Thread {
 		this.gm = gm;
 
 	}
-	
+
 	@Override
 	public void run(){
 		try {
 			os.write(Conversions.intToByteArray(gm.getNbrPlayers()));
-		while(true){
-			byte[] b = gm.getOutGoingCommand(frameID);
+			while(true){
+				byte[] b = gm.getOutGoingCommand(frameID);
+				System.out.println("Writing command from GameServer OutputStream");
 				os.write(b);
-		}
+			}
 		}catch(IOException e){
 			e.printStackTrace();
 		}

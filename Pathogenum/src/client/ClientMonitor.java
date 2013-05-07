@@ -106,7 +106,7 @@ public class ClientMonitor {
 		currentGames.add(gameAddress);		
 	}
 	
-	public synchronized void recieveMovement(Byte[] movement){
+	public synchronized void addMovementToBuffer(Byte[] movement){
 		recievedMovements.offer(movement);
 	}
 

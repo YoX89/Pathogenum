@@ -46,7 +46,7 @@ public class GameServer extends Thread{
 			//Send movements and frame ID
 			gm.setOutgoingCommands(commands, frameID++);
 
-
+			System.out.println("Putting command with framID: " + frameID + " in the monitor");
 
 			time = System.currentTimeMillis();
 			try {
