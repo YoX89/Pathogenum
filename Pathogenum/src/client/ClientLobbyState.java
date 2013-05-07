@@ -75,10 +75,9 @@ public class ClientLobbyState extends BasicGameState {
 		inputText.render(arg0, arg2);
 		outputText.render(arg0, arg2);
 		nameText.render(arg0, arg2);
-		String s = cch.getGameName();
-		if(!s.equals("") && s != null){
-			gameName = s;
-		}
+		
+		
+		
 		nameText.setText(gameName);
 		ArrayList<String> names = cch.getNames();
 		// System.out.println("NSIZE: " + names.size());
@@ -133,9 +132,18 @@ public class ClientLobbyState extends BasicGameState {
 		ArrayList<String> chatList = cch.getMessage();
 		addNewLines(chatList);
 		popMessages(chatList);
+		if(gameName.equals("")){
+			
+		}
 		// for(int i = 0; i < chatMessages.length; i++){
 		// System.out.println("chatMessages::"+chatMessages[i]);
 		// }
+		
+		if(gameName.equals("")){
+			cch.updateGameName();
+			gameName = cch.getGameName();
+		}
+		
 	}
 
 	private void addNewLines(ArrayList<String> chatList) {
