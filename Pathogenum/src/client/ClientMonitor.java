@@ -14,6 +14,7 @@ public class ClientMonitor {
 	private ArrayList<GameAddress> currentGames;
 	private int nbrOfPlayers;
 	private String gameName;
+	private boolean isReady = false;
 	public ClientMonitor(){
 		messagesToSend = new ArrayList<String>();
 		recievedMessages = new ArrayList<String>();
@@ -102,5 +103,14 @@ public class ClientMonitor {
 	}
 	public synchronized void setGameName(String name){
 		gameName = name;
+	}
+
+	public void setReady(boolean b) {
+		isReady = b;
+		notifyAll();
+	}
+
+	public boolean isReady() {
+		return isReady;
 	}
 }

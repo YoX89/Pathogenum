@@ -22,12 +22,14 @@ import org.newdawn.slick.state.StateBasedGame;
 public class ClientLobbyState extends BasicGameState {
 
 	Image sendButton;
+	Image readyButton;
 	TextField inputText;
 	TextField outputText;
 	TextField nameText;
 	TextField[] connectedClients;
 	String[] chatMessages;
 	boolean pressedSend = false;
+	boolean pressedReady = false;
 	ClientConnectionHandler cch = ClientConnectionHandler.getCCH(
 			ClientHubState.getHost(), ClientHubState.getPort());
 	public static final int ID = 1;
@@ -38,6 +40,7 @@ public class ClientLobbyState extends BasicGameState {
 
 		chatMessages = new String[10];
 		sendButton = new Image("resources/gfx/SendButton.png");
+		readyButton = new Image("resources/gfx/JoingameButton.png");
 		nameText = new TextField(arg0, arg0.getDefaultFont(), 400, 100, 150, 30);
 		inputText = new TextField(arg0, arg0.getDefaultFont(), 100, 250,
 				sendButton.getWidth(), 30);
@@ -64,6 +67,7 @@ public class ClientLobbyState extends BasicGameState {
 		}
 
 		arg2.drawImage(sendButton, 100, 300);
+		arg2.drawImage(readyButton, 300, 300);
 		inputText.render(arg0, arg2);
 		outputText.render(arg0, arg2);
 		nameText.render(arg0, arg2);
@@ -94,6 +98,9 @@ public class ClientLobbyState extends BasicGameState {
 		if (pressedSend && !Mouse.isButtonDown(0)) {
 			pressedSend = false;
 		}
+		if(pressedReady && !Mouse.isButtonDown(0)) {
+			pressedReady = false;
+		}
 		/*
 		 * Sends chat message
 		 */
@@ -105,6 +112,13 @@ public class ClientLobbyState extends BasicGameState {
 			pressedSend = true;
 			cch.sendMessage(inputText.getText());
 			inputText.setText("");
+		}
+		
+		moa = new MouseOverArea(arg0, readyButton, 300, 400, readyButton.getWidth(), readyButton.getHeight());
+		if(moa.isMouseOver() && Mouse.isButtonDown(0) && !pressedReady){
+			pressedReady = true;
+			//START GAME
+			cch.setReady();
 		}
 
 		ArrayList<String> chatList = cch.getMessage();

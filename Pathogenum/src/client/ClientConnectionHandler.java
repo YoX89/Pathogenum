@@ -195,4 +195,8 @@ public class ClientConnectionHandler {
 		// TODO Auto-generated method stub
 		
 	}
+	public void setReady() {
+		cm.setReady(true);
+		
+	}
 }
