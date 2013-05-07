@@ -75,6 +75,9 @@ public class ClientMonitor {
 	 * gets movements from input thread to client
 	 */
 	public synchronized byte[] recieveMovements(byte[] buff) {
+		if(recievedMovements.isEmpty()){
+			return buff;
+		}
 		Byte[] oldestMovement = recievedMovements.pop();
 		byte[] primOm = Conversions.ObjectByteArrayToPrimitiveByteArray(oldestMovement);
 		return primOm;
@@ -105,12 +108,12 @@ public class ClientMonitor {
 		gameName = name;
 	}
 
-	public void setReady(boolean b) {
+	public synchronized void setReady(boolean b) {
 		isReady = b;
 		notifyAll();
 	}
 
-	public boolean isReady() {
+	public synchronized boolean isReady() {
 		return isReady;
 	}
 }

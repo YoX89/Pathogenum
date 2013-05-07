@@ -114,11 +114,12 @@ public class ClientLobbyState extends BasicGameState {
 			inputText.setText("");
 		}
 		
-		moa = new MouseOverArea(arg0, readyButton, 300, 400, readyButton.getWidth(), readyButton.getHeight());
+		moa = new MouseOverArea(arg0, readyButton, 300, 300, readyButton.getWidth(), readyButton.getHeight());
 		if(moa.isMouseOver() && Mouse.isButtonDown(0) && !pressedReady){
 			pressedReady = true;
-			//START GAME
+			System.out.println("Pressing ready");
 			cch.setReady();
+			arg1.enterState(ClientGameState.ID);
 		}
 
 		ArrayList<String> chatList = cch.getMessage();
