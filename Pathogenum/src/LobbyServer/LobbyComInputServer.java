@@ -55,7 +55,11 @@ public class LobbyComInputServer extends Thread{
 			case Constants.SENDGAMENAME:
 				lm.shouldSendGameName();
 				break;
+			case Constants.SETREADY: 
+				lm.setReady(conn.getInetAddress().getHostName(), true);
+				break;
 			}
+		
 		}
 		try {
 			if(!conn.isClosed())
