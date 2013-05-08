@@ -7,6 +7,7 @@ import java.net.Socket;
 
 import utils.Constants;
 import utils.Conversions;
+import utils.misc;
 
 public class GameServerOutputThread extends Thread {
 	private OutputStream os;
@@ -26,11 +27,11 @@ public class GameServerOutputThread extends Thread {
 	@Override
 	public void run(){
 		try {
-			os.write(Conversions.intToByteArray(gm.getNbrPlayers()));
+			//os.write(Conversions.intToByteArray(gm.getNbrPlayers()));
 			while(true){
-				byte[] movements = gm.getOutGoingCommand(frameID);
+				byte[] movements = gm.getOutGoingCommand(frameID++);
 				byte[] command = Conversions.intToByteArray(Constants.SENDMOVEMENT);
-				System.out.println("Writing command from GameServer OutputStream");
+				//System.out.println("Writing movement from GameServer" + misc.printByte(movements));
 				os.write(command);
 				os.write(movements);
 			}

@@ -45,18 +45,23 @@ public class LobbyComOutputServer extends Thread {
 					ok = -1;
 				}
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				System.out.println("LobbyComOutputServer interrupted.");
+				//e.printStackTrace();
+				ok = -1;
 			}
 			try {
 				if (ok != -1) {
 					readAndPrintMsg();
 					getAndPrintConnected();
-					writeGameName();
+					ok = writeGameName();
 					os.flush();
 				}
 			} catch (IOException e) {
 				// e.printStackTrace();
 				ok = -1;
+			}
+			if (this.isInterrupted()) {
+				return; //keep socket
 			}
 		}
 		System.out.println("LobbyComOutputServer stopped");
@@ -65,7 +70,7 @@ public class LobbyComOutputServer extends Thread {
 		return;
 	}
 
-	private void writeGameName() {
+	private int writeGameName() {
 		System.out.println("LCOS:WRITEGAMENAME");
 		String name = lm.writeGameName();
 		if(name!=null){
@@ -74,11 +79,12 @@ public class LobbyComOutputServer extends Thread {
 				os.write(Conversions.intToByteArray(Constants.SENDGAMENAME));
 				os.write(Conversions.intToByteArray(name.length()));
 				os.write(name.getBytes());
+				return 1;
 			} catch (IOException e) {
-				e.printStackTrace();
+				return -1;
 			}
 		}
-		
+		return 1;
 	}
 
 	private void getAndPrintConnected() throws IOException {

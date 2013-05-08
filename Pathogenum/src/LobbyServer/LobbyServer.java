@@ -62,7 +62,15 @@ public class LobbyServer extends Thread {
 				e.printStackTrace();
 			}
 		}
-		conListener.interrupt();
+		System.out.println("Innan inter");
+		//conListener.interrupt();
+		try {
+			conListener.interrupt();
+			s.close(); //interrupt s.accept in conlistener
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Efter inter");
 		GameServer gs = new GameServer(clients);
 		gs.start();
 	}
@@ -73,7 +81,12 @@ public class LobbyServer extends Thread {
 
 	private class ConnectionListener extends Thread {
 
+		ArrayList<LobbyComInputServer> lcisList;
+		ArrayList<LobbyComOutputServer> lcosList;
+		
 		public void run() {
+			lcisList = new ArrayList<LobbyComInputServer>();
+			lcosList = new ArrayList<LobbyComOutputServer>();
 			System.out.println("LobbyServer started");
 			boolean notInterupted = true;
 			while (notInterupted) {// �ndra till while(!gamestarted)
@@ -89,6 +102,8 @@ public class LobbyServer extends Thread {
 								conn, lm);
 						LobbyComInputServer lcis = new LobbyComInputServer(
 								conn, lm);
+						lcisList.add(lcis);
+						lcosList.add(lcos);
 						lcos.start();
 						lcis.start();
 						while (!lcos.runs) {
@@ -100,7 +115,8 @@ public class LobbyServer extends Thread {
 						lm.notifyWaiters();
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("Serversocket in lobby closed, as an interrupt.");
+					//e.printStackTrace();
 				}
 
 				if (this.isInterrupted()) {
@@ -110,6 +126,14 @@ public class LobbyServer extends Thread {
 
 				}
 			}
+			for(LobbyComOutputServer lcos: lcosList){
+				lcos.interrupt();
+			}
+			for(LobbyComInputServer lcis: lcisList){
+				lcis.interrupt();
+			}
+			System.out.println("LobbyConnListener stoppes");
+			return;
 		}
 
 	}

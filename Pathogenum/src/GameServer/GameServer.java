@@ -4,6 +4,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
 
+import utils.misc;
+
 
 public class GameServer extends Thread{
 
@@ -41,12 +43,11 @@ public class GameServer extends Thread{
 			for(int i = 0; i < nbrOfPlayers; ++i){
 				commands[i] = gm.getIncomingCommand(i);
 			}
-			
 
 			//Send movements and frame ID
 			gm.setOutgoingCommands(commands, frameID++);
 
-			System.out.println("Putting command with framID: " + frameID + " in the monitor");
+			//System.out.println("Putting command with framID: " + frameID + " in the monitor");
 
 			time = System.currentTimeMillis();
 			try {

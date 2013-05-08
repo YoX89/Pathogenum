@@ -28,7 +28,7 @@ public class ClientMonitor {
 	}
 	
 	public synchronized void addMessage(String message) {
-		System.out.println("Message to be sent in monitor: " + message);
+		//System.out.println("Message to be sent in monitor: " + message);
 		messagesToSend.add(message);
 		notifyAll();
 	}
@@ -36,7 +36,7 @@ public class ClientMonitor {
 		wait();
 	}
 	public synchronized ArrayList<String> getChatMessagesToSend(){
-		System.out.println("Message gotten to be sent from oThread");
+		//System.out.println("Message gotten to be sent from oThread");
 		ArrayList<String> temp = (ArrayList<String>)messagesToSend.clone();
 		messagesToSend.clear();
 		return temp;
@@ -52,12 +52,12 @@ public class ClientMonitor {
 	}
 
 	public synchronized void addRecievedMessage(String text) {
-		System.out.println("clientmonitor::addrecievedmessage: " + text);
+		//System.out.println("clientmonitor::addrecievedmessage: " + text);
 		recievedMessages.add(text);
 		notifyAll();
 	}
 
-	public synchronized void addMovement(byte[] command) {
+	public synchronized void addMovementToSend(byte[] command) {
 		movementsToSend.add(new Byte(command[0]));	
 		notifyAll();
 	}
@@ -88,10 +88,14 @@ public class ClientMonitor {
 			}
 		}
 		Byte[] oldestMovement = recievedMovements.pop();
+		//System.out.println("OLDESTMOVEMENT: " + misc.printByte(oldestMovement));
 		byte[] primOm = Conversions.ObjectByteArrayToPrimitiveByteArray(oldestMovement);
+		//System.out.println("OLDESTMOVEMENTPRIMITIV: " + misc.printByte(primOm));
 		return primOm;
 	}
 
+
+	
 	public synchronized ArrayList<GameAddress> getGames() {
 		ArrayList<GameAddress> temp = (ArrayList<GameAddress>)currentGames.clone();
 		currentGames.clear();
@@ -119,7 +123,7 @@ public class ClientMonitor {
 		return gameName;	
 	}
 	public synchronized void setGameName(String name){
-		System.out.println("CMONITOR:SETTINGGAMENAME");
+		//System.out.println("CMONITOR:SETTINGGAMENAME");
 		gameName = name;
 	}
 

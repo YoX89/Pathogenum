@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import utils.Constants;
 import utils.Conversions;
 import utils.GameAddress;
+import utils.misc;
 import LobbyServer.LobbyServer;
 
 /**
@@ -30,7 +31,7 @@ public class ClientConnectionHandler {
 	private int nbrOfPlayers;
 	private InetAddress gameHost;
 	private int gamePort;
-	private ClientMonitor cm;
+	ClientMonitor cm;
 	LobbyServer ls;
 
 	public static ClientConnectionHandler getCCH(InetAddress hubHost, int hubPort){
@@ -79,7 +80,8 @@ public class ClientConnectionHandler {
 	 */
 	public void sendMovement(int[] acc) {
 		byte[] command = {getCommandFromMovementKey(acc)};
-		cm.addMovement(command);
+		//System.out.println("SendMovements: " + misc.printByte(command));
+		cm.addMovementToSend(command);
 	}
 
 	/**Translates key pressings to 1-byte commands
@@ -128,7 +130,7 @@ public class ClientConnectionHandler {
 	 * @param port
 	 */
 	public void createNewLobby(String gameName, int port) {
-		System.out.println("Going to create new lobby");
+		//System.out.println("Going to create new lobby");
 		if(port != -1){
 			try {
 				ls = new LobbyServer(gameName, port);
@@ -158,7 +160,7 @@ public class ClientConnectionHandler {
 
 	}
 	public String getGameName() {
-		System.out.println("CCH:GETGAMENAME");
+		//System.out.println("CCH:GETGAMENAME");
 		if(ls!=null){			
 			String re = ls.getGameName();
 			return re;

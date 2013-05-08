@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import utils.Constants;
 import utils.Conversions;
+import utils.misc;
 
 public class ClientOutputThread extends Thread {
 	private Socket socket;
@@ -30,13 +31,13 @@ public class ClientOutputThread extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			getMovements();
-			System.out.println("after movements before messages");
+			sendMovements();
+			//System.out.println("after movements before messages");
 			getMessages();
-			System.out.println("after messages before ready");
+			//System.out.println("after messages before ready");
 			//getGameName();
 			getReady();
-			System.out.println("after ready");
+			//System.out.println("after ready");
 		}
 		System.out.println("ClientOutputThread stopped");
 		return;
@@ -78,7 +79,7 @@ public class ClientOutputThread extends Thread {
 		boolean isReady = cm.isReady();
 		if(isReady){
 			byte[] command = Conversions.intToByteArray(Constants.SETREADY);
-			System.out.println("Sending \"I AM READY BIATCH\"");
+			//System.out.println("Sending \"I AM READY BIATCH\"");
 			try {
 				os.write(command);
 				os.flush();
@@ -88,13 +89,13 @@ public class ClientOutputThread extends Thread {
 		}
 	}
 
-	private void getMovements() {
-		System.out.println("--------------------------I'm here");
+	private void sendMovements() {
+		//System.out.println("--------------------------I'm here");
 		ArrayList<Byte> movements = cm.getMovements();
 		for (int i = 0; i < movements.size(); i++) {
 			if (movements.get(i) != -1) {
 				try {
-					System.out.println("Sending movement: " + movements.get(i));
+					//System.out.println("Sending movement throug cyberspyder: " + movements.get(i));
 					os.write(movements.get(i));
 				} catch (IOException e) {
 					e.printStackTrace();

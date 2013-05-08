@@ -77,8 +77,9 @@ public class ClientInputThread extends Thread {
 					break;
 				case Constants.SENDMOVEMENT:
 					setMovements();
+					break;
 				default:
-					System.out.println("Receiveng something...???");
+					System.out.println("got comm: " + Conversions.ByteArrayToInt(command));
 					break;
 				}
 
@@ -91,7 +92,7 @@ public class ClientInputThread extends Thread {
 	}
 
 	private void setMovements() {
-		System.out.println("Setting movement");
+		//System.out.println("Setting movement");
 		byte[] longBuff = new byte[8];
 		
 		try {
@@ -102,10 +103,16 @@ public class ClientInputThread extends Thread {
 			long frame = Conversions.byteArrayToLong(longBuff);
 			
 			byte[] movements = new byte[connectedPlayers.size()];
-			
 			is.read(movements);
-			cm.addMovementToBuffer(movements);
-			System.out.println("HEJ");
+			byte[] totaltInfo = new byte[longBuff.length + movements.length];
+			for(int i = 0; i < longBuff.length; i++){
+				totaltInfo[i] = longBuff[i];
+			}
+			for(int i = 0; i < movements.length; i++){
+				totaltInfo[i+longBuff.length] = movements[i];
+			}
+			cm.addMovementToBuffer(totaltInfo);
+			//System.out.println("HEJ");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -117,7 +124,7 @@ public class ClientInputThread extends Thread {
 
 
 	private void setGameName() {
-		System.out.println("CLIENTINPUTTHREAD:SETTINGGAMENAME");
+		//System.out.println("CLIENTINPUTTHREAD:SETTINGGAMENAME");
 		byte[] lengthArray = new byte[4];
 		try {
 			//System.out.println("ClientInputThread::readGameName");

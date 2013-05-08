@@ -26,7 +26,7 @@ public class GameMonitor {
 	}
 	
 	public synchronized void addIncomingCommand(byte b, int player){
-		System.out.println("Adding incoming command: " + (int)b + " for player " + player);
+		//System.out.println("Adding incoming command: " + (int)b + " for player " + player);
 		incComs[player-1].add(b);
 	}
 	
@@ -41,9 +41,17 @@ public class GameMonitor {
 	
 	public synchronized void setOutgoingCommands(Byte[] b, long frame){
 		outComs.put(frame, b);
+		notifyAll();
 	}
 	
 	public synchronized byte[] getOutGoingCommand(long frame){
+		while(outComs.size() == 0){
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		byte[] coms = new byte[1*players + 8];
 		byte[] frameBytes = ByteBuffer.allocate(8).putLong(frame).array();
 		
@@ -57,6 +65,9 @@ public class GameMonitor {
 			for(int i = 0; i < players; i++){
 				b[i] = 0;
 			}
+		}
+		if(b[0] != 0){
+			System.out.println("!0");
 		}
 		for(int i = 0; i < players; ++i){
 			coms[8+i] = b[i];

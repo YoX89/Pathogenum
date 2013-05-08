@@ -82,7 +82,6 @@ public class ClientLobbyState extends BasicGameState {
 		ArrayList<String> names = cch.getNames();
 		// System.out.println("NSIZE: " + names.size());
 		if (names != null) {
-			System.out.println("NAMES != NULL");
 			for (int i = 0; i < names.size(); i++) {
 				String text = names.get(i);
 				if (text == null) {
@@ -133,15 +132,9 @@ public class ClientLobbyState extends BasicGameState {
 		addNewLines(chatList);
 		popMessages(chatList);
 		if(gameName.equals("")){
-			
-		}
-		// for(int i = 0; i < chatMessages.length; i++){
-		// System.out.println("chatMessages::"+chatMessages[i]);
-		// }
-		
-		if(gameName.equals("")){
 			cch.updateGameName();
 			gameName = cch.getGameName();
+			
 		}
 		
 	}

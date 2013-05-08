@@ -124,8 +124,7 @@ public class ClientHubState extends BasicGameState {
 		tFields.add(newGamePortField);
 		tFields.add(errorMessages);
 		tFields.add(IpText);
-		// Music bgMusic = new Music("resources/audio/Invincible.ogg"); //:(
-		// bgMusic.loop();
+		
 	}
 
 	@Override

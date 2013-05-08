@@ -46,6 +46,6 @@ public class Conversions {
 		for(int i = 0; i < array.length; i++){
 			ret[i] = array[i];
 		}
-		return null;
+		return ret;
 	}
 }

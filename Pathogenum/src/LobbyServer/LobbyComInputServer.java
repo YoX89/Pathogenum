@@ -60,6 +60,9 @@ public class LobbyComInputServer extends Thread{
 				lm.setReady(conn.getInetAddress().getHostName(), true);
 				break;
 			}
+			if (this.isInterrupted()) {
+				return; //keep socket
+			}
 		
 		}
 		try {

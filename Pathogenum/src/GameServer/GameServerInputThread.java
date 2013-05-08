@@ -27,9 +27,9 @@ public class GameServerInputThread extends Thread {
 		while(true){
 			byte b = 0x00;
 			try {
-				System.out.println("Server waiting to read from player " + player);
+				//System.out.println("Server waiting to read from player " + player);
 				b = (byte) is.read();
-				System.out.println("Getting command: " + (int)b);
+				//System.out.println("Getting movement on gameserverinput: " + (int)b);
 				gm.addIncomingCommand(b, player);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
