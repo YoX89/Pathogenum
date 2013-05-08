@@ -7,6 +7,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.gui.TextField;
@@ -31,6 +32,9 @@ public class ClientLobbyState extends BasicGameState {
 	boolean pressedSend = false;
 	boolean pressedReady = false;
 	String gameName = "";
+	Music bgMusic;
+	
+	boolean musicPlays = false;
 	
 	ClientConnectionHandler cch = ClientConnectionHandler.getCCH(
 			ClientHubState.getHost(), ClientHubState.getPort());
@@ -58,6 +62,8 @@ public class ClientLobbyState extends BasicGameState {
 					100, 500 + i * 50, sendButton.getWidth() * 2, 30);
 			connectedClients[i].setAcceptingInput(false);
 		}
+		
+		bgMusic = new Music("resources/audio/pathogenum.ogg");
 		cch.updateGameName();
 		gameName = cch.getGameName();
 	}
@@ -100,6 +106,10 @@ public class ClientLobbyState extends BasicGameState {
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 			throws SlickException {
+		if(!musicPlays){
+			bgMusic.loop();
+			musicPlays = true;
+		}
 
 		if (pressedSend && !Mouse.isButtonDown(0)) {
 			pressedSend = false;
