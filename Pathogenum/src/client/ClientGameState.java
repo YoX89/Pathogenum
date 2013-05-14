@@ -241,10 +241,10 @@ public class ClientGameState extends BasicGameState {
 
 	private void doMovements(byte[] b, int s) {
 		if (b != null) {
-			System.out.println("Movements in client: " + misc.printByte(b));
+//			System.out.println("Movements in client: " + misc.printByte(b));
 			long frame = extractID(b);
 			int acc[] = extractMovements(b);
-			System.out.println("ACC: [" + acc[0] +  "] [" + acc[1] +  "] [" + acc[2] +  "] [" + acc[3] +  "]");
+//			System.out.println("ACC: [" + acc[0] +  "] [" + acc[1] +  "] [" + acc[2] +  "] [" + acc[3] +  "]");
 			world.step(s * 0.001f, 8, 3);
 			for (int i = 4; i < entities.size(); ++i) {
 				entities.get(i).addForce(acc, s);

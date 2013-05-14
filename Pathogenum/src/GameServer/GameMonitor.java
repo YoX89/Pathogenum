@@ -4,6 +4,8 @@ import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 
+import utils.misc;
+
 
 public class GameMonitor {
 	
@@ -41,6 +43,7 @@ public class GameMonitor {
 	
 	public synchronized void setOutgoingCommands(Byte[] b, long frame){
 		outComs.put(frame, b);
+		System.out.println("In Game Monitor setting outgoing commands: " + misc.printByte(b));
 		notifyAll();
 	}
 	

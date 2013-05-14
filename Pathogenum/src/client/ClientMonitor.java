@@ -111,6 +111,10 @@ public class ClientMonitor {
 	}
 	
 	public synchronized void addMovementToBuffer(byte[] movement){
+		System.out.println("Movement to buffer is: ");
+		for(int i = 0; i < movement.length; i++) {
+			System.out.print(movement[i] + " ");
+		}
 		Byte[] mov = new Byte[movement.length];
 		for(int i=0; i<movement.length;i++){
 			mov[i] = new Byte(movement[i]);
