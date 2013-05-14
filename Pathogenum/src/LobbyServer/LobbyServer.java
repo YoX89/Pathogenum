@@ -41,27 +41,26 @@ public class LobbyServer extends Thread {
 	@Override
 	public void run() {
 
-		boolean notReady = true;
-		while (notReady) {
+		boolean allReady = false;
+		while (!allReady) {
 			try {
 				lm.waitForEvent();
+				allReady = true;
+				System.out.println("Client size is: " + clients.size());
 				for (int i = 0; i < clients.size(); ++i) {
 					String hostname = clients.get(i).getInetAddress()
 							.getHostName();
-					System.out.println("Hostname: " + hostname);
-					boolean rdy = lm.getReady(hostname);
-					if (rdy) {
-						notReady = false;
-						break;
-					}
-
+					if(!lm.getReady(hostname))
+						allReady = false;
+					
+					System.out.println("Hostname: " + hostname + " all is " + (allReady ? "ready" : "not ready"));
 				}
-				// start gameserver
-
+				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+		
 		System.out.println("Innan inter");
 		//conListener.interrupt();
 		try {
@@ -70,6 +69,7 @@ public class LobbyServer extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		System.out.println("Efter inter");
 		GameServer gs = new GameServer(clients);
 		gs.start();
