@@ -22,7 +22,7 @@ public class GameServer extends Thread{
 		seed = rand.nextLong(); 
 		gm = new GameMonitor(nbrOfPlayers);
 		for(int i = 0; i < nbrOfPlayers; ++i){
-			GameServerInputThread git = new GameServerInputThread(clients.get(i), gm, nbrOfPlayers);
+			GameServerInputThread git = new GameServerInputThread(clients.get(i), gm, i);
 			GameServerOutputThread got = new GameServerOutputThread(clients.get(i), gm);
 			got.start();
 			git.start();
