@@ -14,7 +14,7 @@ import org.newdawn.slick.geom.Shape;
 import utils.Dimensions;
 
 public class NPC extends Entity {
-	Random rand = new Random();
+	Random rand;
 	int forceCount =0;
 	int [] acc = new int [4];
 	long seed;
@@ -38,6 +38,7 @@ public class NPC extends Entity {
 		body.createFixture(fd);
 		body.setLinearDamping(0.0015f);
 		body.setUserData(name);
+		rand = new Random(seed);
 	}
 	
 	public NPC(String name, Shape sh, int speed, World world, float radius) {
@@ -59,6 +60,7 @@ public class NPC extends Entity {
 		body.createFixture(fd);
 		body.setLinearDamping(0.0015f);
 		body.setUserData(name);
+		rand = new Random();
 
 	}
 

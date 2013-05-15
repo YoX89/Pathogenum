@@ -50,6 +50,7 @@ public class ClientGameState extends BasicGameState {
 	int FSTBAOE;
 	NpcFactory fac;
 	Music bgMusic;
+	long seed = 0;
 	
 	boolean musicPlays = false;
 	ClientConnectionHandler cch;
@@ -85,8 +86,8 @@ public class ClientGameState extends BasicGameState {
 		createWalls(boundPoints);
 
 		readImages("resources/gfx/");
-		Random rand = new Random();
-		fac = new NpcFactory(rand.nextLong(), (PathogenumWorld) world,
+		Random rand = new Random(seed);
+		fac = new NpcFactory(0, (PathogenumWorld) world,
 				boundPoints);
 		Circle circle = new Circle(100, 100, Dimensions.meterToPixel(0.5f));
 		shapes.add(circle);
