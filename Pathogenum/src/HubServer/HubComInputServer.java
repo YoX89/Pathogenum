@@ -57,6 +57,9 @@ public class HubComInputServer extends Thread {
 					break;
 				case Constants.SENDGAMENAME:
 					break;
+				case Constants.LEAVEGAME:
+					deRegisterGame(connection, is);
+					break;
 				default:
 					connection.close();
 					ok = -1;
@@ -69,6 +72,26 @@ public class HubComInputServer extends Thread {
 		System.out.println("HubComInputServer stopped");
 		gm.notifyWaiters();
 		return;
+	}
+
+	private void deRegisterGame(Socket conn2, InputStream is2) {
+		byte[] gameNameL = new byte[4];
+		byte[] gameName;
+		int ok = 1;
+		try {
+			ok = is2.read(gameNameL);
+			gameName = new byte[Conversions.ByteArrayToInt(gameNameL)];
+			ok = is2.read(gameName);
+			String gName = new String(gameName);
+			byte[] port = new byte[4];
+			ok = is2.read(port);
+			int prt = Conversions.ByteArrayToInt(port);
+			GameAddress removeGa = new GameAddress(gName, connection.getInetAddress().getHostAddress(), prt);
+			gm.removeGame(removeGa);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	private void sendGames(OutputStream os2) {

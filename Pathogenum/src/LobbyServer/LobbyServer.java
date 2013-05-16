@@ -1,9 +1,14 @@
 package LobbyServer;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import utils.Constants;
+import utils.Conversions;
 
 import GameServer.GameServer;
 
@@ -21,19 +26,29 @@ public class LobbyServer extends Thread {
 	private String name;
 	private ArrayList<Socket> clients;
 	private ConnectionListener conListener;
-
-	public LobbyServer(String name, int port) {
+	private Socket hubSocket;
+	private InetAddress hubAddress;
+	private int hubPort;
+	
+	public LobbyServer(String name, int port, InetAddress hubInetAddress, int hubPort) {
 		this.name = name;
 		try {
 			s = new ServerSocket(port);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		hubAddress = hubInetAddress;
+		this.hubPort = hubPort;
+		try {
+			hubSocket = new Socket(hubAddress, hubPort);
+		} catch (IOException e) {
+			System.out.println("Could not connect to hubserver in gamelobbyserver");
+			e.printStackTrace();
+		}
 		lm = new LobbyMonitor(name);
 		
 		clients = new ArrayList<Socket>();
-
+		
 		conListener = new ConnectionListener();
 		conListener.start();
 	}
@@ -71,10 +86,28 @@ public class LobbyServer extends Thread {
 		}
 		
 		System.out.println("Efter inter");
+		writeDeRegLobby();
 		GameServer gs = new GameServer(clients);
 		gs.start();
 	}
 
+	private void writeDeRegLobby(){
+		OutputStream os;
+		try {
+			os = hubSocket.getOutputStream();
+		byte[] com = Conversions.intToByteArray(Constants.LEAVEGAME);
+		os.write(com);
+		int nameL = name.length();
+		os.write(Conversions.intToByteArray(nameL));
+		os.write(name.getBytes());
+		os.write(hubPort);
+		} catch (IOException e) {
+			System.out.println("Could not write DeregisterLobbyMessage in lobby");
+			e.printStackTrace();
+		}
+		
+	}
+	
 	public String getGameName() {
 		return name;
 	}

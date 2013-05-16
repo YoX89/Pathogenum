@@ -33,7 +33,8 @@ public class ClientConnectionHandler {
 	private int gamePort;
 	ClientMonitor cm;
 	LobbyServer ls;
-
+	private int hubPort;
+	
 	public static ClientConnectionHandler getCCH(InetAddress hubHost, int hubPort){
 		if(myCCH==null){
 			myCCH = new ClientConnectionHandler(hubHost, hubPort);
@@ -46,6 +47,7 @@ public class ClientConnectionHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		this.hubPort = hubPort;
 		cm = new ClientMonitor();
 		iThread = new ClientInputThread(socket,cm);
 		iThread.start();
@@ -133,7 +135,7 @@ public class ClientConnectionHandler {
 		//System.out.println("Going to create new lobby");
 		if(port != -1){
 			try {
-				ls = new LobbyServer(gameName, port);
+				ls = new LobbyServer(gameName, port, socket.getInetAddress(), hubPort); //send hubInetAddress aswell to enable lobby to "deregister" himself after game is created
 				ls.start();
 				oThread.startNewGame(gameName, port);
 				socket.close();
