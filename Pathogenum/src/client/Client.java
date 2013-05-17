@@ -62,6 +62,7 @@ public class Client extends StateBasedGame {
 			} catch (SlickException e) {
 			}
 			agc.setTargetFrameRate(60);
+			agc.setAlwaysRender(true);
 			try {
 				agc.start();
 			} catch (SlickException e) {

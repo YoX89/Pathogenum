@@ -14,6 +14,7 @@ import publicMonitors.ChatMonitor;
  */
 public class LobbyMonitor extends ChatMonitor{
 	
+	HashMap<String, Boolean> ready;
 	ArrayList<String> connectedHosts;
 	String gameName;
 	boolean shouldSendGameName = false;
@@ -23,6 +24,7 @@ public class LobbyMonitor extends ChatMonitor{
 		super();
 		System.out.println("LobbyMonitor created");
 		this.gameName = gameName;
+		ready = new HashMap<String, Boolean>();
 	}
 
 	

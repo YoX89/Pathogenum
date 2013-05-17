@@ -12,6 +12,7 @@ public class GameMonitor {
 	private ArrayDeque<Byte>[] incComs;
 	private HashMap<Long, Byte[]> outComs;
 	private int players;
+	private HashMap<GameServerOutputThread, Boolean> register;
 	
 	public GameMonitor(int nbrOfPlayers){
 		incComs = new ArrayDeque[nbrOfPlayers];
@@ -21,6 +22,15 @@ public class GameMonitor {
 			incComs[i] = new ArrayDeque<Byte>();
 		}
 		this.players = nbrOfPlayers;
+		register = new HashMap<GameServerOutputThread, Boolean>();
+	}
+	
+	public void registerOThread(GameServerOutputThread gsot){
+		register.put(gsot, false);
+	}
+	
+	public void deRegisterOThread(GameServerOutputThread gsot){
+		register.remove(gsot);
 	}
 	
 	public int getNbrPlayers(){
@@ -47,8 +57,8 @@ public class GameMonitor {
 		notifyAll();
 	}
 	
-	public synchronized byte[] getOutGoingCommand(long frame){
-		while(outComs.size() == 0){
+	public synchronized byte[] getOutGoingCommand(long frame, GameServerOutputThread gsot){
+		while(outComs.size() == 0 || register.get(gsot)){
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -61,8 +71,12 @@ public class GameMonitor {
 		for(int i = 0; i < 8; ++i){
 			coms[i] = frameBytes[i];
 		}
+		Byte[] b = null;
 		
-		Byte[] b = outComs.remove(frame);
+		b = outComs.get(frame);
+		register.put(gsot, true);
+			b = outComs.remove(frame);
+			setAllReg(false);
 		if(b == null){
 			b = new Byte[players];
 			for(int i = 0; i < players; i++){
@@ -77,6 +91,22 @@ public class GameMonitor {
 		}
 		
 		return coms;
+	}
+	
+	private void setAllReg(boolean value) {
+		for(GameServerOutputThread gs : register.keySet()){
+			register.put(gs, value);
+		}
+		notifyAll();
+	}
+
+	private boolean allRegTrue(){
+		for(GameServerOutputThread gs : register.keySet()){
+			if(!register.get(gs)){
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

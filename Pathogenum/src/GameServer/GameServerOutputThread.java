@@ -21,7 +21,7 @@ public class GameServerOutputThread extends Thread {
 			e.printStackTrace();
 		}
 		this.gm = gm;
-
+		gm.registerOThread(this);
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class GameServerOutputThread extends Thread {
 		try {
 			// os.write(Conversions.intToByteArray(gm.getNbrPlayers()));
 			while (true) {
-				byte[] movements = gm.getOutGoingCommand(frameID++);
+				byte[] movements = gm.getOutGoingCommand(frameID++, this);
 				byte[] command = Conversions
 						.intToByteArray(Constants.SENDMOVEMENT);
 				// System.out.println("Writing movement from GameServer" +
