@@ -154,6 +154,7 @@ public class ClientConnectionHandler {
 
 	public ArrayList<GameAddress> getGames() {
 		ArrayList<GameAddress> list = cm.getGames();
+		System.out.println("GamesSizeInnCCh: " + list.size());
 		return list;
 	}
 

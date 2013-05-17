@@ -234,7 +234,7 @@ public class ClientHubState extends BasicGameState {
 		if (moa.isMouseOver() && Mouse.isButtonDown(0) && !pressedRefresh) {
 			pressedRefresh = true;
 			System.out.println("PRESSED! Refresh");
-			printGames(gamesList);
+			printGames();
 		}
 
 		ArrayList<String> chatList = cch.getMessage();
@@ -255,11 +255,11 @@ public class ClientHubState extends BasicGameState {
 		}		
 	}
 
-	private void printGames(ArrayList<GameAddress> list) {
+	private void printGames() {
 		cch.refreshGames();
 		gamesList = cch.getGames();
 		String text = "";
-		for (GameAddress address : list) {
+		for (GameAddress address : gamesList) {
 			text += address.getGameName();
 			text += "  :  ";
 			text += address.getHost();
@@ -268,6 +268,7 @@ public class ClientHubState extends BasicGameState {
 			text += "\n";
 		}
 		gamesField.setText(text);
+		System.out.println("GAMESLIST!!!!!\n" + text);
 	}
 
 	private int checkPortValidity() {
