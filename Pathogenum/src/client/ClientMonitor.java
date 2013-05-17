@@ -16,6 +16,8 @@ public class ClientMonitor {
 	private String gameName;
 	private ArrayList<String> connectedPlayers;
 	private boolean isReady = false;
+	private long seed;
+	private int mIndex;
 
 	public ClientMonitor(){
 		messagesToSend = new ArrayList<String>();
@@ -132,7 +134,7 @@ public class ClientMonitor {
 	}
 
 
-	public void setconnectedPlayers(ArrayList<String> connectedPlayers) {
+	public synchronized void setconnectedPlayers(ArrayList<String> connectedPlayers) {
 		this.connectedPlayers = connectedPlayers;
 }
 	public synchronized void setReady(boolean b) {
@@ -142,5 +144,22 @@ public class ClientMonitor {
 
 	public synchronized boolean isReady() {
 		return isReady;
+	}
+	
+	public synchronized void setSeed(long seed) {
+		this.seed = seed; 
+	}
+
+	public synchronized long getSeed() {
+		return seed;
+		
+	}
+
+	public synchronized void setMyIndex(int myIndex) {
+		mIndex = myIndex;
+	}
+	
+	public synchronized int getMyIndex() {
+		return mIndex;
 	}
 }

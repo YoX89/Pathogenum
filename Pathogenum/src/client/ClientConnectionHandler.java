@@ -1,18 +1,13 @@
 package client;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import utils.Constants;
-import utils.Conversions;
 import utils.GameAddress;
-import utils.misc;
 import LobbyServer.LobbyServer;
 
 /**
@@ -25,12 +20,9 @@ public class ClientConnectionHandler {
 	private static ClientConnectionHandler myCCH = null;
 	private Socket socket;
 	private ClientInputThread iThread;
-	private int players;
 
 	private ClientOutputThread oThread;
 	private int nbrOfPlayers;
-	private InetAddress gameHost;
-	private int gamePort;
 	ClientMonitor cm;
 	LobbyServer ls;
 	private int hubPort;
@@ -119,6 +111,11 @@ public class ClientConnectionHandler {
 		}
 		return -1;
 	}
+	
+	//TODO
+	public byte[] receiveInit() {
+		return new byte[1];
+	}
 
 	public byte[] receiveMovements() {
 		nbrOfPlayers = cm.getNbrOfPlayers();
@@ -206,5 +203,15 @@ public class ClientConnectionHandler {
 	public void setReady() {
 		cm.setReady(true);
 		
+	}
+	
+	public long getSeed() {
+		return cm.getSeed();
+	}
+	public int getIndex() {
+		return cm.getMyIndex();
+	}
+	public int getNbrOfPlayers() {
+		return cm.getNbrOfPlayers();
 	}
 }

@@ -2,10 +2,8 @@ package client;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.DatagramSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import utils.Constants;
 import utils.Conversions;
@@ -37,17 +35,17 @@ public class ClientInputThread extends Thread {
 		connectedPlayers = new ArrayList<String>();
 	}
 
-	
+
 	public void run() {
-		
-	//	byte[] pl = new byte[4];
-	//	try {
-	//		is.read(pl);
-	//	} catch (IOException e1) {
-	//		e1.printStackTrace();
-	//	}
-	//	int players = Conversions.ByteArrayToInt(pl);
-	//	cm.setNbrOfPlayers(players);
+
+		//	byte[] pl = new byte[4];
+		//	try {
+		//		is.read(pl);
+		//	} catch (IOException e1) {
+		//		e1.printStackTrace();
+		//	}
+		//	int players = Conversions.ByteArrayToInt(pl);
+		//	cm.setNbrOfPlayers(players);
 		while (ok) {
 			//System.out.println("ipthread::startofloop");
 			byte[] command = new byte[4];
@@ -71,7 +69,7 @@ public class ClientInputThread extends Thread {
 				case Constants.SENDCONNECTED:
 					//System.out.println("IPthread::doin connectedlisting");
 					connectedListing();
-				break;
+					break;
 				case Constants.SENDGAMENAME:
 					setGameName();
 					break;
@@ -94,32 +92,45 @@ public class ClientInputThread extends Thread {
 	private void setMovements() {
 		//System.out.println("Setting movement");
 		byte[] longBuff = new byte[8];
-		
+
 		try {
 			is.read(longBuff);
-			
-			
-			
+
+
+
 			long frame = Conversions.byteArrayToLong(longBuff);
-			
-			byte[] movements = new byte[connectedPlayers.size()];
-			is.read(movements);
-			byte[] totaltInfo = new byte[longBuff.length + movements.length];
-			for(int i = 0; i < longBuff.length; i++){
-				totaltInfo[i] = longBuff[i];
+
+			if(frame != 0) {
+
+				byte[] movements = new byte[connectedPlayers.size()];
+				is.read(movements);
+				byte[] totaltInfo = new byte[longBuff.length + movements.length];
+				for(int i = 0; i < longBuff.length; i++){
+					totaltInfo[i] = longBuff[i];
+				}
+				for(int i = 0; i < movements.length; i++){
+					totaltInfo[i+longBuff.length] = movements[i];
+				}
+				cm.addMovementToBuffer(totaltInfo);
+
+			} else {
+				byte[] seedB = new byte[8];
+				is.read(seedB);
+				long seed = Conversions.byteArrayToLong(seedB);
+				cm.setSeed(seed);
+				byte[] myIndexB = new byte[4];
+				is.read(myIndexB);
+				int myIndex = Conversions.ByteArrayToInt(myIndexB);
+				cm.setMyIndex(myIndex);
 			}
-			for(int i = 0; i < movements.length; i++){
-				totaltInfo[i+longBuff.length] = movements[i];
-			}
-			cm.addMovementToBuffer(totaltInfo);
 			//System.out.println("HEJ");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
+
+
+
 	}
 
 
@@ -137,7 +148,7 @@ public class ClientInputThread extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 
@@ -189,7 +200,7 @@ public class ClientInputThread extends Thread {
 	public ArrayList<String> getNames() {
 		return connectedPlayers;
 	}
-	
+
 	private void gameListing() throws IOException{
 		byte[] command = new byte[4];
 		int check2 = is.read(command);
@@ -223,7 +234,7 @@ public class ClientInputThread extends Thread {
 			cm.addGame(new GameAddress(name, host, port));
 		}
 	}
-	
+
 	private void readMessage() throws IOException{
 		int intCommand = 0;
 		byte[] command = new byte[4];
