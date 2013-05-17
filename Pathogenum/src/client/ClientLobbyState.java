@@ -79,7 +79,7 @@ public class ClientLobbyState extends BasicGameState {
 		}
 
 		arg2.drawImage(sendButton, 100, 300);
-		arg2.drawImage(readyButton, 300, 300);
+		arg2.drawImage(readyButton, 100, 400);
 		inputText.render(arg0, arg2);
 		outputText.render(arg0, arg2);
 		nameText.render(arg0, arg2);
@@ -136,7 +136,7 @@ public class ClientLobbyState extends BasicGameState {
 				
 		}
 		
-		moa = new MouseOverArea(arg0, readyButton, 300, 300, readyButton.getWidth(), readyButton.getHeight());
+		moa = new MouseOverArea(arg0, readyButton, 100, 400, readyButton.getWidth(), readyButton.getHeight());
 		if(moa.isMouseOver() && Mouse.isButtonDown(0) && !pressedReady){
 			pressedReady = true;
 			System.out.println("Pressing ready");
