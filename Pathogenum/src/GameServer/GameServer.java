@@ -48,7 +48,7 @@ public class GameServer extends Thread{
 			//Check movements from clients
 			for(int i = 0; i < nbrOfPlayers; ++i){
 				commands[i] = gm.getIncomingCommand(i);
-				System.out.println("The command from player " + i + " is: " + commands[i]);
+				//System.out.println("The command from player " + i + " is: " + commands[i]);
 			}
 
 			//Send movements and frame ID

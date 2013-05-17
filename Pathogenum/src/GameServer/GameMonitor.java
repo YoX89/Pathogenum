@@ -28,7 +28,7 @@ public class GameMonitor {
 	}
 	
 	public synchronized void addIncomingCommand(byte b, int player){
-		System.out.println("Adding incoming command: " + (int)b + " for player " + player);
+//		System.out.println("Adding incoming command: " + (int)b + " for player " + player);
 		incComs[player].add(b);
 	}
 	
@@ -43,7 +43,7 @@ public class GameMonitor {
 	
 	public synchronized void setOutgoingCommands(Byte[] b, long frame){
 		outComs.put(frame, b);
-		System.out.println("In Game Monitor setting outgoing commands: " + misc.printByte(b));
+	//	System.out.println("In Game Monitor setting outgoing commands: " + misc.printByte(b));
 		notifyAll();
 	}
 	

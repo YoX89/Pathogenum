@@ -55,13 +55,13 @@ public class ClientGameState extends BasicGameState {
 	long seed = 0;
 	int mIndex;
 	int numberOfPlayers;
-	
+
 	boolean musicPlays = false;
 	ClientConnectionHandler cch;
 
 	public ClientGameState(ClientConnectionHandler cch) {
 		this.cch = cch;
-		
+
 		seed = cch.getSeed();
 		mIndex = cch.getIndex();
 		numberOfPlayers = cch.getNbrOfPlayers();
@@ -156,7 +156,7 @@ public class ClientGameState extends BasicGameState {
 		for(Wall w : walls){
 			w.draw(arg2);
 		}
-		
+
 		arg2.resetTransform();
 
 	}
@@ -191,33 +191,36 @@ public class ClientGameState extends BasicGameState {
 		removeBodies();
 	}
 
+
+
 	private void removeBodies() {
 		ArrayList<Body> rmBodys = ((PathogenumWorld) world).getRemoveBodys();
 		if (!rmBodys.isEmpty()) {
+			System.out.println("size of rmBodys " + rmBodys.size());
 			for (int i = 0; i < rmBodys.size(); ++i) {
 				Body b = rmBodys.get(i);
 				boolean find = false;
 				for(int j = 0; j<players.length; j++){
 					Player play = players[j];
 					if(play!=null){
-						if (b.getUserData().equals((play.getName()))) {
+						if (b.getUserData().equals((play.getName()))) {							
 							players[j] = null;
-							find = true;
+							find = true;				
 							break;
 						}
 					}
 				}
-				if(find){
-					break;
-				}
-				for (int j = 3; j < npcs.size(); ++j) {
-					if (b.getUserData().equals((npcs.get(j).getName()))) {
-						npcs.remove(j);
-						break;
+				if(!find){
+					for (int j = 0; j < npcs.size(); ++j) {
+						if (b.getUserData().equals((npcs.get(j).getName()))) {
+							npcs.remove(j);
+							break;
+						}
 					}
 				}
 
 				world.destroyBody(b);
+
 			}
 			rmBodys.clear();
 		}

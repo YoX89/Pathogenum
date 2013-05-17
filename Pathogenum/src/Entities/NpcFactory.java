@@ -27,7 +27,7 @@ public class NpcFactory {
 	
 	public NPC getNpc(){
 		long seed2 = rand.nextLong();
-		String name = ""+id;
+		String name = "NPC"+id;
 		
 		float radius = 0;
 		while(radius < 0.1){
