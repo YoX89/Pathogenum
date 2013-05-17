@@ -22,7 +22,7 @@ public class Client extends StateBasedGame {
 	int port;
 	BasicGameState Hub;
 	BasicGameState Lobby;
-	BasicGameState Game;
+	BasicGameState game;
 	BasicGameState bgs;
 	ClientConnectionHandler cch;
 	private boolean init = false;
@@ -109,11 +109,11 @@ public class Client extends StateBasedGame {
 			e.printStackTrace();
 		}
 		Lobby = new ClientLobbyState();
-		Game = new ClientGameState(cch); //Use the temporary (single player) game state
+//		Game = new ClientGameState(cch); //Use the temporary (single player) game state
 		//Game = new ClientGameState(); //Use the client-server game state
 		addState(Hub);
 		addState(Lobby);
-		addState(Game);
+//		addState(Game);
 		bgs = Hub;
 		init = true;
 	}
@@ -139,6 +139,10 @@ public class Client extends StateBasedGame {
 	@Override
 	public void enterState(int id) {
 		try {
+			if(id == 2) {
+				game = new ClientGameState(cch);
+				addState(game);
+			}
 			GameState gs = getState(id);
 			gs.init(agc, this);
 			bgs = (BasicGameState) gs;

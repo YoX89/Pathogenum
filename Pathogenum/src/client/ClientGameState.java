@@ -54,6 +54,7 @@ public class ClientGameState extends BasicGameState {
 	long seed = 0;
 	int mIndex=0;
 	int numberOfPlayers=4;
+	boolean initDone = false;
 
 	boolean musicPlays = false;
 	ClientConnectionHandler cch;
@@ -62,13 +63,14 @@ public class ClientGameState extends BasicGameState {
 		this.cch = cch;
 
 		seed = cch.getSeed();
-//		mIndex = cch.getIndex();
-//		numberOfPlayers = cch.getNbrOfPlayers();
+		//		mIndex = cch.getIndex();
+		//		numberOfPlayers = cch.getNbrOfPlayers();
 	}
 
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
+		initDone = false;
 		int scale = 2;
 		FSTBAOE = 60;
 		boundPoints = new float[4];
@@ -118,6 +120,9 @@ public class ClientGameState extends BasicGameState {
 		// } catch (UnknownHostException e) {
 		// e.printStackTrace();
 		// }
+
+		initDone = true;
+		System.out.println("INIT IS NOW DOOOOOOOOOO=0=NE!");
 	}
 
 	@Override
@@ -172,22 +177,25 @@ public class ClientGameState extends BasicGameState {
 	@Override
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 			throws SlickException {
-		// System.out.println("Updating!!");
-		if(!musicPlays){
-			bgMusic.loop();
-			musicPlays = true;
+
+		if(initDone){
+			// System.out.println("Updating!!");
+			if(!musicPlays){
+				bgMusic.loop();
+				musicPlays = true;
+			}
+			int[] acc = checkMovementKey();
+			cch.sendMovement(acc);
+			byte[] movements = cch.receiveMovements();
+			doMovements(movements, arg2);
+			if (FSAE > FSTBAOE) {
+				npcs.add(fac.getNpc());
+				FSAE = 0;
+			} else {
+				FSAE++;
+			}
+			removeBodies();
 		}
-		int[] acc = checkMovementKey();
-		cch.sendMovement(acc);
-		byte[] movements = cch.receiveMovements();
-		doMovements(movements, arg2);
-		if (FSAE > FSTBAOE) {
-			npcs.add(fac.getNpc());
-			FSAE = 0;
-		} else {
-			FSAE++;
-		}
-		removeBodies();
 	}
 
 
