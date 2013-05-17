@@ -6,6 +6,7 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Shape;
 
@@ -36,6 +37,7 @@ public class Wall extends Entity{
 	}
 	
 	public void draw(Graphics arg1){
+		arg1.setColor(Color.white);
 		arg1.draw(sh);
 	}
 

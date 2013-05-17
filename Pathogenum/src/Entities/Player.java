@@ -6,6 +6,7 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Shape;
 
@@ -46,6 +47,7 @@ public class Player extends Entity{
 		//System.out.println(pos.x + " " + pos.y);
 		changeShapeSize();
 		sh.setLocation(Dimensions.meterToPixel(pos.x) - sh.getWidth()/2, Dimensions.meterToPixel(pos.y) - sh.getHeight()/2);
+		arg1.setColor(Color.red);
 		arg1.draw(sh);
 	}
 

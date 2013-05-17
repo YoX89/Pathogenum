@@ -43,7 +43,6 @@ public class ClientGameState extends BasicGameState {
 	ArrayList<Wall> walls;
 	ArrayList<NPC> npcs;
 	Player[] players;
-	Player play;
 	World world;
 	float[] boundPoints;
 	int[] keys = new int[4];
@@ -100,8 +99,8 @@ public class ClientGameState extends BasicGameState {
 				boundPoints);
 
 		for(int i =0; i<numberOfPlayers; i++){
-			Circle circle = new Circle(100*(i+1), 100*(i+1), Dimensions.meterToPixel(0.5f));
-			play = new Player(""+i, circle, 100, world, 0.5f);
+			Circle circle = new Circle(100*(i+1), 100*(i+1), Dimensions.meterToPixel(0.5f));	
+			Player play = new Player(""+i, circle, 100, world, 0.5f);
 			players[i]=play;
 		}
 
