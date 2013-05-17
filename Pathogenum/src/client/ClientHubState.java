@@ -194,6 +194,7 @@ public class ClientHubState extends BasicGameState {
 			System.out.println("PRESSED! NEW GAME");
 			pressedNew = true;
 			int port = checkPortValidity();
+			boolean isAscii = CharMatcher.ASCII.matchesAllOf(newGameNameField.getText());
 			if (newGameNameField.getText().equals("")) {
 				errorMessages.setText("No game name");
 			} 
@@ -202,6 +203,9 @@ public class ClientHubState extends BasicGameState {
 			} 
 			else if (port == -1) {
 				errorMessages.setText("Invalid port number");
+			}
+			else if(!isAscii){
+				errorMessages.setText("Invalid game name");
 			}
 			else {
 				cch.createNewLobby(newGameNameField.getText(), port);
@@ -266,6 +270,8 @@ public class ClientHubState extends BasicGameState {
 	private void printGames() {
 		cch.refreshGames();
 		gamesList = cch.getGames();
+		removeDuplicates(); //not great, but w/e
+		
 		String text = "";
 		for (GameAddress address : gamesList) {
 			text += address.getGameName();
@@ -277,6 +283,17 @@ public class ClientHubState extends BasicGameState {
 		}
 		gamesField.setText(text);
 		System.out.println("GAMESLIST!!!!!\n" + text);
+	}
+
+	private void removeDuplicates() {
+		for(int i = 0; i < gamesList.size()-1; i++){
+			for(int j = i + 1; j < gamesList.size(); j++){
+				if(gamesList.get(i).getGameName().equals(gamesList.get(j).getGameName())&&gamesList.get(i).getHost().equals(gamesList.get(j).getHost())&&gamesList.get(i).getPort()==gamesList.get(j).getPort()) {
+					gamesList.remove(j);
+					//ConcurrentMatlabException?
+				}
+			}
+		}	
 	}
 
 	private int checkPortValidity() {
