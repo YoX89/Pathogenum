@@ -19,6 +19,8 @@ import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import com.google.common.base.CharMatcher;
+
 import utils.GameAddress;
 
 /**
@@ -173,8 +175,14 @@ public class ClientHubState extends BasicGameState {
 				&& !(inputText.getText().equals("")) && !pressedSend) {
 			System.out.println("PRESSED! Message is: " + inputText.getText());
 			pressedSend = true;
-			cch.sendMessage(inputText.getText());
-			inputText.setText("");
+			boolean isAscii = CharMatcher.ASCII.matchesAllOf(inputText.getText());
+			if(isAscii){
+				cch.sendMessage(inputText.getText());
+				inputText.setText("");			
+			}
+			else{
+				errorMessages.setText("Illegal chat character");
+			}	
 		}
 		/*
 		 * Creates new game in server
