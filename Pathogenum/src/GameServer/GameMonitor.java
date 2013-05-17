@@ -28,7 +28,7 @@ public class GameMonitor {
 	}
 	
 	public synchronized void addIncomingCommand(byte b, int player){
-		System.out.println("Adding incoming command: " + (int)b + " for player " + player);
+		//System.out.println("Adding incoming command: " + (int)b + " for player " + player);
 		incComs[player].add(b);
 	}
 	

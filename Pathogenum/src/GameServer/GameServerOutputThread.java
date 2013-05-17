@@ -28,7 +28,7 @@ public class GameServerOutputThread extends Thread {
 		try {
 			// os.write(Conversions.intToByteArray(gm.getNbrPlayers()));
 			while (true) {
-				byte[] movements = gm.getOutGoingCommand(frameID++);
+				byte[] movements = gm.getOutGoingCommand(++frameID);
 				byte[] command = Conversions
 						.intToByteArray(Constants.SENDMOVEMENT);
 				// System.out.println("Writing movement from GameServer" +
@@ -43,25 +43,32 @@ public class GameServerOutputThread extends Thread {
 	}
 
 	public void sendInit(long seed, int nbrOfPlayers, int i) {
+		System.out.println("Sending init from server with seed: " + seed + ", nbrOfPlayers: " + nbrOfPlayers + " and index: " + i);
 		byte[] frameZeroPart = Conversions.longToByteArray(0);
 		byte[] seedPart = Conversions.longToByteArray(seed);
-		//byte[] nbrPlayersPart = Conversions.intToByteArray(nbrOfPlayers);
+		byte[] nbrPlayersPart = Conversions.intToByteArray(nbrOfPlayers);
 		byte[] indexPart = Conversions.intToByteArray(i);
 		byte[] initMessage = new byte[frameZeroPart.length + seedPart.length
-				+ indexPart.length];
+				+ indexPart.length + nbrPlayersPart.length];
+		System.out.println(frameZeroPart.length + " " + seedPart.length + " " + nbrPlayersPart.length + " " + indexPart.length);
+		int index = 0;
 		for (int j = 0; j < frameZeroPart.length; j++) {
-			initMessage[j] = frameZeroPart[j];
+			initMessage[index + j] = frameZeroPart[j];
 		}
+		index += frameZeroPart.length;
 		for (int j = 0; j < seedPart.length; j++) {
-			initMessage[j] = seedPart[j];
+			initMessage[index + j] = seedPart[j];
 		}
-//		for (int j = 0; j < nbrPlayersPart.length; j++) {
-//			initMessage[j] = nbrPlayersPart[j];
-//		}
+		index += seedPart.length;
+		for (int j = 0; j < nbrPlayersPart.length; j++) {
+			initMessage[index + j] = nbrPlayersPart[j];
+		}
+		index += nbrPlayersPart.length;
 		for (int j = 0; j < indexPart.length; j++) {
-			initMessage[j] = indexPart[j];
+			initMessage[index + j] = indexPart[j];
 		}
 		try {
+			os.write(Constants.SENDMOVEMENT);
 			os.write(initMessage);
 			os.flush();
 		} catch (IOException e) {

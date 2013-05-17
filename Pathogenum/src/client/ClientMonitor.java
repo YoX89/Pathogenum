@@ -1,7 +1,6 @@
 package client;
 
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 
 import utils.Conversions;
@@ -13,12 +12,12 @@ public class ClientMonitor {
 	private ArrayList<Byte> movementsToSend;
 	private LinkedList<Byte[]> recievedMovements;
 	private ArrayList<GameAddress> currentGames;
-	private int nbrOfPlayers;
+	private int nbrOfPlayers = -1;
 	private String gameName;
 	private ArrayList<String> connectedPlayers;
 	private boolean isReady = false;
 	private long seed;
-	private int mIndex;
+	private int mIndex = -1;
 
 	public ClientMonitor(){
 		messagesToSend = new ArrayList<String>();
@@ -76,8 +75,17 @@ public class ClientMonitor {
 
 	public synchronized void setNbrOfPlayers(int players) {
 		nbrOfPlayers  = players;	
+		notifyAll();
 	}
+	
 	public synchronized int getNbrOfPlayers(){
+		while(nbrOfPlayers == -1) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		return nbrOfPlayers;
 	}
 	/*
@@ -116,10 +124,10 @@ public class ClientMonitor {
 	}
 	
 	public synchronized void addMovementToBuffer(byte[] movement){
-		System.out.println("Movement to buffer is: ");
-		for(int i = 0; i < movement.length; i++) {
-			System.out.print(movement[i] + " ");
-		}
+//		//System.out.println("Movement to buffer is: ");
+//		for(int i = 0; i < movement.length; i++) {
+//			//System.out.print(movement[i] + " ");
+//		}
 		Byte[] mov = new Byte[movement.length];
 		for(int i=0; i<movement.length;i++){
 			mov[i] = new Byte(movement[i]);
@@ -151,18 +159,35 @@ public class ClientMonitor {
 	
 	public synchronized void setSeed(long seed) {
 		this.seed = seed; 
+		notifyAll();
 	}
 
 	public synchronized long getSeed() {
-		return seed;
+		while(seed == 0) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		
+		return seed;
 	}
 
 	public synchronized void setMyIndex(int myIndex) {
+
 		mIndex = myIndex;
+		notifyAll();
 	}
 	
 	public synchronized int getMyIndex() {
+		while(mIndex == -1) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		return mIndex;
 	}
 }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import utils.Constants;
 import utils.Conversions;
 import utils.GameAddress;
+import utils.misc;
 
 /**
  * an inputthread responsible for getting input to the client from the server.
@@ -74,6 +75,7 @@ public class ClientInputThread extends Thread {
 					setGameName();
 					break;
 				case Constants.SENDMOVEMENT:
+				//	System.out.println("Got movement com sent to me");
 					setMovements();
 					break;
 				default:
@@ -99,7 +101,7 @@ public class ClientInputThread extends Thread {
 
 
 			long frame = Conversions.byteArrayToLong(longBuff);
-
+			//System.out.println("Gotten frame is: " + frame);
 			if(frame != 0) {
 
 				byte[] movements = new byte[connectedPlayers.size()];
@@ -115,13 +117,24 @@ public class ClientInputThread extends Thread {
 
 			} else {
 				byte[] seedB = new byte[8];
-				is.read(seedB);
+				System.out.println("Reading long and get " + is.read(seedB) + "  bytes");
 				long seed = Conversions.byteArrayToLong(seedB);
 				cm.setSeed(seed);
+				System.out.println("The seed is gotten from server is: " + seed);
+				byte[] nbrPlayersB = new byte[4];
+				System.out.println("Reading int and getting: " + is.read(nbrPlayersB) + " bytes");
+				
+				int nbrPlayers = Conversions.ByteArrayToInt(nbrPlayersB);
+				System.out.println("The nbrOfPlayers is gotten from server is: " + nbrPlayers);
+				cm.setNbrOfPlayers(nbrPlayers);
 				byte[] myIndexB = new byte[4];
-				is.read(myIndexB);
+				
+				System.out.println("Reading int and getting: " + is.read(myIndexB) + " bytes");
+				System.out.println("BYTE INDEX IS: " + misc.printByte(myIndexB));
 				int myIndex = Conversions.ByteArrayToInt(myIndexB);
+				System.out.println("The index is gotten from server is: " + myIndex);
 				cm.setMyIndex(myIndex);
+				System.out.println("WE ARE GETTING THE INIT STATE FOR GAME WITH FRAM == 0");
 			}
 			//System.out.println("HEJ");
 		} catch (IOException e) {

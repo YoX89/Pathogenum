@@ -60,14 +60,12 @@ public class ClientGameState extends BasicGameState {
 	public ClientGameState(ClientConnectionHandler cch) {
 		this.cch = cch;
 		
-		seed = cch.getSeed();
-		mIndex = cch.getIndex();
-		numberOfPlayers = cch.getNbrOfPlayers();
 	}
 
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
+		
 		int scale = 2;
 		FSTBAOE = 60;
 		boundPoints = new float[4];
@@ -89,20 +87,20 @@ public class ClientGameState extends BasicGameState {
 		entities = new ArrayList<Entity>();
 		// world = new PathogenumWorld(new Vec2(0f,9.82f));
 		world = new PathogenumWorld(new Vec2(0f, 0f));
-		createWalls(boundPoints);
+		//createWalls(boundPoints);
 
 		readImages("resources/gfx/");
-		Random rand = new Random(seed);
-		fac = new NpcFactory(0, (PathogenumWorld) world,
-				boundPoints);
-		Circle circle = new Circle(100, 100, Dimensions.meterToPixel(0.5f));
-		shapes.add(circle);
-		play = new Player("Player1", circle, 100, world, 0.5f);
-		// play = new Player(0,0,"Player1",images.get(0), 100, world);
-		entities.add(play);
-		for (int i = 0; i < 10 + rand.nextInt(40); i++) {
-			entities.add(fac.getNpc());
-		}
+		//Random rand = new Random(seed);
+		//fac = new NpcFactory(0, (PathogenumWorld) world,
+		//		boundPoints);
+//		Circle circle = new Circle(100, 100, Dimensions.meterToPixel(0.5f));
+//		shapes.add(circle);
+//		play = new Player("Player1", circle, 100, world, 0.5f);
+//		// play = new Player(0,0,"Player1",images.get(0), 100, world);
+//		entities.add(play);
+		//for (int i = 0; i < 10 + rand.nextInt(40); i++) {
+		//	entities.add(fac.getNpc());
+		//}
 		cch.cm.setReady(false);
 		bgMusic = new Music("resources/audio/Invincible.ogg"); //:(
 		
@@ -114,9 +112,34 @@ public class ClientGameState extends BasicGameState {
 		// }
 	}
 
+	public void updateGameData(){
+		System.out.println("0");
+		seed = cch.getSeed();
+		System.out.println("1");
+		mIndex = cch.getIndex();
+		System.out.println("2");
+		numberOfPlayers = cch.getNbrOfPlayers();
+		System.out.println("3");
+		
+		System.out.println("Starting game with seed: " + seed + " mIndex: " + mIndex + " and number of players: " + numberOfPlayers);
+		Random rand = new Random(seed);
+		entities.clear();
+		createWalls(boundPoints);
+		fac = new NpcFactory(seed, (PathogenumWorld) world,
+						boundPoints);
+		for (int i = 0; i < 10 + rand.nextInt(40); i++) {
+			entities.add(fac.getNpc());
+		}
+		Circle circle = new Circle(100, 100, Dimensions.meterToPixel(0.5f));
+		shapes.add(circle);
+		play = new Player("Player1", circle, 100, world, 0.5f);
+		entities.add(play);
+	}
+	
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 			throws SlickException {
+//		System.out.println("Trying to render gameSTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATE");
 		float px = play.getPos().x;
 		float py = play.getPos().y;
 		float rad = ((Circle) play.getShape()).getRadius();

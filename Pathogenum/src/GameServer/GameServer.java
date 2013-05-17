@@ -16,7 +16,7 @@ public class GameServer extends Thread{
 	private GameMonitor gm;
 	private int nbrOfPlayers;
 	ArrayList<GameServerOutputThread> gots; 
-	
+
 	public GameServer(ArrayList<Socket> clients){
 		nbrOfPlayers = clients.size();
 		Random rand = new Random();
@@ -27,10 +27,12 @@ public class GameServer extends Thread{
 			GameServerInputThread git = new GameServerInputThread(clients.get(i), gm, i);
 			GameServerOutputThread got = new GameServerOutputThread(clients.get(i), gm);
 			gots.add(got);
-			got.start();
+			//			got.start();
 			git.start();
-			
+
 		}
+
+
 		time = System.currentTimeMillis();
 
 	}
@@ -38,12 +40,25 @@ public class GameServer extends Thread{
 	@Override
 	public void run() {
 		//Send initmessage
+
 		for(int i = 0; i < gots.size(); i++){
 			gots.get(i).sendInit(seed, nbrOfPlayers, i);
 		}
-		
-		long delta = 17;
+
+
+		for(int i = 0; i < gots.size(); i++){
+			gots.get(i).start();
+		}
+
+
+
+		long sleeptime = 17;
+		long delta = 0;
 		while(true) {
+			long diff = delta - sleeptime;
+			if(diff < 0){
+				diff = 0;
+			}
 			Byte[] commands = new Byte[nbrOfPlayers];
 			//Check movements from clients
 			for(int i = 0; i < nbrOfPlayers; ++i){
@@ -58,7 +73,8 @@ public class GameServer extends Thread{
 
 			time = System.currentTimeMillis();
 			try {
-				long sleepingTime = 17 - (delta -17);
+				long sleepingTime = sleeptime - diff;
+				//System.out.println("SLEEPINGTIME: " + sleepingTime);
 				if(sleepingTime > 0){
 					Thread.sleep(sleepingTime);
 				}
@@ -69,5 +85,5 @@ public class GameServer extends Thread{
 		}
 	}
 
-	
+
 }

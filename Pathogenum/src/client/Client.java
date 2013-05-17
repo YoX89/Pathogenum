@@ -20,8 +20,8 @@ public class Client extends StateBasedGame {
 	static AppGameContainer agc;
 	String host;
 	int port;
-	BasicGameState Hub;
-	BasicGameState Lobby;
+	BasicGameState hub;
+	BasicGameState lobby;
 	BasicGameState Game;
 	BasicGameState bgs;
 	ClientConnectionHandler cch;
@@ -76,8 +76,10 @@ public class Client extends StateBasedGame {
 
 	@Override
 	public void render(GameContainer arg0, Graphics arg1) throws SlickException {
-		if (init)
+		if (init) {
+			System.out.println("Trying to render with ID: " + bgs.getID());
 			bgs.render(arg0, this, arg1);
+		}
 
 	}
 
@@ -94,27 +96,28 @@ public class Client extends StateBasedGame {
 	 */
 	@Override
 	public void initStatesList(GameContainer arg0) throws SlickException {
-		
-		Hub = null;
+
+		hub = null;
 		try {
-			
+
 			if(host.equals("localhost")){
 				host = InetAddress.getLocalHost().getHostAddress();
 			}
 			InetAddress ia = InetAddress.getByName(host);
 			cch = ClientConnectionHandler.getCCH(ia, port);
-					//new ClientConnectionHandler(InetAddress.getByName(host), port);
-			Hub = new ClientHubState(ia,port);
+			//new ClientConnectionHandler(InetAddress.getByName(host), port);
+			hub = new ClientHubState(ia,port);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		Lobby = new ClientLobbyState();
-		Game = new ClientGameState(cch); //Use the temporary (single player) game state
-		//Game = new ClientGameState(); //Use the client-server game state
-		addState(Hub);
-		addState(Lobby);
+		lobby = new ClientLobbyState();
+		//Use the temporary (single player) game state
+		Game = new ClientGameState(cch); //Use the client-server game state
+		addState(hub);
+		addState(lobby);
 		addState(Game);
-		bgs = Hub;
+		//addState(Game);
+		bgs = hub;
 		init = true;
 	}
 
@@ -138,10 +141,14 @@ public class Client extends StateBasedGame {
 	 */
 	@Override
 	public void enterState(int id) {
-		try {
+		try {		
 			GameState gs = getState(id);
 			gs.init(agc, this);
 			bgs = (BasicGameState) gs;
+			if(id == ClientGameState.ID){
+				((ClientGameState)bgs).updateGameData();
+			}
+//			bgs.enter(container, game)
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
