@@ -44,13 +44,14 @@ public class ClientOutputThread extends Thread {
 	}
 
 	public void getGameName() {
-		try {
-			os.write(Conversions.intToByteArray(Constants.SENDGAMENAME));
-			os.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+		if(!socket.isClosed()){
+			try {
+				os.write(Conversions.intToByteArray(Constants.SENDGAMENAME));
+				os.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}			
 	}
 
 	private void getMessages() {

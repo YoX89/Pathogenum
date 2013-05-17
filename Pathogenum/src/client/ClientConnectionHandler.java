@@ -177,7 +177,7 @@ public class ClientConnectionHandler {
 		return cm.getNames();
 	}
 
-	public void joinLobby(String host, int port) {
+	public boolean joinLobby(String host, int port) {
 		InetAddress ia = null;
 		try {
 			ia = InetAddress.getByName(host);
@@ -192,8 +192,11 @@ public class ClientConnectionHandler {
 				oThread = new ClientOutputThread(socket,cm);
 				oThread.start();
 				updateGameName();
+				return true;
 			} catch (IOException e) {
+				System.out.println("IOEXCEPTIONS");
 				e.printStackTrace();
+				return false;
 			}
 	}
 	

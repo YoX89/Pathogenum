@@ -230,8 +230,13 @@ public class ClientHubState extends BasicGameState {
 				String host = hostAndPort[0]; 
 				String portString = hostAndPort[1];
 				int port = Integer.parseInt(portString);
-				cch.joinLobby(host,port);
-				arg1.enterState(ClientLobbyState.ID);
+				boolean foundConnection = cch.joinLobby(host,port);
+				if(foundConnection){
+					arg1.enterState(ClientLobbyState.ID);
+				}
+				else{
+					errorMessages.setText("Connection refused");
+				}
 			}else{
 				errorMessages.setText("Incorrect join format");
 			}
