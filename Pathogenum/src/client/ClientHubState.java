@@ -270,6 +270,8 @@ public class ClientHubState extends BasicGameState {
 	private void printGames() {
 		cch.refreshGames();
 		gamesList = cch.getGames();
+		removeDuplicates(); //not great, but w/e
+		
 		String text = "";
 		for (GameAddress address : gamesList) {
 			text += address.getGameName();
@@ -281,6 +283,17 @@ public class ClientHubState extends BasicGameState {
 		}
 		gamesField.setText(text);
 		System.out.println("GAMESLIST!!!!!\n" + text);
+	}
+
+	private void removeDuplicates() {
+		for(int i = 0; i < gamesList.size(); i++){
+			for(int j = i + 1; j < gamesList.size(); j++){
+				if(gamesList.get(i).getGameName().equals(gamesList.get(j).getGameName())&&gamesList.get(i).getHost().equals(gamesList.get(j).getHost())&&gamesList.get(i).getPort()==gamesList.get(j).getPort()) {
+					gamesList.remove(j);
+					//ConcurrentMatlabException?
+				}
+			}
+		}	
 	}
 
 	private int checkPortValidity() {
