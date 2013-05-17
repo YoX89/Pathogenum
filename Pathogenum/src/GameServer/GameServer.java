@@ -4,6 +4,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
 
+import utils.Conversions;
 import utils.misc;
 
 
@@ -14,16 +15,18 @@ public class GameServer extends Thread{
 	private long time;
 	private GameMonitor gm;
 	private int nbrOfPlayers;
+	ArrayList<GameServerOutputThread> gots; 
 	
 	public GameServer(ArrayList<Socket> clients){
 		nbrOfPlayers = clients.size();
 		Random rand = new Random();
-		
+		gots = new ArrayList<GameServerOutputThread>();
 		seed = rand.nextLong(); 
 		gm = new GameMonitor(nbrOfPlayers);
 		for(int i = 0; i < nbrOfPlayers; ++i){
 			GameServerInputThread git = new GameServerInputThread(clients.get(i), gm, i);
 			GameServerOutputThread got = new GameServerOutputThread(clients.get(i), gm);
+			gots.add(got);
 			got.start();
 			git.start();
 			
@@ -34,7 +37,10 @@ public class GameServer extends Thread{
 
 	@Override
 	public void run() {
-		
+		//Send initmessage
+		for(int i = 0; i < gots.size(); i++){
+			gots.get(i).sendInit(seed, nbrOfPlayers, i);
+		}
 		
 		long delta = 17;
 		while(true) {
@@ -62,4 +68,6 @@ public class GameServer extends Thread{
 			delta = System.currentTimeMillis() - time;
 		}
 	}
+
+	
 }

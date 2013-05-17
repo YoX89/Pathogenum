@@ -23,8 +23,10 @@ public class GamesMonitor extends ChatMonitor{
 	 * @param ga
 	 */
 	public synchronized void addGame(GameAddress ga){
-		games.offer(ga);
-		notifyWaiters();
+		if(!games.contains(ga)){
+			games.offer(ga);
+			notifyWaiters();
+		}
 	}
 	/**
 	 * remove a game from the known list of games

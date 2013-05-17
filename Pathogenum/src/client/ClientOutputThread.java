@@ -124,7 +124,8 @@ public class ClientOutputThread extends Thread {
 
 	public void startNewGame(String gameName, int port) {
 		try {
-			os.write(Constants.STARTGAME);
+			System.out.println("SENDINGSTARTNEWGAME from COT");
+			os.write(Constants.ADDGAME);
 			os.write(Conversions.intToByteArray(port));
 			os.write(Conversions.intToByteArray(gameName.length()));
 			os.write(gameName.getBytes());
@@ -136,6 +137,7 @@ public class ClientOutputThread extends Thread {
 	}
 
 	public void refresh() {
+		System.out.println("Sendind refresh to Hub");
 		byte[] send = Conversions.intToByteArray(Constants.GAMELISTING);
 		try {
 			os.write(send);
