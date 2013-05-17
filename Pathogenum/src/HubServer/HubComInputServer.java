@@ -46,7 +46,7 @@ public class HubComInputServer extends Thread {
 				int com = Conversions.ByteArrayToInt(command);
 				System.out.println("Command: " + command[0]);
 				switch (com) {
-				case Constants.STARTGAME:
+				case Constants.ADDGAME:
 					addCommand(connection, is);
 					break;
 				case Constants.GAMELISTING:
@@ -60,6 +60,9 @@ public class HubComInputServer extends Thread {
 				case Constants.LEAVEGAME:
 					deRegisterGame(connection, is);
 					break;
+				case Constants.STARTGAME:
+					System.out.println("Started game sent");
+				break;
 				default:
 					connection.close();
 					ok = -1;
@@ -96,6 +99,7 @@ public class HubComInputServer extends Thread {
 
 	private void sendGames(OutputStream os2) {
 		LinkedList<GameAddress> games = gm.getGameAddresses();
+		System.out.println("GameSizeInHubIThread: " + games.size());
 		if (games != null) {
 			try {
 				os2.write(Conversions.intToByteArray(Constants.GAMELISTING));
@@ -177,6 +181,7 @@ public class HubComInputServer extends Thread {
 		String gameName = new String(name);
 		GameAddress ga = new GameAddress(gameName, ip, port);
 		gm.addGame(ga);
+		System.out.println("Games after addGame: " + gm.games.size());
 		// skicka conf h�r med maybe?
 	}
 

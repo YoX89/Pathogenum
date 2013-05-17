@@ -37,12 +37,23 @@ public class Conversions {
 	}
 	
 	public static byte[] longToByteArray(long l){
-		return null;
+		 final ByteBuffer bb = ByteBuffer.allocate(Long.SIZE / Byte.SIZE);
+		 bb.order(ByteOrder.LITTLE_ENDIAN);
+		 bb.putLong(l);
+		 return bb.array();
 	}
 
 	public static byte[] ObjectByteArrayToPrimitiveByteArray(
 			Byte[] array) {
 		byte[] ret = new byte[array.length];
+		for(int i = 0; i < array.length; i++){
+			ret[i] = array[i];
+		}
+		return ret;
+	}
+	
+	public static Byte[] PrimitiveByteArrayToObjectByteArray(byte[] array){
+		Byte[] ret = new Byte[array.length];
 		for(int i = 0; i < array.length; i++){
 			ret[i] = array[i];
 		}

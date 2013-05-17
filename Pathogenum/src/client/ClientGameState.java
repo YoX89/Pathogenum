@@ -53,12 +53,18 @@ public class ClientGameState extends BasicGameState {
 	NpcFactory fac;
 	Music bgMusic;
 	long seed = 0;
-
+	int mIndex;
+	int numberOfPlayers;
+	
 	boolean musicPlays = false;
 	ClientConnectionHandler cch;
 
 	public ClientGameState(ClientConnectionHandler cch) {
 		this.cch = cch;
+		
+		seed = cch.getSeed();
+		mIndex = cch.getIndex();
+		numberOfPlayers = cch.getNbrOfPlayers();
 	}
 
 	@Override
@@ -83,7 +89,7 @@ public class ClientGameState extends BasicGameState {
 		images = new ArrayList<Image>();
 		walls = new ArrayList<Wall>();
 		npcs = new ArrayList<NPC>();
-		players = new Player[4];
+		players = new Player[numberOfPlayers];
 		// world = new PathogenumWorld(new Vec2(0f,9.82f));
 		world = new PathogenumWorld(new Vec2(0f, 0f));
 		createWalls(boundPoints);
@@ -93,7 +99,7 @@ public class ClientGameState extends BasicGameState {
 		fac = new NpcFactory(0, (PathogenumWorld) world,
 				boundPoints);
 
-		for(int i =0; i<4; i++){
+		for(int i =0; i<numberOfPlayers; i++){
 			Circle circle = new Circle(100*(i+1), 100*(i+1), Dimensions.meterToPixel(0.5f));
 			play = new Player(""+i, circle, 100, world, 0.5f);
 			players[i]=play;
@@ -118,7 +124,7 @@ public class ClientGameState extends BasicGameState {
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 			throws SlickException {
-		Player play = players[0];
+		Player play = players[mIndex];
 		if(play !=null){
 			float px = play.getPos().x;
 			float py = play.getPos().y;
@@ -288,7 +294,7 @@ public class ClientGameState extends BasicGameState {
 					play.addForce(acc[i], s);
 				}
 			}
-			for (int i = 4; i < npcs.size(); ++i) {
+			for (int i = 0; i < npcs.size(); ++i) {
 				npcs.get(i).addForce(s);
 			}
 		}

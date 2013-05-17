@@ -19,6 +19,8 @@ import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import com.google.common.base.CharMatcher;
+
 import utils.GameAddress;
 
 /**
@@ -173,8 +175,14 @@ public class ClientHubState extends BasicGameState {
 				&& !(inputText.getText().equals("")) && !pressedSend) {
 			System.out.println("PRESSED! Message is: " + inputText.getText());
 			pressedSend = true;
-			cch.sendMessage(inputText.getText());
-			inputText.setText("");
+			boolean isAscii = CharMatcher.ASCII.matchesAllOf(inputText.getText());
+			if(isAscii){
+				cch.sendMessage(inputText.getText());
+				inputText.setText("");			
+			}
+			else{
+				errorMessages.setText("Illegal chat character");
+			}	
 		}
 		/*
 		 * Creates new game in server
@@ -234,7 +242,7 @@ public class ClientHubState extends BasicGameState {
 		if (moa.isMouseOver() && Mouse.isButtonDown(0) && !pressedRefresh) {
 			pressedRefresh = true;
 			System.out.println("PRESSED! Refresh");
-			printGames(gamesList);
+			printGames();
 		}
 
 		ArrayList<String> chatList = cch.getMessage();
@@ -255,11 +263,11 @@ public class ClientHubState extends BasicGameState {
 		}		
 	}
 
-	private void printGames(ArrayList<GameAddress> list) {
+	private void printGames() {
 		cch.refreshGames();
 		gamesList = cch.getGames();
 		String text = "";
-		for (GameAddress address : list) {
+		for (GameAddress address : gamesList) {
 			text += address.getGameName();
 			text += "  :  ";
 			text += address.getHost();
@@ -268,6 +276,7 @@ public class ClientHubState extends BasicGameState {
 			text += "\n";
 		}
 		gamesField.setText(text);
+		System.out.println("GAMESLIST!!!!!\n" + text);
 	}
 
 	private int checkPortValidity() {
