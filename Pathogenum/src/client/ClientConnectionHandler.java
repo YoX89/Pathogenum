@@ -189,15 +189,14 @@ public class ClientConnectionHandler {
 			e.printStackTrace();
 		}
 			try {
-				
-				Socket newSocket = new Socket(ia, port);				
+				Socket newSocket = new Socket(ia, port);						
+				socket.close();
+				socket = newSocket;
 				iThread = new ClientInputThread(socket,cm);
 				iThread.start();
 				oThread = new ClientOutputThread(socket,cm);
 				oThread.start();
 				updateGameName();
-				socket.close();
-				socket = newSocket;
 				
 			} catch (IOException e) {
 				System.out.println("IOEXCEPTIONS");

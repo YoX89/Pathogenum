@@ -86,6 +86,7 @@ public class ClientInputThread extends Thread {
 
 			} catch (IOException e) {
 				System.out.println("IOEXCEPTION!!!");
+				e.printStackTrace();
 				ok = false;
 			}
 		}
