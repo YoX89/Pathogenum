@@ -207,8 +207,8 @@ public class ClientInputThread extends Thread {
 		if (checkInput(check2))
 			return;
 		int nbrGames = Conversions.ByteArrayToInt(command);
+		System.out.println("InputThreadGameListing SizeofGames: " + nbrGames);
 		for (int i = 0; i < nbrGames; i++) {
-
 			check2 = is.read(command);
 			if (checkInput(check2))
 				return;

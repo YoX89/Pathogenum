@@ -1,6 +1,7 @@
 package client;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 
 import utils.Conversions;
@@ -34,6 +35,7 @@ public class ClientMonitor {
 		messagesToSend.add(message);
 		notifyAll();
 	}
+	
 	public synchronized void waitForEvent() throws InterruptedException {
 		wait();
 	}
@@ -100,6 +102,7 @@ public class ClientMonitor {
 	
 	public synchronized ArrayList<GameAddress> getGames() {
 		ArrayList<GameAddress> temp = (ArrayList<GameAddress>)currentGames.clone();
+		System.out.println("GameSizeIn ClientMonitor[temp; " + temp.size() + ", currentGames; " + currentGames.size() + "]" );
 		currentGames.clear();
 		return temp;
 	}
