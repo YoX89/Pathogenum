@@ -194,6 +194,7 @@ public class ClientHubState extends BasicGameState {
 			System.out.println("PRESSED! NEW GAME");
 			pressedNew = true;
 			int port = checkPortValidity();
+			boolean isAscii = CharMatcher.ASCII.matchesAllOf(newGameNameField.getText());
 			if (newGameNameField.getText().equals("")) {
 				errorMessages.setText("No game name");
 			} 
@@ -202,6 +203,9 @@ public class ClientHubState extends BasicGameState {
 			} 
 			else if (port == -1) {
 				errorMessages.setText("Invalid port number");
+			}
+			else if(!isAscii){
+				errorMessages.setText("Invalid game name");
 			}
 			else {
 				cch.createNewLobby(newGameNameField.getText(), port);
