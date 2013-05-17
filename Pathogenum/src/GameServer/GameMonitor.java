@@ -75,8 +75,10 @@ public class GameMonitor {
 		
 		b = outComs.get(frame);
 		register.put(gsot, true);
-			b = outComs.remove(frame);
+		if(allRegTrue()){
+			outComs.remove(frame);
 			setAllReg(false);
+		}
 		if(b == null){
 			b = new Byte[players];
 			for(int i = 0; i < players; i++){
