@@ -52,8 +52,8 @@ public class ClientGameState extends BasicGameState {
 	NpcFactory fac;
 	Music bgMusic;
 	long seed = 0;
-	int mIndex;
-	int numberOfPlayers;
+	int mIndex=0;
+	int numberOfPlayers=4;
 
 	boolean musicPlays = false;
 	ClientConnectionHandler cch;
@@ -62,8 +62,8 @@ public class ClientGameState extends BasicGameState {
 		this.cch = cch;
 
 		seed = cch.getSeed();
-		mIndex = cch.getIndex();
-		numberOfPlayers = cch.getNbrOfPlayers();
+//		mIndex = cch.getIndex();
+//		numberOfPlayers = cch.getNbrOfPlayers();
 	}
 
 	@Override
