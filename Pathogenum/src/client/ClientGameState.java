@@ -51,11 +51,11 @@ public class ClientGameState extends BasicGameState {
 	int FSTBAOE;
 	NpcFactory fac;
 	Music bgMusic;
-	long seed = 0;
-	int mIndex=0;
-	int numberOfPlayers=4;
+	long seed = -1;
+	int mIndex= -1;
+	int numberOfPlayers=-1;
 	boolean initDone = false;
-
+	boolean constructDone = false;
 	boolean musicPlays = false;
 	ClientConnectionHandler cch;
 
@@ -63,8 +63,9 @@ public class ClientGameState extends BasicGameState {
 		this.cch = cch;
 
 		seed = cch.getSeed();
-		//		mIndex = cch.getIndex();
-		//		numberOfPlayers = cch.getNbrOfPlayers();
+		mIndex = cch.getIndex();
+		numberOfPlayers = cch.getNbrOfPlayers();
+		constructDone = true;
 	}
 
 	@Override
@@ -112,7 +113,7 @@ public class ClientGameState extends BasicGameState {
 		}
 
 		cch.cm.setReady(false);
-		bgMusic = new Music("resources/audio/Invincible.ogg"); //:(
+		//bgMusic = new Music("resources/audio/Invincible.ogg"); //:(
 
 		// try {
 		// cch.joinGame(InetAddress.getLocalHost().getCanonicalHostName(),
@@ -128,6 +129,7 @@ public class ClientGameState extends BasicGameState {
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 			throws SlickException {
+		if(initDone && constructDone){
 		Player play = players[mIndex];
 		if(play !=null){
 			float px = play.getPos().x;
@@ -162,7 +164,7 @@ public class ClientGameState extends BasicGameState {
 		}
 
 		arg2.resetTransform();
-
+		}
 	}
 
 	private void readImages(String dir) throws SlickException {
@@ -178,12 +180,12 @@ public class ClientGameState extends BasicGameState {
 	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
 			throws SlickException {
 
-		if(initDone){
+		if(initDone && constructDone){
 			// System.out.println("Updating!!");
-			if(!musicPlays){
-				bgMusic.loop();
-				musicPlays = true;
-			}
+//			if(!musicPlays){
+//				bgMusic.loop();
+//				musicPlays = true;
+//			}
 			int[] acc = checkMovementKey();
 			cch.sendMovement(acc);
 			byte[] movements = cch.receiveMovements();

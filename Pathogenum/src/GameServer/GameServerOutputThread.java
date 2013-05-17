@@ -3,6 +3,7 @@ package GameServer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import utils.Constants;
 import utils.Conversions;
@@ -42,31 +43,33 @@ public class GameServerOutputThread extends Thread {
 		}
 	}
 
-	public void sendInit(long seed, int nbrOfPlayers, int i) {
-		byte[] frameZeroPart = Conversions.longToByteArray(0);
+	public boolean sendInit(long seed, int nbrOfPlayers, int i) {
 		byte[] seedPart = Conversions.longToByteArray(seed);
-		//byte[] nbrPlayersPart = Conversions.intToByteArray(nbrOfPlayers);
+		byte[] nbrPlayersPart = Conversions.intToByteArray(nbrOfPlayers);
 		byte[] indexPart = Conversions.intToByteArray(i);
-		byte[] initMessage = new byte[frameZeroPart.length + seedPart.length
-				+ indexPart.length];
-		for (int j = 0; j < frameZeroPart.length; j++) {
-			initMessage[j] = frameZeroPart[j];
-		}
-		for (int j = 0; j < seedPart.length; j++) {
-			initMessage[j] = seedPart[j];
-		}
-//		for (int j = 0; j < nbrPlayersPart.length; j++) {
-//			initMessage[j] = nbrPlayersPart[j];
-//		}
-		for (int j = 0; j < indexPart.length; j++) {
-			initMessage[j] = indexPart[j];
-		}
+		int fullLength = seedPart.length + nbrPlayersPart.length
+				+ indexPart.length;
+		byte[] initMessage = new byte[fullLength];
+		ArrayList<byte[]> byteArrays = new ArrayList<byte[]>();
+		byteArrays.add(seedPart);
+		byteArrays.add(indexPart);
+		byteArrays.add(nbrPlayersPart);
+			int index = 0;
+			for(byte[] array: byteArrays){
+				for(int j = 0; j < array.length; j++){
+					initMessage[j+index] = array[j];
+				}
+				index += array.length;
+			}
 		try {
+			os.write(Constants.INITGAME);
 			os.write(initMessage);
 			os.flush();
+			return true;
 		} catch (IOException e) {
 			System.out.println("Could not write initmessage");
 			e.printStackTrace();
+			return false;
 		}
 	}
 

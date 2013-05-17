@@ -133,7 +133,7 @@ public class Client extends StateBasedGame {
 	}
 
 	/**
-	 * To be able to switch states, I hade to override this method, if you find
+	 * To be able to switch states, I had to override this method, if you find
 	 * a better way. Let me know.
 	 */
 	@Override

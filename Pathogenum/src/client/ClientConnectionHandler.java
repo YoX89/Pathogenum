@@ -118,7 +118,11 @@ public class ClientConnectionHandler {
 	}
 
 	public byte[] receiveMovements() {
-		nbrOfPlayers = cm.getNbrOfPlayers();
+		try {
+			nbrOfPlayers = cm.getNbrOfPlayers();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		byte[] buff = new byte[1*nbrOfPlayers + 8];
 		buff = cm.recieveMovements(buff);
 		return buff;
@@ -210,12 +214,30 @@ public class ClientConnectionHandler {
 	}
 	
 	public long getSeed() {
-		return cm.getSeed();
+		long seed = -1;
+		try {
+			seed =  cm.getSeed();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return seed;
 	}
 	public int getIndex() {
-		return cm.getMyIndex();
+		int mindex = -1;
+		try {
+			mindex =  cm.getMyIndex();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return mindex;
 	}
 	public int getNbrOfPlayers() {
-		return cm.getNbrOfPlayers();
+		int nplayers = -1;
+		try {
+			nplayers =  cm.getNbrOfPlayers();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return nplayers;
 	}
 }

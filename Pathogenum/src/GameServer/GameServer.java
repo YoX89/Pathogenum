@@ -39,10 +39,13 @@ public class GameServer extends Thread{
 	public void run() {
 		//Send initmessage
 		for(int i = 0; i < gots.size(); i++){
-			gots.get(i).sendInit(seed, nbrOfPlayers, i);
+			if(!gots.get(i).sendInit(seed, nbrOfPlayers, i)){
+				System.out.println("SENDING INIT FAILED");
+			}
 		}
 		
-		long delta = 17;
+		long desiredSleep = 25;
+		long diff = 0;
 		while(true) {
 			Byte[] commands = new Byte[nbrOfPlayers];
 			//Check movements from clients
@@ -58,14 +61,14 @@ public class GameServer extends Thread{
 
 			time = System.currentTimeMillis();
 			try {
-				long sleepingTime = 17 - (delta -17);
+				long sleepingTime = desiredSleep - diff;
 				if(sleepingTime > 0){
 					Thread.sleep(sleepingTime);
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			delta = System.currentTimeMillis() - time;
+			diff = (System.currentTimeMillis() - time) - desiredSleep;
 		}
 	}
 

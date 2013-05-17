@@ -13,12 +13,12 @@ public class ClientMonitor {
 	private ArrayList<Byte> movementsToSend;
 	private LinkedList<Byte[]> recievedMovements;
 	private ArrayList<GameAddress> currentGames;
-	private int nbrOfPlayers;
+	private int nbrOfPlayers = -1;
 	private String gameName;
 	private ArrayList<String> connectedPlayers;
 	private boolean isReady = false;
-	private long seed;
-	private int mIndex;
+	private long seed = -1;
+	private int mIndex = -1;
 
 	public ClientMonitor(){
 		messagesToSend = new ArrayList<String>();
@@ -74,12 +74,7 @@ public class ClientMonitor {
 		return temp;
 	}
 
-	public synchronized void setNbrOfPlayers(int players) {
-		nbrOfPlayers  = players;	
-	}
-	public synchronized int getNbrOfPlayers(){
-		return nbrOfPlayers;
-	}
+
 	/*
 	 * gets movements from input thread to client
 	 */
@@ -151,18 +146,37 @@ public class ClientMonitor {
 	
 	public synchronized void setSeed(long seed) {
 		this.seed = seed; 
+		notifyAll();
 	}
 
-	public synchronized long getSeed() {
+	public synchronized long getSeed() throws InterruptedException {
+		while(seed == -1){
+			wait();
+		}
 		return seed;
 		
 	}
 
 	public synchronized void setMyIndex(int myIndex) {
 		mIndex = myIndex;
+		notifyAll();
 	}
 	
-	public synchronized int getMyIndex() {
+	public synchronized int getMyIndex() throws InterruptedException {
+		while(mIndex == -1){
+			wait();
+		}
 		return mIndex;
+	}
+	
+	public synchronized void setNbrOfPlayers(int players) {
+		nbrOfPlayers  = players;	
+		notifyAll();
+	}
+	public synchronized int getNbrOfPlayers() throws InterruptedException{
+		while(nbrOfPlayers == -1){
+			wait();
+		}
+		return nbrOfPlayers;
 	}
 }

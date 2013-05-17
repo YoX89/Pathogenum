@@ -76,6 +76,9 @@ public class ClientInputThread extends Thread {
 				case Constants.SENDMOVEMENT:
 					setMovements();
 					break;
+				case Constants.INITGAME:
+					initGame();
+					break;
 				default:
 					System.out.println("got comm: " + Conversions.ByteArrayToInt(command));
 					break;
@@ -89,6 +92,33 @@ public class ClientInputThread extends Thread {
 		System.out.println("IThread stopped");
 		return;
 	}
+
+	private void initGame() {
+		long seed = -1;
+		int myIndex = -1;
+		int players = -1;
+		byte[] seedB = new byte[8];
+		byte[] myIndexB = new byte[4];
+		byte[] playersB = new byte[4];
+		int ok = 1;
+		try{
+		ok = is.read(seedB);
+		seed = Conversions.byteArrayToLong(seedB);
+		ok *= is.read(myIndexB);
+		myIndex = Conversions.ByteArrayToInt(myIndexB);
+		ok *= is.read(playersB);
+		players = Conversions.ByteArrayToInt(playersB);
+		}catch(IOException ioe){
+			ioe.printStackTrace();	
+		}
+		if(ok < 0){
+			System.out.println("Error in reading");
+		}
+		cm.setSeed(seed);
+		cm.setMyIndex(myIndex);
+		cm.setNbrOfPlayers(players);
+	}
+
 
 	private void setMovements() {
 		//System.out.println("Setting movement");
