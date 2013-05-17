@@ -24,6 +24,7 @@ import utils.Conversions;
 import utils.Dimensions;
 import utils.misc;
 import Entities.Entity;
+import Entities.NPC;
 import Entities.NpcFactory;
 import Entities.Player;
 import Entities.Wall;
@@ -39,8 +40,9 @@ import Physics.PathogenumWorld;
 public class ClientGameState extends BasicGameState {
 
 	ArrayList<Image> images;
-	ArrayList<Shape> shapes;
-	ArrayList<Entity> entities;
+	ArrayList<Wall> walls;
+	ArrayList<NPC> npcs;
+	Player[] players;
 	Player play;
 	World world;
 	float[] boundPoints;
@@ -72,21 +74,22 @@ public class ClientGameState extends BasicGameState {
 		FSTBAOE = 60;
 		boundPoints = new float[4];
 		boundPoints[0] = Dimensions.meterToPixel(0.1f); // x coordinate for left
-														// corners
+		// corners
 		boundPoints[1] = boundPoints[0] + Dimensions.SCREEN_WIDTH * scale
 				- Dimensions.meterToPixel(0.2f); // x coordinate for right
-													// corners
+		// corners
 		boundPoints[2] = Dimensions.meterToPixel(0.1f); // y coordinate for
-														// upper corners
+		// upper corners
 		boundPoints[3] = Dimensions.meterToPixel(0.1f)
 				+ Dimensions.SCREEN_HEIGHT * scale
 				- Dimensions.meterToPixel(0.2f); // y coordinate for lower
-													// corners
+		// corners
 		// System.out.println("HERE");
 		// leave(arg0, arg1);
 		images = new ArrayList<Image>();
-		shapes = new ArrayList<Shape>();
-		entities = new ArrayList<Entity>();
+		walls = new ArrayList<Wall>();
+		npcs = new ArrayList<NPC>();
+		players = new Player[numberOfPlayers];
 		// world = new PathogenumWorld(new Vec2(0f,9.82f));
 		world = new PathogenumWorld(new Vec2(0f, 0f));
 		createWalls(boundPoints);
@@ -95,17 +98,21 @@ public class ClientGameState extends BasicGameState {
 		Random rand = new Random(seed);
 		fac = new NpcFactory(0, (PathogenumWorld) world,
 				boundPoints);
-		Circle circle = new Circle(100, 100, Dimensions.meterToPixel(0.5f));
-		shapes.add(circle);
-		play = new Player("Player1", circle, 100, world, 0.5f);
-		// play = new Player(0,0,"Player1",images.get(0), 100, world);
-		entities.add(play);
-		for (int i = 0; i < 10 + rand.nextInt(40); i++) {
-			entities.add(fac.getNpc());
+
+		for(int i =0; i<numberOfPlayers; i++){
+			Circle circle = new Circle(100*(i+1), 100*(i+1), Dimensions.meterToPixel(0.5f));
+			play = new Player(""+i, circle, 100, world, 0.5f);
+			players[i]=play;
 		}
+
+
+		for (int i = 0; i < 10 + rand.nextInt(40); i++) {
+			npcs.add(fac.getNpc());
+		}
+
 		cch.cm.setReady(false);
 		bgMusic = new Music("resources/audio/Invincible.ogg"); //:(
-		
+
 		// try {
 		// cch.joinGame(InetAddress.getLocalHost().getCanonicalHostName(),
 		// 30000);
@@ -117,26 +124,39 @@ public class ClientGameState extends BasicGameState {
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 			throws SlickException {
-		float px = play.getPos().x;
-		float py = play.getPos().y;
-		float rad = ((Circle) play.getShape()).getRadius();
-		float scale = 15.625f / rad;
+		Player play = players[mIndex];
+		if(play !=null){
+			float px = play.getPos().x;
+			float py = play.getPos().y;
+			float rad = ((Circle) play.getShape()).getRadius();
+			float scale = 15.625f / rad;
 
-		if (scale * Dimensions.pixelToMeter(arg0.getScreenWidth()) < Dimensions
-				.pixelToMeter(Dimensions.SCREEN_WIDTH)) {
-			scale = 0.5f;
+			if (scale * Dimensions.pixelToMeter(arg0.getScreenWidth()) < Dimensions
+					.pixelToMeter(Dimensions.SCREEN_WIDTH)) {
+				scale = 0.5f;
+			}
+			arg2.scale(scale, scale);
+			arg2.translate(Dimensions.meterToPixel(-px * scale)
+					+ (Dimensions.SCREEN_WIDTH / 2),
+					Dimensions.meterToPixel(-py * scale)
+					+ (Dimensions.SCREEN_HEIGHT / 2));
+			// System.out.println("Scale:  " + scale +"   scale*:  "
+			// +scale*Dimensions.pixelToMeter(arg0.getScreenWidth()) +
+			// "   Screen:  " + Dimensions.pixelToMeter(Dimensions.SCREEN_WIDTH));
 		}
-		arg2.scale(scale, scale);
-		arg2.translate(Dimensions.meterToPixel(-px * scale)
-				+ (Dimensions.SCREEN_WIDTH / 2),
-				Dimensions.meterToPixel(-py * scale)
-						+ (Dimensions.SCREEN_HEIGHT / 2));
-		// System.out.println("Scale:  " + scale +"   scale*:  "
-		// +scale*Dimensions.pixelToMeter(arg0.getScreenWidth()) +
-		// "   Screen:  " + Dimensions.pixelToMeter(Dimensions.SCREEN_WIDTH));
-		for (Entity e : entities) {
+		for(int i = 0; i< players.length;i++){
+			Player player = players[i];
+			if(player != null){
+				player.draw(arg2);
+			}
+		}
+		for (Entity e : npcs) {
 			e.draw(arg2);
 		}
+		for(Wall w : walls){
+			w.draw(arg2);
+		}
+		
 		arg2.resetTransform();
 
 	}
@@ -163,7 +183,7 @@ public class ClientGameState extends BasicGameState {
 		byte[] movements = cch.receiveMovements();
 		doMovements(movements, arg2);
 		if (FSAE > FSTBAOE) {
-			entities.add(fac.getNpc());
+			npcs.add(fac.getNpc());
 			FSAE = 0;
 		} else {
 			FSAE++;
@@ -176,12 +196,27 @@ public class ClientGameState extends BasicGameState {
 		if (!rmBodys.isEmpty()) {
 			for (int i = 0; i < rmBodys.size(); ++i) {
 				Body b = rmBodys.get(i);
-				for (int j = 3; j < entities.size(); ++j) {
-					if (b.getUserData().equals((entities.get(j).getName()))) {
-						entities.remove(j);
+				boolean find = false;
+				for(int j = 0; j<players.length; j++){
+					Player play = players[j];
+					if(play!=null){
+						if (b.getUserData().equals((play.getName()))) {
+							players[j] = null;
+							find = true;
+							break;
+						}
+					}
+				}
+				if(find){
+					break;
+				}
+				for (int j = 3; j < npcs.size(); ++j) {
+					if (b.getUserData().equals((npcs.get(j).getName()))) {
+						npcs.remove(j);
 						break;
 					}
 				}
+
 				world.destroyBody(b);
 			}
 			rmBodys.clear();
@@ -209,17 +244,17 @@ public class ClientGameState extends BasicGameState {
 
 		Rectangle bottomWall = new Rectangle(bp[0], bp[3] - bp[2], bp[1]
 				- bp[0], Dimensions.meterToPixel(0.1f));
-		entities.add(new Wall(topWall, world));
-		entities.add(new Wall(leftWall, world));
-		entities.add(new Wall(rightWall, world));
-		entities.add(new Wall(bottomWall, world));
+		walls.add(new Wall(topWall, world));
+		walls.add(new Wall(leftWall, world));
+		walls.add(new Wall(rightWall, world));
+		walls.add(new Wall(bottomWall, world));
 
 	}
 
 	private int[] checkMovementKey() {
 		Input i = new Input(0);
 		if (i.isKeyDown(Input.KEY_UP)) {
-			 //System.out.println("UP");
+			//System.out.println("UP");
 			keys[0] = 1;
 		} else {
 			keys[0] = 0;
@@ -248,13 +283,19 @@ public class ClientGameState extends BasicGameState {
 
 	private void doMovements(byte[] b, int s) {
 		if (b != null) {
-//			System.out.println("Movements in client: " + misc.printByte(b));
+			//			System.out.println("Movements in client: " + misc.printByte(b));
 			long frame = extractID(b);
-			int acc[] = extractMovements(b);
-//			System.out.println("ACC: [" + acc[0] +  "] [" + acc[1] +  "] [" + acc[2] +  "] [" + acc[3] +  "]");
+			int acc[][] = extractMovements(b);
+			//			System.out.println("ACC: [" + acc[0] +  "] [" + acc[1] +  "] [" + acc[2] +  "] [" + acc[3] +  "]");
 			world.step(s * 0.001f, 8, 3);
-			for (int i = 4; i < entities.size(); ++i) {
-				entities.get(i).addForce(acc, s);
+			for(int i = 0; i< acc.length; i++){
+				Player play = players[i];
+				if(play != null){
+					play.addForce(acc[i], s);
+				}
+			}
+			for (int i = 0; i < npcs.size(); ++i) {
+				npcs.get(i).addForce(s);
 			}
 		}
 	}
@@ -268,7 +309,7 @@ public class ClientGameState extends BasicGameState {
 		return Conversions.byteArrayToLong(id);
 	}
 
-	private int[] extractMovements(byte[] b) {
+	private int[][] extractMovements(byte[] b) {
 		int[][] movs = new int[b.length - 8][4];
 		for (int i = 0; i < b.length - 8; ++i) {
 			switch (b[i+8]) {
@@ -307,7 +348,7 @@ public class ClientGameState extends BasicGameState {
 		}
 
 		// TODO Enable more players
-		return movs[0];
+		return movs;
 
 	}
 }
