@@ -73,7 +73,7 @@ public class NPC extends Entity {
 	}
 
 
-	public void addForce(int[] ac, int ms){
+	public void addForce(int ms){
 		if(forceCount == -1){
 			forceCount = rand.nextInt(20);
 			for(int i =0; i<4;++i){
