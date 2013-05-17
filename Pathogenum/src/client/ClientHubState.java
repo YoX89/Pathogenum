@@ -286,7 +286,7 @@ public class ClientHubState extends BasicGameState {
 	}
 
 	private void removeDuplicates() {
-		for(int i = 0; i < gamesList.size(); i++){
+		for(int i = 0; i < gamesList.size()-1; i++){
 			for(int j = i + 1; j < gamesList.size(); j++){
 				if(gamesList.get(i).getGameName().equals(gamesList.get(j).getGameName())&&gamesList.get(i).getHost().equals(gamesList.get(j).getHost())&&gamesList.get(i).getPort()==gamesList.get(j).getPort()) {
 					gamesList.remove(j);
