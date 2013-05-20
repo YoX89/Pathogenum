@@ -20,30 +20,8 @@ public class Entity {
 	protected Image img;
 	protected Shape sh;
 	protected String name;
-	//protected Vec2 speed;
-	
-	
-//	public Entity(int x, int y, String name, Image img, PathogenumWorld world){
-//		this.name = name;
-//		this.img = img;
-//		BodyDef bd = new BodyDef();
-//		bd.position = new Vec2(x, y);
-//		
-//		bd.type = BodyType.DYNAMIC;
-//		CircleShape cs = new CircleShape();
-//		cs.m_radius = 0.5f;
-//		FixtureDef fd = new FixtureDef();
-//		fd.shape = cs;
-//		fd.density = 0.5f;
-//		fd.friction = 0.3f;        
-//		fd.restitution = 0.5f;
-//		
-//		body = world.createBody(bd);
-//		body.createFixture(fd);
-//		body.setLinearDamping(0.0015f);
-//	}
+
 	public Entity(String name, Shape sh, World world){
-		//speed = new Vec2();
 		this.name = name;
 		this.sh = sh;
 	}
@@ -92,25 +70,10 @@ public class Entity {
 	}
 	
 	public void addForce(int[] acc, int ms){
-//		System.out.println(acc[0] + " " + acc[1] + " " + acc[2] + " " + acc[3]);
-		//System.out.println(body.getMass() + " ");
 		Vec2 f = new Vec2((acc[3]-acc[2]),(acc[1] - acc[0]));
 		f.normalize();
 		f = f.mul((force));
-		//speed = speed.add(f);
-		
-		//speed = speed.add(new Vec2(-1*Math.signum(speed.x)*body.getLinearDamping(),-1*Math.signum(speed.y)*body.getLinearDamping()));
-		
-//		System.out.println("Velocity is: x: " + body.getLinearVelocity().x + " y: " + body.getLinearVelocity().y);
-		
-		//body.applyLinearImpulse(speed,getPos());
 		body.applyLinearImpulse(f, getPos());
-//		System.out.println(body.getLinearVelocity().x + ";" + body.getLinearVelocity().y);
-//		System.out.println("Inertia" + body.getInertia());
-//		System.out.println("After force; Velocity is: x: " + body.getLinearVelocity().x + " y: " + body.getLinearVelocity().y);
-//		body.setLinearVelocity(new_vec);
-//		System.out.println(curr_vec.x + " " + new_vec.x);
-//		System.out.println("The difference in velocity is = x: " + (new_vec.x - curr_vec.x) + " and y: " + (new_vec.y - curr_vec.y));
 	}
 	
 }
