@@ -61,6 +61,7 @@ public class LobbyComOutputServer extends Thread {
 				ok = -1;
 			}
 			if (this.isInterrupted()) {
+				System.out.println("Interrupted, keeping socket");
 				return; // keep socket
 			}
 		}
@@ -91,24 +92,26 @@ public class LobbyComOutputServer extends Thread {
 	}
 
 	private void getAndPrintConnected() throws IOException {
-		System.out.println("Printing Connected");
-		byte[] com = new byte[4];
-		HashMap<Thread, Boolean> reg = (HashMap<Thread, Boolean>) lm
-				.getRegister().clone();
-		com = Conversions.intToByteArray(Constants.SENDCONNECTED);
-		os.write(com);
-		int size = reg.keySet().size();
-		com = Conversions.intToByteArray(size);
-		os.write(com);
-		for (Thread t : reg.keySet()) {
-			LobbyComOutputServer lcos = (LobbyComOutputServer) t;
-			InetAddress i = lcos.conn.getInetAddress();
-			String in = i.getHostAddress();
-			System.out.println(" -sending " + in);
-			int l = in.length();
-			com = Conversions.intToByteArray(l);
+		if (runs) {
+			System.out.println("Printing Connected");
+			byte[] com = new byte[4];
+			HashMap<Thread, Boolean> reg = (HashMap<Thread, Boolean>) lm
+					.getRegister().clone();
+			com = Conversions.intToByteArray(Constants.SENDCONNECTED);
 			os.write(com);
-			os.write(in.getBytes());
+			int size = reg.keySet().size();
+			com = Conversions.intToByteArray(size);
+			os.write(com);
+			for (Thread t : reg.keySet()) {
+				LobbyComOutputServer lcos = (LobbyComOutputServer) t;
+				InetAddress i = lcos.conn.getInetAddress();
+				String in = i.getHostAddress();
+				System.out.println(" -sending " + in);
+				int l = in.length();
+				com = Conversions.intToByteArray(l);
+				os.write(com);
+				os.write(in.getBytes());
+			}
 		}
 	}
 
@@ -118,14 +121,16 @@ public class LobbyComOutputServer extends Thread {
 	 * @throws IOException
 	 */
 	private void readAndPrintMsg() throws IOException {
-		String msg = lm.getMessage(this);
-		if (msg != null) {
-			byte[] com = Conversions.intToByteArray(Constants.SENDMESSAGE);
-			os.write(com);
-			com = Conversions.intToByteArray(msg.getBytes().length);
-			os.write(com);
-			os.write(msg.getBytes());
-			System.out.println("Sending message: " + msg);
+		if (runs) {
+			String msg = lm.getMessage(this);
+			if (msg != null) {
+				byte[] com = Conversions.intToByteArray(Constants.SENDMESSAGE);
+				os.write(com);
+				com = Conversions.intToByteArray(msg.getBytes().length);
+				os.write(com);
+				os.write(msg.getBytes());
+				System.out.println("Sending message: " + msg);
+			}
 		}
 	}
 }
