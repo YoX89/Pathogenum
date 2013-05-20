@@ -78,6 +78,7 @@ public class HubComInputServer extends Thread {
 	}
 
 	private void deRegisterGame(Socket conn2, InputStream is2) {
+		System.out.println("ShouldDeregister");
 		byte[] gameNameL = new byte[4];
 		byte[] gameName;
 		int ok = 1;
@@ -90,6 +91,7 @@ public class HubComInputServer extends Thread {
 			ok = is2.read(port);
 			int prt = Conversions.ByteArrayToInt(port);
 			GameAddress removeGa = new GameAddress(gName, connection.getInetAddress().getHostAddress(), prt);
+			System.out.println("Ga to remove: " + removeGa);
 			gm.removeGame(removeGa);
 		} catch (IOException e) {
 			e.printStackTrace();

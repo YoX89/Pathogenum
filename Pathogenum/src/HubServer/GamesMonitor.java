@@ -23,9 +23,9 @@ public class GamesMonitor extends ChatMonitor{
 	 * @param ga
 	 */
 	public synchronized void addGame(GameAddress ga){
-		if(!games.contains(ga)){
+		if(!games.contains(ga) && ga.getPort() > 1024){
 			games.offer(ga);
-			notifyWaiters();
+			notifyAll();
 		}
 	}
 	/**
@@ -33,8 +33,10 @@ public class GamesMonitor extends ChatMonitor{
 	 * @param ga
 	 */
 	public synchronized void removeGame(GameAddress ga){
-		games.remove(ga);
-		notifyWaiters();
+		System.out.println("Should remove: " + ga);
+		boolean rem = games.remove(ga);
+		System.out.println("Did remove? " + rem);
+		notifyAll();
 	}
 	/**
 	 * returns the list of known games
@@ -42,7 +44,5 @@ public class GamesMonitor extends ChatMonitor{
 	 */
 	public synchronized LinkedList<GameAddress> getGameAddresses(){
 			return games;
-	//	}
-	//	return null;
 	}
 }

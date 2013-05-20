@@ -29,11 +29,13 @@ public class LobbyServer extends Thread {
 	private Socket hubSocket;
 	private InetAddress hubAddress;
 	private int hubPort;
+	private int gamePort;
 	
 	public LobbyServer(String name, int port, InetAddress hubInetAddress, int hubPort) {
+		gamePort = port;
 		this.name = name;
 		try {
-			s = new ServerSocket(port);
+			s = new ServerSocket(gamePort);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -100,7 +102,8 @@ public class LobbyServer extends Thread {
 		int nameL = name.length();
 		os.write(Conversions.intToByteArray(nameL));
 		os.write(name.getBytes());
-		os.write(hubPort);
+		System.out.println("Hport: " + hubPort + ", Gport: " + gamePort);
+		os.write(Conversions.intToByteArray(gamePort));
 		} catch (IOException e) {
 			System.out.println("Could not write DeregisterLobbyMessage in lobby");
 			e.printStackTrace();
@@ -156,7 +159,6 @@ public class LobbyServer extends Thread {
 					notInterupted = false;
 					// TODO
 					// Clean up
-
 				}
 			}
 			for(LobbyComOutputServer lcos: lcosList){
