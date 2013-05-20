@@ -46,7 +46,7 @@ public class LobbyComOutputServer extends Thread {
 				}
 			} catch (InterruptedException e) {
 				System.out.println("LobbyComOutputServer interrupted.");
-				//e.printStackTrace();
+				// e.printStackTrace();
 				ok = -1;
 			}
 			try {
@@ -61,36 +61,40 @@ public class LobbyComOutputServer extends Thread {
 				ok = -1;
 			}
 			if (this.isInterrupted()) {
-				return; //keep socket
+				return; // keep socket
 			}
 		}
+		runs = false;
 		System.out.println("LobbyComOutputServer stopped");
 		lm.deRegister(this);
-		runs = false;
 		return;
 	}
 
 	private int writeGameName() {
-		System.out.println("LCOS:WRITEGAMENAME");
-		String name = lm.writeGameName();
-		if(name!=null){
-			try {
-				System.out.println("\tLCOS:WRITINGGAMENAMETOSTREAM");
-				os.write(Conversions.intToByteArray(Constants.SENDGAMENAME));
-				os.write(Conversions.intToByteArray(name.length()));
-				os.write(name.getBytes());
-				return 1;
-			} catch (IOException e) {
-				return -1;
+		if (runs) {
+			System.out.println("LCOS:WRITEGAMENAME");
+			String name = lm.writeGameName();
+			if (name != null) {
+				try {
+					System.out.println("\tLCOS:WRITINGGAMENAMETOSTREAM");
+					os.write(Conversions.intToByteArray(Constants.SENDGAMENAME));
+					os.write(Conversions.intToByteArray(name.length()));
+					os.write(name.getBytes());
+					return 1;
+				} catch (IOException e) {
+					return -1;
+				}
 			}
+			return 1;
 		}
-		return 1;
+		return -1;
 	}
 
 	private void getAndPrintConnected() throws IOException {
 		System.out.println("Printing Connected");
 		byte[] com = new byte[4];
-		HashMap<Thread, Boolean> reg = lm.getRegister();
+		HashMap<Thread, Boolean> reg = (HashMap<Thread, Boolean>) lm
+				.getRegister().clone();
 		com = Conversions.intToByteArray(Constants.SENDCONNECTED);
 		os.write(com);
 		int size = reg.keySet().size();

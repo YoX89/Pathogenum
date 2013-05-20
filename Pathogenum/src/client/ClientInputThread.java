@@ -105,16 +105,22 @@ public class ClientInputThread extends Thread {
 		int ok = 1;
 		try{
 		ok = is.read(seedB);
+		if(ok < 0){
+			System.out.println("Error in reading");
+		}
 		seed = Conversions.byteArrayToLong(seedB);
-		ok *= is.read(myIndexB);
+		ok = is.read(myIndexB);
+		if(ok < 0){
+			System.out.println("Error in reading");
+		}
 		myIndex = Conversions.ByteArrayToInt(myIndexB);
-		ok *= is.read(playersB);
+		ok = is.read(playersB);
+		if(ok < 0){
+			System.out.println("Error in reading");
+		}
 		players = Conversions.ByteArrayToInt(playersB);
 		}catch(IOException ioe){
 			ioe.printStackTrace();	
-		}
-		if(ok < 0){
-			System.out.println("Error in reading");
 		}
 		cm.setSeed(seed);
 		cm.setMyIndex(myIndex);
