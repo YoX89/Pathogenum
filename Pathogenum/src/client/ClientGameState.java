@@ -211,6 +211,12 @@ public class ClientGameState extends BasicGameState {
 
 	private void removeBodies() {
 		ArrayList<Body> rmBodys = ((PathogenumWorld) world).getRemoveBodys();
+		ArrayList<Integer> droppedPlayers = cch.getDroppedPlayers();
+		for(int i=0; i<droppedPlayers.size();i++){
+			Player play = players[droppedPlayers.get(i)];
+			world.destroyBody(play.getBody());
+			players[droppedPlayers.get(i)]=null;
+		}
 		if (!rmBodys.isEmpty()) {
 			System.out.println("size of rmBodys " + rmBodys.size());
 			for (int i = 0; i < rmBodys.size(); ++i) {

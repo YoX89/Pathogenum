@@ -25,15 +25,21 @@ public class GameMonitor {
 		register = new HashMap<GameServerOutputThread, Boolean>();
 	}
 	
-	public void registerOThread(GameServerOutputThread gsot){
+	public synchronized void registerOThread(GameServerOutputThread gsot){
 		register.put(gsot, false);
+		notifyAll();
 	}
 	
-	public void deRegisterOThread(GameServerOutputThread gsot){
-		register.remove(gsot);
+	public synchronized void deRegisterOThread(GameServerOutputThread gsot){
+		System.out.println("DEREGISTERING:::::::::::" + register.size());
+		boolean ok = register.remove(gsot);
+		//register.keySet().remove(gsot);
+		System.out.println("DEREGISTERDONE::::::::::" + register.size() + ", " + ok);
+		notifyAll();
+		//players--;
 	}
 	
-	public int getNbrPlayers(){
+	public synchronized int getNbrPlayers(){
 		return players;
 	}
 	
@@ -58,7 +64,9 @@ public class GameMonitor {
 	}
 	
 	public synchronized byte[] getOutGoingCommand(long frame, GameServerOutputThread gsot){
+		System.out.println("registerSize: " + register.size());
 		while(outComs.size() == 0 || register.get(gsot)){
+			System.out.println("\tregisterSize: " + register.size());
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -95,20 +103,27 @@ public class GameMonitor {
 		return coms;
 	}
 	
-	private void setAllReg(boolean value) {
+	private synchronized void setAllReg(boolean value) {
 		for(GameServerOutputThread gs : register.keySet()){
 			register.put(gs, value);
 		}
 		notifyAll();
 	}
 
-	private boolean allRegTrue(){
+	private synchronized boolean allRegTrue(){
 		for(GameServerOutputThread gs : register.keySet()){
 			if(!register.get(gs)){
 				return false;
 			}
 		}
 		return true;
+	}
+
+	public synchronized void sendDropped(int player) {
+		for(GameServerOutputThread gsot: register.keySet()){
+			gsot.sendDropped(player);
+		}
+		
 	}
 
 }

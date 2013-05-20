@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 
+import javax.sql.rowset.spi.SyncResolver;
+
 import utils.Conversions;
 import utils.GameAddress;
 
@@ -16,6 +18,7 @@ public class ClientMonitor {
 	private int nbrOfPlayers = -1;
 	private String gameName;
 	private ArrayList<String> connectedPlayers;
+	private ArrayList<Integer> dropedPlayers;
 	private boolean isReady = false;
 	private long seed = -1;
 	private int mIndex = -1;
@@ -28,6 +31,8 @@ public class ClientMonitor {
 		currentGames = new ArrayList<GameAddress>();
 		gameName = "";
 		connectedPlayers = new ArrayList<String>();
+		dropedPlayers = new ArrayList<Integer>();
+		
 	}
 	
 	public synchronized void addMessage(String message) {
@@ -178,5 +183,17 @@ public class ClientMonitor {
 			wait();
 		}
 		return nbrOfPlayers;
+	}
+
+	public synchronized ArrayList<Integer> getDroppedPlayers() {
+		ArrayList<Integer> drop = (ArrayList<Integer>) dropedPlayers.clone();
+		dropedPlayers.clear();
+		return drop;
+	}
+
+	public synchronized void setDroppedPlayer(int index) {
+		dropedPlayers.add(index);
+		//nbrOfPlayers--;
+		System.out.println("DROPPED SET IN CM, nbrplay: " + nbrOfPlayers);
 	}
 }

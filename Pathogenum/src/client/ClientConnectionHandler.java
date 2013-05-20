@@ -111,20 +111,18 @@ public class ClientConnectionHandler {
 		}
 		return -1;
 	}
-	
-	//TODO
-	public byte[] receiveInit() {
-		return new byte[1];
-	}
 
 	public byte[] receiveMovements() {
+		System.out.println("Trying to get Movements");
 		try {
 			nbrOfPlayers = cm.getNbrOfPlayers();
+			System.out.println("PLAYERSINCMIS: " + nbrOfPlayers);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		byte[] buff = new byte[1*nbrOfPlayers + 8];
 		buff = cm.recieveMovements(buff);
+		System.out.println("Movements gotten");
 		return buff;
 	}
 	/**
@@ -241,5 +239,8 @@ public class ClientConnectionHandler {
 			e.printStackTrace();
 		}
 		return nplayers;
+	}
+	public ArrayList<Integer> getDroppedPlayers() {
+		return cm.getDroppedPlayers();
 	}
 }
