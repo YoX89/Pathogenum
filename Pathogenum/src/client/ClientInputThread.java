@@ -59,24 +59,27 @@ public class ClientInputThread extends Thread {
 				int intCommand = Conversions.ByteArrayToInt(command);
 				switch (intCommand) {
 				case Constants.SENDMESSAGE:
-					//System.out.println("IPthread::doin readmessage");
+					System.out.println("IPthread::doin readmessage");
 					readMessage();
 					break;
 				case Constants.GAMELISTING:
-					//System.out.println("IPthread::doin gamelisting");
+					System.out.println("IPthread::doin gamelisting");
 					gameListing();
 					break;
 				case Constants.SENDCONNECTED:
-					//System.out.println("IPthread::doin connectedlisting");
+					System.out.println("IPthread::doin connectedlisting");
 					connectedListing();
 					break;
 				case Constants.SENDGAMENAME:
+					System.out.println("IPthread::doin sendgamename");
 					setGameName();
 					break;
 				case Constants.SENDMOVEMENT:
+					System.out.println("IPthread::doin sendmovement");
 					setMovements();
 					break;
 				case Constants.INITGAME:
+					System.out.println("IPthread::doin initgame");
 					initGame();
 					break;
 				default:
