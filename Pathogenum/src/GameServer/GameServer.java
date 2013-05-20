@@ -25,7 +25,7 @@ public class GameServer extends Thread{
 		gm = new GameMonitor(nbrOfPlayers);
 		for(int i = 0; i < nbrOfPlayers; ++i){
 			GameServerInputThread git = new GameServerInputThread(clients.get(i), gm, i);
-			GameServerOutputThread got = new GameServerOutputThread(clients.get(i), gm);
+			GameServerOutputThread got = new GameServerOutputThread(clients.get(i), gm, i);
 			gots.add(got);
 			got.start();
 			git.start();
@@ -43,7 +43,7 @@ public class GameServer extends Thread{
 				System.out.println("SENDING INIT FAILED");
 			}
 		}
-		
+		//nbrOfPlayers = gm.getNbrPlayers();
 		long desiredSleep = 25;
 		long diff = 0;
 		while(true) {

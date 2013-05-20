@@ -82,6 +82,10 @@ public class ClientInputThread extends Thread {
 					System.out.println("IPthread::doin initgame");
 					initGame();
 					break;
+				case Constants.DROPPED:
+				System.out.println("IPThread::doin dropped");
+					setDroppedPlayer();
+					break;
 				default:
 					System.out.println("got comm: " + Conversions.ByteArrayToInt(command));
 					System.exit(1);
@@ -97,6 +101,18 @@ public class ClientInputThread extends Thread {
 		System.out.println("IThread stopped");
 		return;
 	}
+
+	private void setDroppedPlayer() {
+		byte[] buff = new byte[4];
+		try {
+			is.read(buff);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		int index = Conversions.ByteArrayToInt(buff);
+		cm.setDroppedPlayer(index);
+	}
+
 
 	private void initGame() {
 		long seed = -1;
@@ -144,7 +160,8 @@ public class ClientInputThread extends Thread {
 
 		//	if(frame != 0) {
 				
-				byte[] movements = new byte[connectedPlayers.size()];
+				byte[] movements = null;
+					movements = new byte[connectedPlayers.size()];
 				System.out.println("MOVEMENTLÄNGD: "+movements.length);
 				is.read(movements);
 				byte[] totaltInfo = new byte[longBuff.length + movements.length];
