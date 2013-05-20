@@ -142,9 +142,10 @@ public class ClientInputThread extends Thread {
 
 			long frame = Conversions.byteArrayToLong(longBuff);
 
-			if(frame != 0) {
-
+		//	if(frame != 0) {
+				
 				byte[] movements = new byte[connectedPlayers.size()];
+				System.out.println("MOVEMENTLÄNGD: "+movements.length);
 				is.read(movements);
 				byte[] totaltInfo = new byte[longBuff.length + movements.length];
 				for(int i = 0; i < longBuff.length; i++){
@@ -155,16 +156,17 @@ public class ClientInputThread extends Thread {
 				}
 				cm.addMovementToBuffer(totaltInfo);
 
-			} else {
-				byte[] seedB = new byte[8];
-				is.read(seedB);
-				long seed = Conversions.byteArrayToLong(seedB);
-				cm.setSeed(seed);
-				byte[] myIndexB = new byte[4];
-				is.read(myIndexB);
-				int myIndex = Conversions.ByteArrayToInt(myIndexB);
-				cm.setMyIndex(myIndex);
-			}
+			//} 
+//			else {
+//				byte[] seedB = new byte[8];
+//				is.read(seedB);
+//				long seed = Conversions.byteArrayToLong(seedB);
+//				cm.setSeed(seed);
+//				byte[] myIndexB = new byte[4];
+//				is.read(myIndexB);
+//				int myIndex = Conversions.ByteArrayToInt(myIndexB);
+//				cm.setMyIndex(myIndex);
+//			}
 			//System.out.println("HEJ");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
