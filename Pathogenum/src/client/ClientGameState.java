@@ -15,7 +15,6 @@ import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -58,6 +57,7 @@ public class ClientGameState extends BasicGameState {
 	boolean constructDone = false;
 	boolean musicPlays = false;
 	ClientConnectionHandler cch;
+	private int remainingPlayers;
 
 	public ClientGameState(ClientConnectionHandler cch) {
 		this.cch = cch;
@@ -65,6 +65,7 @@ public class ClientGameState extends BasicGameState {
 		seed = cch.getSeed();
 		mIndex = cch.getIndex();
 		numberOfPlayers = cch.getNbrOfPlayers();
+		remainingPlayers = numberOfPlayers;
 		constructDone = true;
 	}
 
@@ -201,8 +202,7 @@ public class ClientGameState extends BasicGameState {
 			removeBodies();
 		}
 	}
-
-
+	
 
 	private void removeBodies() {
 		ArrayList<Body> rmBodys = ((PathogenumWorld) world).getRemoveBodys();
@@ -216,7 +216,15 @@ public class ClientGameState extends BasicGameState {
 					if(play!=null){
 						if (b.getUserData().equals((play.getName()))) {							
 							players[j] = null;
+							remainingPlayers--;
+							if(j == mIndex)
+								lose();
+							else if(remainingPlayers == 1){
+								win();
+							}
+								
 							find = true;				
+							
 							break;
 						}
 					}
@@ -235,6 +243,16 @@ public class ClientGameState extends BasicGameState {
 			}
 			rmBodys.clear();
 		}
+	}
+
+	private void win() {
+		
+		
+	}
+
+	private void lose() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/**

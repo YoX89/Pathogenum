@@ -74,13 +74,6 @@ public class PathogenumWorld extends World {
 						removeBodys.add(b.getBody());	
 					}
 				}
-				if(ab.getUserData().equals("Player1")){
-					System.out.println("Play massa " + ab.getMass() + "Density: " + a.m_density);
-				}else if (bb.getUserData().equals("PLayer1")){
-					System.out.println("Play massa " + bb.getMass() + "Density: " + b.m_density);
-				}
-				
-
 			}
 		});
 	}
