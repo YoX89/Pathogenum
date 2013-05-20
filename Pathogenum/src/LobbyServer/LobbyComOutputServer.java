@@ -46,7 +46,7 @@ public class LobbyComOutputServer extends Thread {
 				}
 			} catch (InterruptedException e) {
 				System.out.println("LobbyComOutputServer interrupted.");
-				// e.printStackTrace();
+				interrupt();
 				ok = -1;
 			}
 			try {
