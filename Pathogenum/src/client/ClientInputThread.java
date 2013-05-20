@@ -81,6 +81,7 @@ public class ClientInputThread extends Thread {
 					break;
 				default:
 					System.out.println("got comm: " + Conversions.ByteArrayToInt(command));
+					System.exit(1);
 					break;
 				}
 
