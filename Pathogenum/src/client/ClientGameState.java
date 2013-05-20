@@ -43,6 +43,7 @@ public class ClientGameState extends BasicGameState {
 	ArrayList<NPC> npcs;
 	Player[] players;
 	World world;
+	Image winOrLose;
 	float[] boundPoints;
 	int[] keys = new int[4];
 	public static final int ID = 2;
@@ -56,6 +57,7 @@ public class ClientGameState extends BasicGameState {
 	boolean initDone = false;
 	boolean constructDone = false;
 	boolean musicPlays = false;
+	boolean ended;
 	ClientConnectionHandler cch;
 	private int remainingPlayers;
 
@@ -73,6 +75,7 @@ public class ClientGameState extends BasicGameState {
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
 		initDone = false;
+		ended = false;
 		int scale = 2;
 		FSTBAOE = 60;
 		boundPoints = new float[4];
@@ -130,6 +133,9 @@ public class ClientGameState extends BasicGameState {
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 			throws SlickException {
+		if(ended){
+			arg2.drawImage(winOrLose, 250, 200);
+		}
 		if(initDone && constructDone){
 		Player play = players[mIndex];
 		if(play !=null){
@@ -252,12 +258,30 @@ public class ClientGameState extends BasicGameState {
 	}
 
 	private void win() {
+		for(int i = 0; i<10; i++){
+			System.out.println("WIN!!!!!!!!!!!!!!!!!!");
+		}
 		
+		try {
+			winOrLose=new Image("resources/gfx/win.png");
+			ended = true;
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
 	private void lose() {
-		// TODO Auto-generated method stub
+		for(int i = 0; i<10; i++){
+			System.out.println("LOSE!!!!!!!!!!!!!!!!!!");
+		}
+	
+		try {
+			winOrLose=new Image("resources/gfx/lose.png");
+			ended = true;
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
