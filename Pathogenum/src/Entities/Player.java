@@ -14,13 +14,6 @@ import utils.Dimensions;
 
 public class Player extends Entity{
 	
-
-//	public Player(int x, int y, String name, Image rep, int speed, PathogenumWorld world){
-//		super(x,y, name, rep, world);
-//		this.name = name;
-//		img = rep;
-//	}
-	
 	public Player( String name, Shape sh, int speed, World world, float radius){
 		super(name, sh, world);
 		BodyDef bd = new BodyDef();

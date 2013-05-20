@@ -42,29 +42,6 @@ public class NPC extends Entity {
 		rand = new Random(seed);
 	}
 	
-	public NPC(String name, Shape sh, int speed, World world, float radius) {
-		super(name, sh, world);
-		this.seed = seed;
-		BodyDef bd = new BodyDef();
-		bd.position = new Vec2(Dimensions.pixelToMeter(sh.getX()), Dimensions.pixelToMeter(sh.getY()));
-
-		bd.type = BodyType.DYNAMIC;
-		CircleShape cs = new CircleShape();
-		cs.m_radius = radius;
-		FixtureDef fd = new FixtureDef();
-		fd.shape = cs;
-		fd.density = 1f;
-		fd.friction = 0.3f;        
-		fd.restitution = 0.5f;
-		force = 0.04f;
-		body = world.createBody(bd);
-		body.createFixture(fd);
-		body.setLinearDamping(0.0015f);
-		body.setUserData(name);
-		rand = new Random();
-
-	}
-
 
 	public void draw(Graphics arg1){
 		Vec2 pos = body.getPosition();

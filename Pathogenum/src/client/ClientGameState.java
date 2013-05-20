@@ -189,7 +189,9 @@ public class ClientGameState extends BasicGameState {
 			int[] acc = checkMovementKey();
 			cch.sendMovement(acc);
 			byte[] movements = cch.receiveMovements();
-			doMovements(movements, arg2);
+			System.out.println("The delta in the update funcgtion is: " + arg2);
+			//TODO change here if you want different delta
+			doMovements(movements, 25);
 			if (FSAE > FSTBAOE) {
 				npcs.add(fac.getNpc());
 				FSAE = 0;
