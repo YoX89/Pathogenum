@@ -90,6 +90,7 @@ public class LobbyServer extends Thread {
 		System.out.println("Efter inter");
 		writeDeRegLobby();
 		GameServer gs = new GameServer(clients);
+		
 		gs.start();
 	}
 

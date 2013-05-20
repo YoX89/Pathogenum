@@ -47,23 +47,26 @@ public class GameServerOutputThread extends Thread {
 		byte[] seedPart = Conversions.longToByteArray(seed);
 		byte[] nbrPlayersPart = Conversions.intToByteArray(nbrOfPlayers);
 		byte[] indexPart = Conversions.intToByteArray(i);
-		int fullLength = seedPart.length + nbrPlayersPart.length
-				+ indexPart.length;
-		byte[] initMessage = new byte[fullLength];
-		ArrayList<byte[]> byteArrays = new ArrayList<byte[]>();
-		byteArrays.add(seedPart);
-		byteArrays.add(indexPart);
-		byteArrays.add(nbrPlayersPart);
-			int index = 0;
-			for(byte[] array: byteArrays){
-				for(int j = 0; j < array.length; j++){
-					initMessage[j+index] = array[j];
-				}
-				index += array.length;
-			}
+//		int fullLength = seedPart.length + nbrPlayersPart.length
+//				+ indexPart.length;
+//		byte[] initMessage = new byte[fullLength];
+//		ArrayList<byte[]> byteArrays = new ArrayList<byte[]>();
+//		byteArrays.add(seedPart);
+//		byteArrays.add(indexPart);
+//		byteArrays.add(nbrPlayersPart);
+//		int index = 0;
+//		for(byte[] array: byteArrays){
+//			for(int j = 0; j < array.length; j++){
+//				initMessage[j+index] = array[j];
+//			}
+//			index += array.length;
+//		}
 		try {
 			os.write(Constants.INITGAME);
-			os.write(initMessage);
+		//	os.write(initMessage);
+			os.write(seedPart);
+			os.write(indexPart);
+			os.write(nbrPlayersPart);
 			os.flush();
 			return true;
 		} catch (IOException e) {
