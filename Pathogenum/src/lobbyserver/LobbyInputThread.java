@@ -31,7 +31,6 @@ public class LobbyInputThread extends Thread{
 	}
 	
 	public void run(){
-		System.out.println("LobbyComInputServer started");
 		while(ok != -1){
 			byte[] com = new byte[4];
 			try {
@@ -53,7 +52,6 @@ public class LobbyInputThread extends Thread{
 				ok = -1;
 			break;
 			case Constants.SENDGAMENAME:
-				System.out.println("LCIS:SENDGAMENAMECASE");
 				lm.shouldSendGameName();
 				break;
 			case Constants.SETREADY: 
@@ -71,7 +69,6 @@ public class LobbyInputThread extends Thread{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("LobbyComInputServer stopped2");
 		lm.notifyWaiters();
 		return;
 	}
@@ -81,7 +78,6 @@ public class LobbyInputThread extends Thread{
 	 * @throws IOException
 	 */
 	private void fetchMessage() throws IOException{
-		System.out.println("fetching messages");
 		byte[] buff = new byte[4];
 			ok = is.read(buff);
 		int mLength = Conversions.ByteArrayToInt(buff);

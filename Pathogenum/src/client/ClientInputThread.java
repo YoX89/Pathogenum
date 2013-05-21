@@ -48,46 +48,36 @@ public class ClientInputThread extends Thread {
 				int intCommand = Conversions.ByteArrayToInt(command);
 				switch (intCommand) {
 				case Constants.SENDMESSAGE:
-					System.out.println("IPthread::doin readmessage");
 					readMessage();
 					break;
 				case Constants.GAMELISTING:
-					System.out.println("IPthread::doin gamelisting");
 					gameListing();
 					break;
 				case Constants.SENDCONNECTED:
-					System.out.println("IPthread::doin connectedlisting");
 					connectedListing();
 					break;
 				case Constants.SENDGAMENAME:
-					System.out.println("IPthread::doin sendgamename");
 					setGameName();
 					break;
 				case Constants.SENDMOVEMENT:
-					System.out.println("IPthread::doin sendmovement");
 					setMovements();
 					break;
 				case Constants.INITGAME:
-					System.out.println("IPthread::doin initgame");
 					initGame();
 					break;
 				case Constants.DROPPED:
-					System.out.println("IPThread::doin dropped");
 					setDroppedPlayer();
 					break;
 				default:
-					System.out.println("got comm: " + Conversions.ByteArrayToInt(command));
 					System.exit(1);
 					break;
 				}
 
 			} catch (IOException e) {
-				System.out.println("IOEXCEPTION!!!");
-				e.printStackTrace();
+				//e.printStackTrace();
 				ok = false;
 			}
 		}
-		System.out.println("IThread stopped");
 		return;
 	}
 
@@ -145,7 +135,6 @@ public class ClientInputThread extends Thread {
 
 			byte[] movements = null;
 			movements = new byte[connectedPlayers.size()];
-			System.out.println("MOVEMENTLÄNGD: "+movements.length);
 			is.read(movements);
 			byte[] totaltInfo = new byte[longBuff.length + movements.length];
 			for(int i = 0; i < longBuff.length; i++){
@@ -232,7 +221,6 @@ public class ClientInputThread extends Thread {
 		if (checkInput(check2))
 			return;
 		int nbrGames = Conversions.ByteArrayToInt(command);
-		System.out.println("InputThreadGameListing SizeofGames: " + nbrGames);
 		for (int i = 0; i < nbrGames; i++) {
 			check2 = is.read(command);
 			if (checkInput(check2))

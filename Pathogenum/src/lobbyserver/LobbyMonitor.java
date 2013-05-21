@@ -18,7 +18,6 @@ public class LobbyMonitor extends ChatMonitor{
 	boolean shouldSendGameName = false;
 	public LobbyMonitor(String gameName){
 		super();
-		System.out.println("LobbyMonitor created");
 		this.gameName = gameName;
 		ready = new HashMap<String, Boolean>();
 	}
@@ -58,16 +57,13 @@ public class LobbyMonitor extends ChatMonitor{
 
 
 	public synchronized void shouldSendGameName() {
-		System.out.println("\tLMONITOR:SHOULDSENDGAME");
 		shouldSendGameName = true;
 		notifyAll();
 	}
 
 
 	public String writeGameName() {
-		System.out.println("\tLMONITOR:WRITEGAMENAME");
 		if(shouldSendGameName){
-			System.out.println("\tLMONITOR:WRITINGGAMENAME");
 			shouldSendGameName = false;
 			return gameName;
 		}

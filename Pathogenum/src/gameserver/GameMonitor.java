@@ -56,9 +56,7 @@ public class GameMonitor {
 	}
 	
 	public synchronized byte[] getOutGoingCommand(long frame, GameServerOutputThread gsot){
-		System.out.println("registerSize: " + register.size());
 		while(outComs.size() == 0 || register.get(gsot)){
-			System.out.println("\tregisterSize: " + register.size());
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -85,9 +83,7 @@ public class GameMonitor {
 				b[i] = 0;
 			}
 		}
-		if(b[0] != 0){
-			System.out.println("!0");
-		}
+
 		for(int i = 0; i < players; ++i){
 			coms[8+i] = b[i];
 		}

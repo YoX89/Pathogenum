@@ -22,7 +22,6 @@ public class ChatMonitor {
 	public ChatMonitor() {
 		messageQueue = new LinkedList<String>();
 		register = new HashMap<Thread, Boolean>();
-		System.out.println("ChatMonitor created");
 	}
 
 	/**
@@ -49,7 +48,6 @@ public class ChatMonitor {
 	 * @param message
 	 */
 	public synchronized void putMessage(String hostAddress, String message) {
-		System.out.println("doing putMessage");
 		messageQueue.offer(hostAddress + ": " + message);
 		setChanged();
 		notifyAll();
@@ -62,7 +60,6 @@ public class ChatMonitor {
 	 */
 	public synchronized String getMessage(Thread lcos) {
 		String msg = messageQueue.peek();
-		System.out.println("doing getMessage");
 		register.put(lcos, true);
 		if (msg == null) {
 			return null;

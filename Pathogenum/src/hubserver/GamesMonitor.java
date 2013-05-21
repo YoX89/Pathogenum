@@ -33,9 +33,7 @@ public class GamesMonitor extends ChatMonitor{
 	 * @param ga
 	 */
 	public synchronized void removeGame(GameAddress ga){
-		System.out.println("Should remove: " + ga);
 		boolean rem = games.remove(ga);
-		System.out.println("Did remove? " + rem);
 		notifyAll();
 	}
 	/**

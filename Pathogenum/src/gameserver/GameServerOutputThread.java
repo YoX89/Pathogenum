@@ -32,11 +32,9 @@ public class GameServerOutputThread extends Thread {
 		boolean notClosed = true;
 		try {
 			while (notClosed) {
-				System.out.println("Before GOCommand");
 				byte[] movements = gm.getOutGoingCommand(frameID++, this);
 				byte[] command = Conversions
 						.intToByteArray(Constants.SENDMOVEMENT);
-				System.out.println("Movements IN gsot: " + Misc.printByte(movements));
 				os.write(command);
 				os.write(movements);
 				os.flush();
@@ -69,7 +67,6 @@ public class GameServerOutputThread extends Thread {
 			os.flush();
 			return true;
 		} catch (IOException e) {
-			System.out.println("Could not write initmessage");
 			e.printStackTrace();
 			return false;
 		}

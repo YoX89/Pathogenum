@@ -114,7 +114,6 @@ public class ClientGameState extends BasicGameState {
 		cch.cm.setReady(false);
 
 		initDone = true;
-		System.out.println("INIT IS NOW DOOOOOOOOOO=0=NE!");
 	}
 
 	@Override
@@ -195,7 +194,6 @@ public class ClientGameState extends BasicGameState {
 			players[droppedPlayers.get(i)]=null;
 		}
 		if (!rmBodys.isEmpty()) {
-			System.out.println("size of rmBodys " + rmBodys.size());
 			for (int i = 0; i < rmBodys.size(); ++i) {
 				Body b = rmBodys.get(i);
 				boolean find = false;
@@ -236,10 +234,6 @@ public class ClientGameState extends BasicGameState {
 	private void win() {
 		if (!ended) {
 
-			for (int i = 0; i < 10; i++) {
-				System.out.println("WIN!!!!!!!!!!!!!!!!!!");
-			}
-
 			try {
 				winOrLose = new Image("resources/gfx/win.png");
 				ended = true;
@@ -252,9 +246,6 @@ public class ClientGameState extends BasicGameState {
 
 	private void lose() {
 		if (!ended) {
-			for (int i = 0; i < 10; i++) {
-				System.out.println("LOSE!!!!!!!!!!!!!!!!!!");
-			}
 
 			try {
 				winOrLose = new Image("resources/gfx/lose.png");

@@ -37,7 +37,6 @@ public class HubOutputThread extends Thread {
 	}
 
 	public void run() {
-		System.out.println("HubComOutputServer started");
 		while (ok != -1) {
 			try {
 				gm.waitForEvent(); //Bl� linus vad jobbig du �r...
@@ -54,7 +53,6 @@ public class HubOutputThread extends Thread {
 				ok = -1;
 			}
 		}
-		System.out.println("HubComOutputServer stopped");
 		gm.deRegister(this);
 		return;
 	}
@@ -78,7 +76,6 @@ public class HubOutputThread extends Thread {
 			com = Conversions.intToByteArray(msg.getBytes().length);
 			os.write(com);
 			os.write(msg.getBytes());
-			System.out.println("Sending message: " + msg);
 		}
 	}
 }

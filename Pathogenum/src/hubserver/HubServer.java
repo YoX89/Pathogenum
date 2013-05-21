@@ -38,9 +38,6 @@ public class HubServer extends Thread {
 	}
 
 	public void run() {
-		System.out.println("HubServer started on: "
-				+ Ssock.getInetAddress().getHostAddress()
-				+ Ssock.getLocalPort());
 		while (true) {
 			try {
 				Socket conn = Ssock.accept();

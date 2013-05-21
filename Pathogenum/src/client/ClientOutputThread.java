@@ -35,7 +35,6 @@ public class ClientOutputThread extends Thread {
 			getMessages();
 			getReady();
 		}
-		System.out.println("ClientOutputThread stopped");
 		return;
 	}
 
@@ -55,17 +54,15 @@ public class ClientOutputThread extends Thread {
 		for (int i = 0; i < messages.size(); i++) {
 			String message = messages.get(i);
 			byte[] command = Conversions.intToByteArray(Constants.SENDMESSAGE);
-			//System.out.println("opthread::sending command: "+Conversions.ByteArrayToInt(command));
 			byte[] length = Conversions.intToByteArray(message.length());
 			byte[] text = message.getBytes();
 			try {
-				//System.out.println("opthread::writing, length: "+message.length());
 				os.write(command);
 				os.write(length);
 				os.write(text);
 				os.flush();
 			} catch (IOException e) {
-				// e.printStackTrace();
+				 e.printStackTrace();
 				closeConnection();
 			}
 		}
@@ -76,7 +73,6 @@ public class ClientOutputThread extends Thread {
 		boolean isReady = cm.isReady();
 		if(isReady){
 			byte[] command = Conversions.intToByteArray(Constants.SETREADY);
-			//System.out.println("Sending \"I AM READY BIATCH\"");
 			try {
 				os.write(command);
 				os.flush();
@@ -119,7 +115,6 @@ public class ClientOutputThread extends Thread {
 
 	public void startNewGame(String gameName, int port) {
 		try {
-			System.out.println("SENDINGSTARTNEWGAME from COT");
 			os.write(Constants.ADDGAME);
 			os.write(Conversions.intToByteArray(port));
 			os.write(Conversions.intToByteArray(gameName.length()));
@@ -131,7 +126,6 @@ public class ClientOutputThread extends Thread {
 	}
 
 	public void refresh() {
-		System.out.println("Sendind refresh to Hub");
 		byte[] send = Conversions.intToByteArray(Constants.GAMELISTING);
 		try {
 			os.write(send);

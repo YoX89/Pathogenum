@@ -113,16 +113,13 @@ public class ClientConnectionHandler {
 	}
 
 	public byte[] receiveMovements() {
-		System.out.println("Trying to get Movements");
 		try {
 			nbrOfPlayers = cm.getNbrOfPlayers();
-			System.out.println("PLAYERSINCMIS: " + nbrOfPlayers);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		byte[] buff = new byte[1*nbrOfPlayers + 8];
 		buff = cm.recieveMovements(buff);
-		System.out.println("Movements gotten");
 		return buff;
 	}
 	/**
@@ -142,7 +139,6 @@ public class ClientConnectionHandler {
 				iThread.start();
 				oThread = new ClientOutputThread(socket,cm);
 				oThread.start();
-				System.out.println("New lobby created @: " + gameName + ":" + port);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -152,7 +148,6 @@ public class ClientConnectionHandler {
 
 	public ArrayList<GameAddress> getGames() {
 		ArrayList<GameAddress> list = cm.getGames();
-		System.out.println("GamesSizeInnCCh: " + list.size());
 		return list;
 	}
 
@@ -195,7 +190,6 @@ public class ClientConnectionHandler {
 				updateGameName();
 				
 			} catch (IOException e) {
-				System.out.println("IOEXCEPTIONS");
 				e.printStackTrace();
 				return false;
 			}

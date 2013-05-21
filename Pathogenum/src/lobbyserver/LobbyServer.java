@@ -46,7 +46,7 @@ public class LobbyServer extends Thread {
 			hubSocket = new Socket(hubAddress, hubPort);
 		} catch (IOException e) {
 			System.out.println("Could not connect to hubserver in gamelobbyserver");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		lm = new LobbyMonitor(name);
 		
@@ -64,14 +64,12 @@ public class LobbyServer extends Thread {
 			try {
 				lm.waitForEvent();
 				allReady = true;
-				System.out.println("Client size is: " + clients.size());
 				for (int i = 0; i < clients.size(); ++i) {
 					String hostname = clients.get(i).getInetAddress()
 							.getHostName();
 					if(!lm.getReady(hostname))
 						allReady = false;
 					
-					System.out.println("Hostname: " + hostname + " all is " + (allReady ? "ready" : "not ready"));
 				}
 				
 			} catch (InterruptedException e) {
@@ -79,7 +77,6 @@ public class LobbyServer extends Thread {
 			}
 		}
 		
-		System.out.println("Innan inter");
 		try {
 			conListener.interrupt();
 			s.close(); //interrupt s.accept in conlistener
@@ -87,7 +84,6 @@ public class LobbyServer extends Thread {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Efter inter");
 		writeDeRegLobby();
 		GameServer gs = new GameServer(clients);
 		
@@ -103,11 +99,10 @@ public class LobbyServer extends Thread {
 		int nameL = name.length();
 		os.write(Conversions.intToByteArray(nameL));
 		os.write(name.getBytes());
-		System.out.println("Hport: " + hubPort + ", Gport: " + gamePort);
 		os.write(Conversions.intToByteArray(gamePort));
 		} catch (IOException e) {
 			System.out.println("Could not write DeregisterLobbyMessage in lobby");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 	}
@@ -124,12 +119,10 @@ public class LobbyServer extends Thread {
 		public void run() {
 			lcisList = new ArrayList<LobbyInputThread>();
 			lcosList = new ArrayList<LobbyOutputThread>();
-			System.out.println("LobbyServer started");
 			boolean notInterupted = true;
 			while (notInterupted) {// �ndra till while(!gamestarted)
 				try {
 					Socket conn = s.accept();
-					System.out.println("Client connects");
 					if (lm.getRegister().keySet().size() >= 4) {
 						System.out.println("Maximum size of game");
 						conn.close();
@@ -146,8 +139,6 @@ public class LobbyServer extends Thread {
 						while (!lcos.runs) {
 
 						}
-						System.out.println("Set Hostname: "
-								+ conn.getInetAddress().getHostName());
 						lm.setReady(conn.getInetAddress().getHostName(), false);
 						lm.notifyWaiters();
 					}
@@ -166,7 +157,6 @@ public class LobbyServer extends Thread {
 			for(LobbyInputThread lcis: lcisList){
 				lcis.interrupt();
 			}
-			System.out.println("LobbyConnListener stoppes");
 			return;
 		}
 

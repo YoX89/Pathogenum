@@ -166,7 +166,6 @@ public class ClientHubState extends BasicGameState {
 				sendButton.getWidth(), sendButton.getHeight());
 		if (moa.isMouseOver() && Mouse.isButtonDown(0)
 				&& !(inputText.getText().equals("")) && !pressedSend) {
-			System.out.println("PRESSED! Message is: " + inputText.getText());
 			pressedSend = true;
 			boolean isAscii = CharMatcher.ASCII.matchesAllOf(inputText.getText());
 			if(isAscii){
@@ -184,7 +183,6 @@ public class ClientHubState extends BasicGameState {
 				newgameButton.getWidth(), newgameButton.getHeight());
 
 		if (moa.isMouseOver() && Mouse.isButtonDown(0) && !pressedNew) {
-			System.out.println("PRESSED! NEW GAME");
 			pressedNew = true;
 			int port = checkPortValidity();
 			boolean isAscii = CharMatcher.ASCII.matchesAllOf(newGameNameField.getText());
@@ -215,7 +213,6 @@ public class ClientHubState extends BasicGameState {
 				joingameButton.getWidth(), joingameButton.getHeight());
 		if (moa.isMouseOver() && Mouse.isButtonDown(0) && !pressedJoin) {
 			pressedJoin = true;
-			System.out.println("PRESSED! JOIN GAME");
 			String ipText = IpText.getText();
 			
 			String[] hostAndPort = ipText.split(":");
@@ -243,7 +240,6 @@ public class ClientHubState extends BasicGameState {
 				refreshButton.getWidth(), refreshButton.getHeight());
 		if (moa.isMouseOver() && Mouse.isButtonDown(0) && !pressedRefresh) {
 			pressedRefresh = true;
-			System.out.println("PRESSED! Refresh");
 			printGames();
 		}
 
@@ -280,7 +276,6 @@ public class ClientHubState extends BasicGameState {
 			text += "\n";
 		}
 		gamesField.setText(text);
-		System.out.println("GAMESLIST!!!!!\n" + text);
 	}
 
 	private void removeDuplicates() {

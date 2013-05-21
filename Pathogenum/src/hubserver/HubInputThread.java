@@ -38,13 +38,11 @@ public class HubInputThread extends Thread {
 
 	public void run() {
 		byte[] command = new byte[4];
-		System.out.println("HubcomInputServer started");
 		ok = 0;
 		while (ok != -1) {
 			try {
 				ok = is.read(command);
 				int com = Conversions.ByteArrayToInt(command);
-				System.out.println("Command: " + command[0]);
 				switch (com) {
 				case Constants.ADDGAME:
 					addCommand(connection, is);
@@ -61,7 +59,6 @@ public class HubInputThread extends Thread {
 					deRegisterGame(connection, is);
 					break;
 				case Constants.STARTGAME:
-					System.out.println("Started game sent");
 				break;
 				default:
 					connection.close();
@@ -72,13 +69,11 @@ public class HubInputThread extends Thread {
 				ok = -1;
 			}
 		}
-		System.out.println("HubComInputServer stopped");
 		gm.notifyWaiters();
 		return;
 	}
 
 	private void deRegisterGame(Socket conn2, InputStream is2) {
-		System.out.println("ShouldDeregister");
 		byte[] gameNameL = new byte[4];
 		byte[] gameName;
 		int ok = 1;
@@ -91,7 +86,6 @@ public class HubInputThread extends Thread {
 			ok = is2.read(port);
 			int prt = Conversions.ByteArrayToInt(port);
 			GameAddress removeGa = new GameAddress(gName, connection.getInetAddress().getHostAddress(), prt);
-			System.out.println("Ga to remove: " + removeGa);
 			gm.removeGame(removeGa);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -101,7 +95,6 @@ public class HubInputThread extends Thread {
 
 	private void sendGames(OutputStream os2) {
 		LinkedList<GameAddress> games = gm.getGameAddresses();
-		System.out.println("GameSizeInHubIThread: " + games.size());
 		if (games != null) {
 			try {
 				os2.write(Conversions.intToByteArray(Constants.GAMELISTING));
@@ -181,8 +174,6 @@ public class HubInputThread extends Thread {
 		String gameName = new String(name);
 		GameAddress ga = new GameAddress(gameName, ip, port);
 		gm.addGame(ga);
-		System.out.println("Games after addGame: " + gm.games.size());
-		// skicka conf h�r med maybe?
 	}
 
 }

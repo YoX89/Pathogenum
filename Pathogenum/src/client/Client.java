@@ -127,7 +127,6 @@ public class Client extends StateBasedGame {
 	@Override
 	public boolean closeRequested() {
 		agc.exit();
-		System.out.println("CLOSIÖNG");
 		return false;
 	}
 
