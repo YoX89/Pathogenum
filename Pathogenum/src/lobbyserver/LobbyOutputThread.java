@@ -1,4 +1,4 @@
-package LobbyServer;
+package lobbyserver;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,7 +15,7 @@ import utils.Conversions;
  * @author Mardrey
  * 
  */
-public class LobbyComOutputServer extends Thread {
+public class LobbyOutputThread extends Thread {
 
 	OutputStream os;
 	Socket conn;
@@ -23,7 +23,7 @@ public class LobbyComOutputServer extends Thread {
 	int ok = 0;
 	boolean runs;
 
-	public LobbyComOutputServer(Socket s, LobbyMonitor lm) {
+	public LobbyOutputThread(Socket s, LobbyMonitor lm) {
 		runs = false;
 		conn = s;
 		try {
@@ -103,7 +103,7 @@ public class LobbyComOutputServer extends Thread {
 			com = Conversions.intToByteArray(size);
 			os.write(com);
 			for (Thread t : reg.keySet()) {
-				LobbyComOutputServer lcos = (LobbyComOutputServer) t;
+				LobbyOutputThread lcos = (LobbyOutputThread) t;
 				InetAddress i = lcos.conn.getInetAddress();
 				String in = i.getHostAddress();
 				System.out.println(" -sending " + in);

@@ -1,11 +1,12 @@
-package GameServer;
+package gameserver;
 
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
 
+import utils.Constants;
 import utils.Conversions;
-import utils.misc;
+import utils.Misc;
 
 
 public class GameServer extends Thread{
@@ -44,7 +45,7 @@ public class GameServer extends Thread{
 			}
 		}
 		//nbrOfPlayers = gm.getNbrPlayers();
-		long desiredSleep = 25;
+		long desiredSleep = Constants.GAME_SPEED;
 		long diff = 0;
 		while(true) {
 			Byte[] commands = new Byte[nbrOfPlayers];

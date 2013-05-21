@@ -1,4 +1,4 @@
-package LobbyServer;
+package lobbyserver;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,14 +13,14 @@ import utils.Conversions;
  * @author Mardrey
  *
  */
-public class LobbyComInputServer extends Thread{
+public class LobbyInputThread extends Thread{
 	
 	InputStream is;
 	Socket conn;
 	LobbyMonitor lm;
 	int ok = 0;
 	
-	public LobbyComInputServer(Socket s, LobbyMonitor lm){
+	public LobbyInputThread(Socket s, LobbyMonitor lm){
 		conn = s;
 		try {
 			is = conn.getInputStream();

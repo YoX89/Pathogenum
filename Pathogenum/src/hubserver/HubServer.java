@@ -1,4 +1,4 @@
-package HubServer;
+package hubserver;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 
-import publicMonitors.ChatMonitor;
+import publicmonitors.ChatMonitor;
 import utils.GameAddress;
 
 /**
@@ -46,8 +46,8 @@ public class HubServer extends Thread {
 		while (true) {
 			try {
 				Socket conn = Ssock.accept();
-				HubComOutputServer hcos = new HubComOutputServer(conn, gm);
-				HubComInputServer HCS = new HubComInputServer(conn, gm);
+				HubOutputThread hcos = new HubOutputThread(conn, gm);
+				HubInputThread HCS = new HubInputThread(conn, gm);
 				hcos.start();
 				HCS.start();
 			} catch (IOException e) {

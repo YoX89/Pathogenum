@@ -1,8 +1,8 @@
-package HubServer;
+package hubserver;
 
 import java.util.LinkedList;
 
-import publicMonitors.ChatMonitor;
+import publicmonitors.ChatMonitor;
 import utils.GameAddress;
 /**
  * a monitor used to store known games for the HubServer

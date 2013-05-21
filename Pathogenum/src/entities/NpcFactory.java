@@ -1,11 +1,12 @@
-package Entities;
+package entities;
 
 import java.util.Random;
 
 import org.jbox2d.dynamics.World;
 import org.newdawn.slick.geom.Circle;
 
-import Physics.PathogenumWorld;
+import physics.PathogenumWorld;
+
 
 import utils.Dimensions;
 

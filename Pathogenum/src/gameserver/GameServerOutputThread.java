@@ -1,4 +1,4 @@
-package GameServer;
+package gameserver;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import utils.Constants;
 import utils.Conversions;
-import utils.misc;
+import utils.Misc;
 
 public class GameServerOutputThread extends Thread {
 	private OutputStream os;
@@ -38,7 +38,7 @@ public class GameServerOutputThread extends Thread {
 				byte[] movements = gm.getOutGoingCommand(frameID++, this);
 				byte[] command = Conversions
 						.intToByteArray(Constants.SENDMOVEMENT);
-				System.out.println("Movements IN gsot: " + misc.printByte(movements));
+				System.out.println("Movements IN gsot: " + Misc.printByte(movements));
 				// System.out.println("Writing movement from GameServer" +
 				// misc.printByte(movements));
 				os.write(command);

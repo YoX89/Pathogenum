@@ -1,4 +1,4 @@
-package HubServer;
+package hubserver;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -7,7 +7,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import publicMonitors.ChatMonitor;
+import publicmonitors.ChatMonitor;
 
 import utils.Constants;
 import utils.Conversions;
@@ -19,13 +19,13 @@ import utils.GameAddress;
  * @author Mardrey
  * 
  */
-public class HubComOutputServer extends Thread {
+public class HubOutputThread extends Thread {
 	OutputStream os;
 	Socket conn;
 	GamesMonitor gm;
 	int ok = 0;
 
-	public HubComOutputServer(Socket s, GamesMonitor gm) {
+	public HubOutputThread(Socket s, GamesMonitor gm) {
 		conn = s;
 		try {
 			os = conn.getOutputStream();

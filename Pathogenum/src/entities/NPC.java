@@ -1,4 +1,6 @@
-package Entities;
+package entities;
+
+import java.util.Random;
 
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.common.Vec2;
@@ -12,13 +14,18 @@ import org.newdawn.slick.geom.Shape;
 
 import utils.Dimensions;
 
-public class Player extends Entity{
+public class NPC extends Entity {
+	Random rand;
+	int forceCount =0;
+	int [] acc = new int [4];
+	long seed;
 	
-	public Player( String name, Shape sh, int speed, World world, float radius){
+	public NPC(String name, Shape sh, int speed, World world, float radius, long seed) {
 		super(name, sh, world);
+		this.seed = seed;
 		BodyDef bd = new BodyDef();
 		bd.position = new Vec2(Dimensions.pixelToMeter(sh.getX()), Dimensions.pixelToMeter(sh.getY()));
-		
+
 		bd.type = BodyType.DYNAMIC;
 		CircleShape cs = new CircleShape();
 		cs.m_radius = radius;
@@ -32,16 +39,29 @@ public class Player extends Entity{
 		body.createFixture(fd);
 		body.setLinearDamping(0.0015f);
 		body.setUserData(name);
+		rand = new Random(seed);
 	}
 	
-	
+
 	public void draw(Graphics arg1){
 		Vec2 pos = body.getPosition();
-		//System.out.println(pos.x + " " + pos.y);
 		changeShapeSize();
 		sh.setLocation(Dimensions.meterToPixel(pos.x) - sh.getWidth()/2, Dimensions.meterToPixel(pos.y) - sh.getHeight()/2);
-		arg1.setColor(Color.red);
+		arg1.setColor(Color.green);
 		arg1.draw(sh);
+	}
+
+
+	public void addForce(int ms){
+		if(forceCount == -1){
+			forceCount = rand.nextInt(20);
+			for(int i =0; i<4;++i){
+				acc[i] = rand.nextInt(2);
+			}	
+		}
+		super.addForce(acc, ms);
+		forceCount--;
+
 	}
 
 }

@@ -1,4 +1,4 @@
-package HubServer;
+package hubserver;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +17,7 @@ import utils.GameAddress;
  * @author Mardrey
  * 
  */
-public class HubComInputServer extends Thread {
+public class HubInputThread extends Thread {
 
 	Socket connection;
 	GamesMonitor gm;
@@ -25,7 +25,7 @@ public class HubComInputServer extends Thread {
 	OutputStream os;
 	int ok;
 
-	public HubComInputServer(Socket connection, GamesMonitor gm) {
+	public HubInputThread(Socket connection, GamesMonitor gm) {
 		this.connection = connection;
 		this.gm = gm;
 		try {

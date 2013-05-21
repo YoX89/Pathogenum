@@ -1,6 +1,6 @@
 package utils;
 
-public class misc {
+public class Misc {
 	public static String printByte(byte[] b){
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < b.length; i++){
