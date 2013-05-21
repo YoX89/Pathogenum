@@ -49,8 +49,12 @@ public class Client extends StateBasedGame {
 	public static void main(String args[]) {
 
 		try {
-
-			Client client = new Client("client", args[0], args[1]);
+			Client client = null;
+			try{
+				client = new Client("client", args[0], args[1]);
+			}catch(ArrayIndexOutOfBoundsException ie){
+				client = new Client("client", "localhost", "12345");
+			}
 			agc = null;
 			try {
 				agc = new AppGameContainer(client);
@@ -95,26 +99,26 @@ public class Client extends StateBasedGame {
 	 */
 	@Override
 	public void initStatesList(GameContainer arg0) throws SlickException {
-		
+
 		Hub = null;
 		try {
-			
+
 			if(host.equals("localhost")){
 				host = InetAddress.getLocalHost().getHostAddress();
 			}
 			InetAddress ia = InetAddress.getByName(host);
 			cch = ClientConnectionHandler.getCCH(ia, port);
-					//new ClientConnectionHandler(InetAddress.getByName(host), port);
+			//new ClientConnectionHandler(InetAddress.getByName(host), port);
 			Hub = new ClientHubState(ia,port);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
 		Lobby = new ClientLobbyState();
-//		Game = new ClientGameState(cch); //Use the temporary (single player) game state
+		//		Game = new ClientGameState(cch); //Use the temporary (single player) game state
 		//Game = new ClientGameState(); //Use the client-server game state
 		addState(Hub);
 		addState(Lobby);
-//		addState(Game);
+		//		addState(Game);
 		bgs = Hub;
 		init = true;
 	}
