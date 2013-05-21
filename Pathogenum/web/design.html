@@ -1,0 +1,70 @@
+ <!--
+Design by Bryant Smith
+http://www.bryantsmith.com
+http://www.aszx.net
+email: template [-at-] bryantsmith [-dot-] com
+Released under Creative Commons Attribution 2.5 Generic.  In other words, do with it what you please; but please leave the link if you'd be so kind :)
+
+Name       : An Ocean of Sky
+Description: One column, with top naviation.  All divs, validations: XHTML Strict 1.0 & CSS
+Version    : 1.0
+Released   : 20081009
+-->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="anoceanofsky.css" />
+<title>Pathogenum, The night is dark and full of terrors</title>
+</head>
+
+<body>
+    <div id="page">
+        <div class="topNaviagationLink"><a href="index.html">Home</a></div>
+        <div class="topNaviagationLink"><a href="design.html">Design and Evaluation</a></div>
+	</div>
+    <div id="mainPicture">
+    	<div class="picture">
+        	<div id="headerTitle">Pathogenum</div>
+            <div id="headerSubtext">The night is dark and full of terrors</div>
+        </div>
+    </div>
+        <div class="contentBox">
+    	<div class="innerBox">
+        	<div class="contentTitle">The design of Pathogenum</div>
+          <div class="contentText"><p>To communicate between players, the game utilizes the Transmission Control Protocol, or TCP for short. To send data we have used sockets, inputstreams and outputstreams. The protocol which the program recognizes commands through is protocol we have ourselves designed. There exists four different important parts of the networked game-system.</p>
+          <ul>
+            <li>HubServer</li>
+            <li>LobbyServer</li>
+            <li>GameServer</li>
+            <li>Client</li>
+          </ul>
+        <p>The HubServer is a program which lies on a computer that is supposed to be online at any time. Here the lobbys will be listed for players to see, and it will coordinate chat messages between players whom has not connected to a lobby yet.</p>
+
+        <p>The LobbyServer is started by a Client to allow himself and other Clients to connect to him or her as preparation for starting a game. When a lobby is created it is listed in the HubServer. In the lobby players can chat with other players currently in the lobby, and start a game session.</p>
+
+        <p>The GameServer is responsible for sneding initializing data to the Clients for use in the Game and for distributing actions performed by all the players. The GameServer is also responsible for making sure that all the commands sent and recieved are done so in a synchronized manner.</p>
+
+        <p>The Client is a Graphical User Interface that gives the players a way to interact with the HubServers functionality as well as the LobbyServers functions. The Game is also run in the Client, with its own graphical representation.</p></div>
+
+        <div id="sequence">
+            <div class="picture">
+            </div>
+        </div>
+
+        <div class="contentTitle">Evaluation</div>
+        <div id="evaluation">
+            <div class="picture">
+                <div id="headerTitle2">Pathogenum</div>
+                <div id="headerSubtext2">Did everything go as planned?</div> 
+            </div>
+        </div>
+            <div class="contentText"><p>We did not have enough time to implement all intended functionality, such as power-ups and likewise abilities and gameplay elements. Some bugs remain in the program which have not been fixed due to time limitations as well. What was difficult in the project was for everyone to have the same image of the programs intended functionality and design. in a small way, collective code ownership was slightly lacking. Some interesting aspects of the project was the network traffic design and encoding, as well as designing the game to use as little network traffic as possible. To be able to utilize a physics engine was also quite interesting. To put all this together with a graphical engine also proved to be great fun!</p>
+
+            <p>For students thinking of doing a similar project we would recommend to more formally specify the requirements of your product, as to give everyone a more unified vision of the product. Test your network codes thouroughly, as we have hade quite a few bugs which have been difficult to find, which tests might have discovered for us.</p></div>
+
+    </div>
+</body>
+</html>

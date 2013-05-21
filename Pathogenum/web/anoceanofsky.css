@@ -33,7 +33,7 @@ position:relative;
 margin-top:30px;
 font-size:16px;
 margin-left:-10px;
-width:121px;
+width:181px;
 height: 35px;
 line-height: 35px;
 float:left;
@@ -54,7 +54,7 @@ text-align:center;
 border-bottom:none;
 color:#0C61C9;
 display: block;
-width:121px;
+width:181px;
 height: 35px;
 line-height: 35px;
 background-image:url(tab.png);
@@ -140,6 +140,60 @@ background-repeat:no-repeat;
 margin-left:10px;
 }
 
+#chat2
+{
+width:650px;
+height:502px;
+background-color:#FFFFFF;	
+}
+
+#chat2 .picture
+{
+position:relative;
+width:626px;
+height:482px;
+top:10px;
+background-image:url(hub-1.png);
+background-repeat:no-repeat;
+margin-left:10px;
+}
+
+#sequence
+{
+width:650px;
+height:380px;
+background-color:#FFFFFF;
+}
+
+#sequence .picture
+{
+position:relative;
+width:626px;
+height:370px;
+top:10px;
+background-image:url(sequence.png);
+background-repeat:no-repeat;
+margin-left:10px;
+}
+
+#evaluation
+{
+width:650px;
+height:380px;
+background-color:#FFFFFF;
+}
+
+#evaluation .picture
+{
+position:relative;
+width:626px;
+height:370px;
+top:10px;
+background-image:url(evaluation.jpg);
+background-repeat:no-repeat;
+margin-left:10px;
+}
+
 #headerTitle
 {
 position:relative;
@@ -150,6 +204,16 @@ color:#FFFFFF;
 font-family:"Adobe Garamond Pro Bold", Georgia, "Times New Roman", Times, serif;
 }
 
+#headerTitle2
+{
+position:relative;
+top:30px;
+left:380px;
+font-size:25px;
+color:#333333;
+font-family:"Adobe Garamond Pro Bold", Georgia, "Times New Roman", Times, serif;
+}
+
 #headerSubtext
 {
 position:relative;
@@ -157,6 +221,16 @@ top:30px;
 left:50px;
 font-size:14px;
 color:#A9C8FA;
+font-family:"Adobe Garamond Pro Bold", Georgia, "Times New Roman", Times, serif;
+}
+
+#headerSubtext2
+{
+position:relative;
+top:30px;
+left:390px;
+font-size:14px;
+color:#333333;
 font-family:"Adobe Garamond Pro Bold", Georgia, "Times New Roman", Times, serif;
 }
 
