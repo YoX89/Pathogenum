@@ -6,9 +6,10 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import lobbyserver.LobbyServer;
+
 import utils.Constants;
 import utils.GameAddress;
-import LobbyServer.LobbyServer;
 
 /**
  * Class for handling the connection between clients and server.

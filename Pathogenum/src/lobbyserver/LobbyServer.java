@@ -1,4 +1,4 @@
-package LobbyServer;
+package lobbyserver;
 
 import gameserver.GameServer;
 

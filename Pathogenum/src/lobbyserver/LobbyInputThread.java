@@ -1,4 +1,4 @@
-package LobbyServer;
+package lobbyserver;
 
 import java.io.IOException;
 import java.io.InputStream;
