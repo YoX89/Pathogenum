@@ -19,13 +19,13 @@ import utils.GameAddress;
  * @author Mardrey
  * 
  */
-public class HubComOutputServer extends Thread {
+public class HubOutputThread extends Thread {
 	OutputStream os;
 	Socket conn;
 	GamesMonitor gm;
 	int ok = 0;
 
-	public HubComOutputServer(Socket s, GamesMonitor gm) {
+	public HubOutputThread(Socket s, GamesMonitor gm) {
 		conn = s;
 		try {
 			os = conn.getOutputStream();

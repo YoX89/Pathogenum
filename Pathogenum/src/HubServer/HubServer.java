@@ -46,8 +46,8 @@ public class HubServer extends Thread {
 		while (true) {
 			try {
 				Socket conn = Ssock.accept();
-				HubComOutputServer hcos = new HubComOutputServer(conn, gm);
-				HubComInputServer HCS = new HubComInputServer(conn, gm);
+				HubOutputThread hcos = new HubOutputThread(conn, gm);
+				HubInputThread HCS = new HubInputThread(conn, gm);
 				hcos.start();
 				HCS.start();
 			} catch (IOException e) {

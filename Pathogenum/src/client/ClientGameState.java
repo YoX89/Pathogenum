@@ -21,7 +21,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import utils.Constants;
 import utils.Conversions;
 import utils.Dimensions;
-import utils.misc;
+import utils.Misc;
 import Entities.Entity;
 import Entities.NPC;
 import Entities.NpcFactory;

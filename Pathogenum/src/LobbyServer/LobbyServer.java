@@ -118,12 +118,12 @@ public class LobbyServer extends Thread {
 
 	private class ConnectionListener extends Thread {
 
-		ArrayList<LobbyComInputServer> lcisList;
-		ArrayList<LobbyComOutputServer> lcosList;
+		ArrayList<LobbyInputThread> lcisList;
+		ArrayList<LobbyOutputThread> lcosList;
 		
 		public void run() {
-			lcisList = new ArrayList<LobbyComInputServer>();
-			lcosList = new ArrayList<LobbyComOutputServer>();
+			lcisList = new ArrayList<LobbyInputThread>();
+			lcosList = new ArrayList<LobbyOutputThread>();
 			System.out.println("LobbyServer started");
 			boolean notInterupted = true;
 			while (notInterupted) {// �ndra till while(!gamestarted)
@@ -135,9 +135,9 @@ public class LobbyServer extends Thread {
 						conn.close();
 					} else {
 						clients.add(conn);
-						LobbyComOutputServer lcos = new LobbyComOutputServer(
+						LobbyOutputThread lcos = new LobbyOutputThread(
 								conn, lm);
-						LobbyComInputServer lcis = new LobbyComInputServer(
+						LobbyInputThread lcis = new LobbyInputThread(
 								conn, lm);
 						lcisList.add(lcis);
 						lcosList.add(lcos);
@@ -162,10 +162,10 @@ public class LobbyServer extends Thread {
 					// Clean up
 				}
 			}
-			for(LobbyComOutputServer lcos: lcosList){
+			for(LobbyOutputThread lcos: lcosList){
 				lcos.interrupt();
 			}
-			for(LobbyComInputServer lcis: lcisList){
+			for(LobbyInputThread lcis: lcisList){
 				lcis.interrupt();
 			}
 			System.out.println("LobbyConnListener stoppes");

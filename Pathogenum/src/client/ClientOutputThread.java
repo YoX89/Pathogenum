@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import utils.Constants;
 import utils.Conversions;
-import utils.misc;
+import utils.Misc;
 
 public class ClientOutputThread extends Thread {
 	private Socket socket;
