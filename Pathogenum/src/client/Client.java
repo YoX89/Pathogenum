@@ -1,5 +1,10 @@
 package client;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -47,14 +52,30 @@ public class Client extends StateBasedGame {
 	 * @param args
 	 */
 	public static void main(String args[]) {
+		
+		File f = new File("config");
+		FileReader fr = null;
+		try {
+			fr = new FileReader(f);
+		} catch (FileNotFoundException e2) {
+			e2.printStackTrace();
+		}
+		BufferedReader br = new BufferedReader(fr);
+
+		String host = "";
+		String port = "";
+		try {
+			host = br.readLine();
+			port = br.readLine();
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 
 		try {
-			Client client = null;
-			try{
-				client = new Client("client", args[0], args[1]);
-			}catch(ArrayIndexOutOfBoundsException ie){
-				client = new Client("client", "localhost", "12345");
-			}
+
+			Client client = new Client("client", host, port);
+
 			agc = null;
 			try {
 				agc = new AppGameContainer(client);
