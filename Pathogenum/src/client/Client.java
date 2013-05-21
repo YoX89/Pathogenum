@@ -69,7 +69,6 @@ public class Client extends StateBasedGame {
 				e.printStackTrace();
 			}
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -104,17 +103,13 @@ public class Client extends StateBasedGame {
 			}
 			InetAddress ia = InetAddress.getByName(host);
 			cch = ClientConnectionHandler.getCCH(ia, port);
-					//new ClientConnectionHandler(InetAddress.getByName(host), port);
 			Hub = new ClientHubState(ia,port);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
 		Lobby = new ClientLobbyState();
-//		Game = new ClientGameState(cch); //Use the temporary (single player) game state
-		//Game = new ClientGameState(); //Use the client-server game state
 		addState(Hub);
 		addState(Lobby);
-//		addState(Game);
 		bgs = Hub;
 		init = true;
 	}
@@ -127,7 +122,6 @@ public class Client extends StateBasedGame {
 	 */
 	@Override
 	public boolean closeRequested() {
-		cch.closeConnection();
 		agc.exit();
 		System.out.println("CLOSIÖNG");
 		return false;

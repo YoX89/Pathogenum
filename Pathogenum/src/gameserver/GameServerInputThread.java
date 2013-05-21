@@ -16,7 +16,6 @@ public class GameServerInputThread extends Thread {
 		try {
 			this.is = s.getInputStream();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.gm = gm;
@@ -30,22 +29,14 @@ public class GameServerInputThread extends Thread {
 		while (notClosed) {
 			byte b = 0x00;
 			try {
-				// System.out.println("Server waiting to read from player " +
-				// player);
 				b = (byte) is.read();
-				// System.out.println("Getting movement on gameserverinput: " +
-				// (int)b);
-				gm.addIncomingCommand(b, player);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				if (!sock.isClosed()) {
 					try {
 						sock.close();
-
 					} catch (IOException e1) {
 						e1.printStackTrace();
-
 					}
 					notClosed = false;
 				}

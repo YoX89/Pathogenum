@@ -31,12 +31,8 @@ public class GameMonitor {
 	}
 	
 	public synchronized void deRegisterOThread(GameServerOutputThread gsot){
-		System.out.println("DEREGISTERING:::::::::::" + register.size());
-		boolean ok = register.remove(gsot);
-		//register.keySet().remove(gsot);
-		System.out.println("DEREGISTERDONE::::::::::" + register.size() + ", " + ok);
+		register.remove(gsot);
 		notifyAll();
-		//players--;
 	}
 	
 	public synchronized int getNbrPlayers(){
@@ -44,7 +40,6 @@ public class GameMonitor {
 	}
 	
 	public synchronized void addIncomingCommand(byte b, int player){
-//		System.out.println("Adding incoming command: " + (int)b + " for player " + player);
 		incComs[player].add(b);
 	}
 	
@@ -52,14 +47,11 @@ public class GameMonitor {
 		Byte b = incComs[player].pollFirst();
 		if(b == null)
 			b = new Byte((byte) 0x00);
-		
-//		System.out.println("Reading incoming command: " + b + " from player " + player);
 		return b;
 	}
 	
 	public synchronized void setOutgoingCommands(Byte[] b, long frame){
 		outComs.put(frame, b);
-	//	System.out.println("In Game Monitor setting outgoing commands: " + misc.printByte(b));
 		notifyAll();
 	}
 	

@@ -37,7 +37,6 @@ public class Player extends Entity{
 	
 	public void draw(Graphics arg1){
 		Vec2 pos = body.getPosition();
-		//System.out.println(pos.x + " " + pos.y);
 		changeShapeSize();
 		sh.setLocation(Dimensions.meterToPixel(pos.x) - sh.getWidth()/2, Dimensions.meterToPixel(pos.y) - sh.getHeight()/2);
 		arg1.setColor(Color.red);

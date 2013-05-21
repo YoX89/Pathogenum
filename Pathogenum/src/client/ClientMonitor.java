@@ -36,7 +36,6 @@ public class ClientMonitor {
 	}
 	
 	public synchronized void addMessage(String message) {
-		//System.out.println("Message to be sent in monitor: " + message);
 		messagesToSend.add(message);
 		notifyAll();
 	}
@@ -45,7 +44,6 @@ public class ClientMonitor {
 		wait();
 	}
 	public synchronized ArrayList<String> getChatMessagesToSend(){
-		//System.out.println("Message gotten to be sent from oThread");
 		ArrayList<String> temp = (ArrayList<String>)messagesToSend.clone();
 		messagesToSend.clear();
 		return temp;
@@ -61,7 +59,6 @@ public class ClientMonitor {
 	}
 
 	public synchronized void addRecievedMessage(String text) {
-		//System.out.println("clientmonitor::addrecievedmessage: " + text);
 		recievedMessages.add(text);
 		notifyAll();
 	}
@@ -92,9 +89,7 @@ public class ClientMonitor {
 			}
 		}
 		Byte[] oldestMovement = recievedMovements.pop();
-		//System.out.println("OLDESTMOVEMENT: " + misc.printByte(oldestMovement));
 		byte[] primOm = Conversions.ObjectByteArrayToPrimitiveByteArray(oldestMovement);
-		//System.out.println("OLDESTMOVEMENTPRIMITIV: " + misc.printByte(primOm));
 		return primOm;
 	}
 
@@ -102,7 +97,6 @@ public class ClientMonitor {
 	
 	public synchronized ArrayList<GameAddress> getGames() {
 		ArrayList<GameAddress> temp = (ArrayList<GameAddress>)currentGames.clone();
-		System.out.println("GameSizeIn ClientMonitor[temp; " + temp.size() + ", currentGames; " + currentGames.size() + "]" );
 		currentGames.clear();
 		return temp;
 	}
@@ -116,10 +110,6 @@ public class ClientMonitor {
 	}
 	
 	public synchronized void addMovementToBuffer(byte[] movement){
-		System.out.println("Movement to buffer is: ");
-		for(int i = 0; i < movement.length; i++) {
-			System.out.print(movement[i] + " ");
-		}
 		Byte[] mov = new Byte[movement.length];
 		for(int i=0; i<movement.length;i++){
 			mov[i] = new Byte(movement[i]);
@@ -132,7 +122,6 @@ public class ClientMonitor {
 		return gameName;	
 	}
 	public synchronized void setGameName(String name){
-		//System.out.println("CMONITOR:SETTINGGAMENAME");
 		gameName = name;
 	}
 
@@ -193,7 +182,6 @@ public class ClientMonitor {
 
 	public synchronized void setDroppedPlayer(int index) {
 		dropedPlayers.add(index);
-		//nbrOfPlayers--;
 		System.out.println("DROPPED SET IN CM, nbrplay: " + nbrOfPlayers);
 	}
 }

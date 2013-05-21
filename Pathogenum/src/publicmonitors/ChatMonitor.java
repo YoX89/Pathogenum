@@ -15,15 +15,12 @@ public class ChatMonitor {
 
 	protected HashMap<Thread, Boolean> register;
 
-	// HashSet<LobbyComOutputServer> register;
-
 	public HashMap<Thread, Boolean> getRegister(){
 		return register;
 	}
 	
 	public ChatMonitor() {
 		messageQueue = new LinkedList<String>();
-		// register = new HashSet<LobbyComOutputServer>();
 		register = new HashMap<Thread, Boolean>();
 		System.out.println("ChatMonitor created");
 	}

@@ -20,8 +20,6 @@ import utils.GameAddress;
  * 
  */
 public class HubServer extends Thread {
-	//private static ArrayList<GameAddress> gameList = new ArrayList<GameAddress>();
-
 	ServerSocket Ssock;
 	GamesMonitor gm;
 

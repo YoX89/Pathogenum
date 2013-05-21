@@ -9,7 +9,6 @@ import java.io.IOException;
  */
 public class ServerMain {
 	public static void main(String[] args) throws IOException{
-		//LobbyServer ls = new LobbyServer(Integer.parseInt(args[0]));
 		if(args.length != 1){
 			System.out.println("Invalid number of parameters.\nStart program like \"java -jar ServerMain.jar [Port]\"");
 			return;

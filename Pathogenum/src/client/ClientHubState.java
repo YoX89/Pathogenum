@@ -139,14 +139,7 @@ public class ClientHubState extends BasicGameState {
 		arg2.drawImage(refreshButton, 50, 600);
 		for(TextField tf: tFields){
 			tf.render(arg0, arg2);
-		}
-		//inputText.render(arg0, arg2);
-		//outputText.render(arg0, arg2);
-		//gamesField.render(arg0, arg2);
-		//newGameNameField.render(arg0, arg2);
-		//newGamePortField.render(arg0, arg2);
-		//errorMessages.render(arg0, arg2);
-		
+		}	
 	}
 
 	@Override
@@ -295,7 +288,6 @@ public class ClientHubState extends BasicGameState {
 			for(int j = i + 1; j < gamesList.size(); j++){
 				if(gamesList.get(i).getGameName().equals(gamesList.get(j).getGameName())&&gamesList.get(i).getHost().equals(gamesList.get(j).getHost())&&gamesList.get(i).getPort()==gamesList.get(j).getPort()) {
 					gamesList.remove(j);
-					//ConcurrentMatlabException?
 				}
 			}
 		}	
@@ -319,7 +311,6 @@ public class ClientHubState extends BasicGameState {
 	 */
 	@Override
 	public int getID() {
-		// TODO Auto-generated method stub
 		return ID;
 	}
 
@@ -347,7 +338,6 @@ public class ClientHubState extends BasicGameState {
 				messages += "\n";
 			}
 		}
-		// System.out.println(messages);
 		outputText.setText(messages);
 	}
 
