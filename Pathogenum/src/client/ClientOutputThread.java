@@ -32,12 +32,8 @@ public class ClientOutputThread extends Thread {
 				e.printStackTrace();
 			}
 			sendMovements();
-			//System.out.println("after movements before messages");
 			getMessages();
-			//System.out.println("after messages before ready");
-			//getGameName();
 			getReady();
-			//System.out.println("after ready");
 		}
 		System.out.println("ClientOutputThread stopped");
 		return;
@@ -75,7 +71,7 @@ public class ClientOutputThread extends Thread {
 		}
 
 	}
-	
+
 	private void getReady() {
 		boolean isReady = cm.isReady();
 		if(isReady){
@@ -91,12 +87,10 @@ public class ClientOutputThread extends Thread {
 	}
 
 	private void sendMovements() {
-		//System.out.println("--------------------------I'm here");
 		ArrayList<Byte> movements = cm.getMovements();
 		for (int i = 0; i < movements.size(); i++) {
 			if (movements.get(i) != -1) {
 				try {
-					//System.out.println("Sending movement throug cyberspyder: " + movements.get(i));
 					os.write(movements.get(i));
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -132,7 +126,6 @@ public class ClientOutputThread extends Thread {
 			os.write(gameName.getBytes());
 			os.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

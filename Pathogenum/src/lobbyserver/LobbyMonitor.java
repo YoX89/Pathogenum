@@ -2,8 +2,6 @@ package lobbyserver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 
 import publicmonitors.ChatMonitor;
 
@@ -18,8 +16,6 @@ public class LobbyMonitor extends ChatMonitor{
 	ArrayList<String> connectedHosts;
 	String gameName;
 	boolean shouldSendGameName = false;
-	//HashSet<LobbyComOutputServer> register;
-	
 	public LobbyMonitor(String gameName){
 		super();
 		System.out.println("LobbyMonitor created");

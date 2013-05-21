@@ -35,9 +35,9 @@ public class ClientLobbyState extends BasicGameState {
 	boolean pressedReady = false;
 	String gameName = "";
 	Music bgMusic;
-	
+
 	boolean musicPlays = false;
-	
+
 	ClientConnectionHandler cch = ClientConnectionHandler.getCCH(
 			ClientHubState.getHost(), ClientHubState.getPort());
 	public static final int ID = 1;
@@ -58,13 +58,13 @@ public class ClientLobbyState extends BasicGameState {
 				200);
 		outputText.setBackgroundColor(new Color(0, 0, 0));
 		connectedClients = new TextField[4];
-		
+
 		for (int i = 0; i < connectedClients.length; i++) {
 			connectedClients[i] = new TextField(arg0, arg0.getDefaultFont(),
 					100, 500 + i * 50, sendButton.getWidth() * 2, 30);
 			connectedClients[i].setAcceptingInput(false);
 		}
-		
+
 		bgMusic = new Music("resources/audio/pathogenum.ogg");
 		cch.updateGameName();
 		gameName = cch.getGameName();
@@ -74,7 +74,7 @@ public class ClientLobbyState extends BasicGameState {
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 			throws SlickException {
 		if (!inputText.hasFocus()) { // Vad ledande forskare kallar
-										// "ett fulhack"
+			// "ett fulhack"
 			inputText.setFocus(true);
 		}
 
@@ -83,12 +83,11 @@ public class ClientLobbyState extends BasicGameState {
 		inputText.render(arg0, arg2);
 		outputText.render(arg0, arg2);
 		nameText.render(arg0, arg2);
-		
-		
-		
+
+
+
 		nameText.setText(gameName);
 		ArrayList<String> names = cch.getNames();
-		// System.out.println("NSIZE: " + names.size());
 		if (names != null) {
 			for (int i = 0; i < names.size(); i++) {
 				String text = names.get(i);
@@ -101,8 +100,6 @@ public class ClientLobbyState extends BasicGameState {
 		for (int i = 0; i < connectedClients.length; i++) {
 			connectedClients[i].render(arg0, arg2);
 		}
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -133,9 +130,9 @@ public class ClientLobbyState extends BasicGameState {
 				cch.sendMessage(inputText.getText());
 				inputText.setText("");			
 			}
-				
+
 		}
-		
+
 		moa = new MouseOverArea(arg0, readyButton, 100, 400, readyButton.getWidth(), readyButton.getHeight());
 		if(moa.isMouseOver() && Mouse.isButtonDown(0) && !pressedReady){
 			pressedReady = true;
@@ -150,9 +147,9 @@ public class ClientLobbyState extends BasicGameState {
 		if(gameName.equals("")){
 			cch.updateGameName();
 			gameName = cch.getGameName();
-			
+
 		}
-		
+
 	}
 
 	private void addNewLines(ArrayList<String> chatList) {
@@ -186,7 +183,6 @@ public class ClientLobbyState extends BasicGameState {
 				messages += "\n";
 			}
 		}
-		// System.out.println(messages);
 		outputText.setText(messages);
 	}
 

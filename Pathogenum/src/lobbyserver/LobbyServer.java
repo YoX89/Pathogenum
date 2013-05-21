@@ -80,7 +80,6 @@ public class LobbyServer extends Thread {
 		}
 		
 		System.out.println("Innan inter");
-		//conListener.interrupt();
 		try {
 			conListener.interrupt();
 			s.close(); //interrupt s.accept in conlistener
@@ -159,8 +158,6 @@ public class LobbyServer extends Thread {
 
 				if (this.isInterrupted()) {
 					notInterupted = false;
-					// TODO
-					// Clean up
 				}
 			}
 			for(LobbyOutputThread lcos: lcosList){

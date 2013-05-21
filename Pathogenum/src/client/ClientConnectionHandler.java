@@ -75,7 +75,6 @@ public class ClientConnectionHandler {
 	 */
 	public void sendMovement(int[] acc) {
 		byte[] command = {getCommandFromMovementKey(acc)};
-		//System.out.println("SendMovements: " + misc.printByte(command));
 		cm.addMovementToSend(command);
 	}
 
@@ -132,7 +131,6 @@ public class ClientConnectionHandler {
 	 * @param port
 	 */
 	public void createNewLobby(String gameName, int port) {
-		//System.out.println("Going to create new lobby");
 		if(port != -1){
 			try {
 				ls = new LobbyServer(gameName, port, socket.getInetAddress(), hubPort); //send hubInetAddress aswell to enable lobby to "deregister" himself after game is created
@@ -163,7 +161,6 @@ public class ClientConnectionHandler {
 
 	}
 	public String getGameName() {
-		//System.out.println("CCH:GETGAMENAME");
 		if(ls!=null){			
 			String re = ls.getGameName();
 			return re;
@@ -205,10 +202,6 @@ public class ClientConnectionHandler {
 			return true;
 	}
 	
-	public void closeConnection() {
-		// TODO Auto-generated method stub
-		
-	}
 	public void setReady() {
 		cm.setReady(true);
 		

@@ -17,7 +17,7 @@ public class GameServer extends Thread{
 	private GameMonitor gm;
 	private int nbrOfPlayers;
 	ArrayList<GameServerOutputThread> gots; 
-	
+
 	public GameServer(ArrayList<Socket> clients){
 		nbrOfPlayers = clients.size();
 		Random rand = new Random();
@@ -30,7 +30,7 @@ public class GameServer extends Thread{
 			gots.add(got);
 			got.start();
 			git.start();
-			
+
 		}
 		time = System.currentTimeMillis();
 
@@ -38,28 +38,21 @@ public class GameServer extends Thread{
 
 	@Override
 	public void run() {
-		//Send initmessage
 		for(int i = 0; i < gots.size(); i++){
 			if(!gots.get(i).sendInit(seed, nbrOfPlayers, i)){
 				System.out.println("SENDING INIT FAILED");
 			}
 		}
-		//nbrOfPlayers = gm.getNbrPlayers();
 		long desiredSleep = Constants.GAME_SPEED;
 		long diff = 0;
 		while(true) {
 			Byte[] commands = new Byte[nbrOfPlayers];
-			//Check movements from clients
 			for(int i = 0; i < nbrOfPlayers; ++i){
 				commands[i] = gm.getIncomingCommand(i);
-				//System.out.println("The command from player " + i + " is: " + commands[i]);
 			}
 
 			//Send movements and frame ID
 			gm.setOutgoingCommands(commands, frameID++);
-
-			//System.out.println("Putting command with framID: " + frameID + " in the monitor");
-
 			time = System.currentTimeMillis();
 			try {
 				long sleepingTime = desiredSleep - diff;
@@ -73,5 +66,5 @@ public class GameServer extends Thread{
 		}
 	}
 
-	
+
 }

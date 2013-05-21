@@ -163,8 +163,6 @@ public class HubInputThread extends Thread {
 			ok = -1;
 		}
 		int port = Conversions.ByteArrayToInt(prt);
-		// int port = connection2.getPort();
-
 		byte[] nameLength = new byte[4];
 		try {
 			is2.read(nameLength);

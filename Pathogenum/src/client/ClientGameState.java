@@ -29,7 +29,7 @@ import entities.Wall;
 import utils.Constants;
 import utils.Conversions;
 import utils.Dimensions;
-import utils.Misc;
+
 
 /**
  * A gamestate representing the main game window
@@ -81,24 +81,18 @@ public class ClientGameState extends BasicGameState {
 		int scale = 2;
 		FSTBAOE = 60;
 		boundPoints = new float[4];
-		boundPoints[0] = Dimensions.meterToPixel(0.1f); // x coordinate for left
-		// corners
+		boundPoints[0] = Dimensions.meterToPixel(0.1f); // x coordinate for left corners
 		boundPoints[1] = boundPoints[0] + Dimensions.SCREEN_WIDTH * scale
-				- Dimensions.meterToPixel(0.2f); // x coordinate for right
-		// corners
-		boundPoints[2] = Dimensions.meterToPixel(0.1f); // y coordinate for
-		// upper corners
+				- Dimensions.meterToPixel(0.2f); // x coordinate for right corners
+		boundPoints[2] = Dimensions.meterToPixel(0.1f); // y coordinate for upper corners
 		boundPoints[3] = Dimensions.meterToPixel(0.1f)
 				+ Dimensions.SCREEN_HEIGHT * scale
-				- Dimensions.meterToPixel(0.2f); // y coordinate for lower
-		// corners
-		// System.out.println("HERE");
-		// leave(arg0, arg1);
+				- Dimensions.meterToPixel(0.2f); // y coordinate for lower corners
+
 		images = new ArrayList<Image>();
 		walls = new ArrayList<Wall>();
 		npcs = new ArrayList<NPC>();
 		players = new Player[numberOfPlayers];
-		// world = new PathogenumWorld(new Vec2(0f,9.82f));
 		world = new PathogenumWorld(new Vec2(0f, 0f));
 		createWalls(boundPoints);
 
@@ -118,14 +112,6 @@ public class ClientGameState extends BasicGameState {
 		}
 
 		cch.cm.setReady(false);
-		// bgMusic = new Music("resources/audio/Invincible.ogg"); //:(
-
-		// try {
-		// cch.joinGame(InetAddress.getLocalHost().getCanonicalHostName(),
-		// 30000);
-		// } catch (UnknownHostException e) {
-		// e.printStackTrace();
-		// }
 
 		initDone = true;
 		System.out.println("INIT IS NOW DOOOOOOOOOO=0=NE!");
@@ -153,11 +139,7 @@ public class ClientGameState extends BasicGameState {
 				arg2.translate(Dimensions.meterToPixel(-px * scale)
 						+ (Dimensions.SCREEN_WIDTH / 2),
 						Dimensions.meterToPixel(-py * scale)
-								+ (Dimensions.SCREEN_HEIGHT / 2));
-				// System.out.println("Scale:  " + scale +"   scale*:  "
-				// +scale*Dimensions.pixelToMeter(arg0.getScreenWidth()) +
-				// "   Screen:  " +
-				// Dimensions.pixelToMeter(Dimensions.SCREEN_WIDTH));
+						+ (Dimensions.SCREEN_HEIGHT / 2));
 			}
 			for (int i = 0; i < players.length; i++) {
 				Player player = players[i];
@@ -190,16 +172,9 @@ public class ClientGameState extends BasicGameState {
 			throws SlickException {
 
 		if (initDone && constructDone) {
-			// System.out.println("Updating!!");
-			// if(!musicPlays){
-			// bgMusic.loop();
-			// musicPlays = true;
-			// }
 			int[] acc = checkMovementKey();
 			cch.sendMovement(acc);
 			byte[] movements = cch.receiveMovements();
-			System.out.println("The delta in the update funcgtion is: " + arg2);
-			// TODO change here if you want different delta
 			doMovements(movements, Constants.GAME_SPEED);
 			if (FSAE > FSTBAOE) {
 				npcs.add(fac.getNpc());
@@ -295,7 +270,6 @@ public class ClientGameState extends BasicGameState {
 	 */
 	@Override
 	public int getID() {
-		// TODO Auto-generated method stub
 		return ID;
 	}
 
@@ -321,26 +295,22 @@ public class ClientGameState extends BasicGameState {
 	private int[] checkMovementKey() {
 		Input i = new Input(0);
 		if (i.isKeyDown(Input.KEY_UP)) {
-			// System.out.println("UP");
 			keys[0] = 1;
 		} else {
 			keys[0] = 0;
 		}
 
 		if (i.isKeyDown(Input.KEY_DOWN)) {
-			// System.out.println("DOWN");
 			keys[1] = 1;
 		} else {
 			keys[1] = 0;
 		}
 		if (i.isKeyDown(Input.KEY_LEFT)) {
-			// System.out.println("LEFT");
 			keys[2] = 1;
 		} else {
 			keys[2] = 0;
 		}
 		if (i.isKeyDown(Input.KEY_RIGHT)) {
-			// System.out.println("RIGHT");
 			keys[3] = 1;
 		} else {
 			keys[3] = 0;
@@ -350,11 +320,7 @@ public class ClientGameState extends BasicGameState {
 
 	private void doMovements(byte[] b, int s) {
 		if (b != null) {
-			// System.out.println("Movements in client: " + misc.printByte(b));
-			long frame = extractID(b);
 			int acc[][] = extractMovements(b);
-			// System.out.println("ACC: [" + acc[0] + "] [" + acc[1] + "] [" +
-			// acc[2] + "] [" + acc[3] + "]");
 			world.step(s * 0.001f, 8, 3);
 			for (int i = 0; i < acc.length; i++) {
 				Player play = players[i];
@@ -366,15 +332,6 @@ public class ClientGameState extends BasicGameState {
 				npcs.get(i).addForce(s);
 			}
 		}
-	}
-
-	private long extractID(byte[] b) {
-		byte[] id = new byte[8];
-		for (int i = 0; i < 8; ++i) {
-			id[i] = b[i];
-		}
-
-		return Conversions.byteArrayToLong(id);
 	}
 
 	private int[][] extractMovements(byte[] b) {
@@ -414,8 +371,6 @@ public class ClientGameState extends BasicGameState {
 				break;
 			}
 		}
-
-		// TODO Enable more players
 		return movs;
 
 	}
