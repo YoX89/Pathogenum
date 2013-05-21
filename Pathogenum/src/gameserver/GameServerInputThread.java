@@ -30,6 +30,7 @@ public class GameServerInputThread extends Thread {
 			byte b = 0x00;
 			try {
 				b = (byte) is.read();
+				 gm.addIncomingCommand(b, player);
 			} catch (IOException e) {
 				e.printStackTrace();
 				if (!sock.isClosed()) {

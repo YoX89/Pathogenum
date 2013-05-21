@@ -32,14 +32,14 @@ public class ClientMonitor {
 		gameName = "";
 		connectedPlayers = new ArrayList<String>();
 		dropedPlayers = new ArrayList<Integer>();
-		
+
 	}
-	
+
 	public synchronized void addMessage(String message) {
 		messagesToSend.add(message);
 		notifyAll();
 	}
-	
+
 	public synchronized void waitForEvent() throws InterruptedException {
 		wait();
 	}
@@ -67,9 +67,9 @@ public class ClientMonitor {
 		movementsToSend.add(new Byte(command[0]));	
 		notifyAll();
 	}
-/*
- * gets movements from client to output thread
- */
+	/*
+	 * gets movements from client to output thread
+	 */
 	public synchronized ArrayList<Byte> getMovements() {		
 		ArrayList<Byte> temp = (ArrayList<Byte>)movementsToSend.clone();
 		movementsToSend.clear();
@@ -94,7 +94,7 @@ public class ClientMonitor {
 	}
 
 
-	
+
 	public synchronized ArrayList<GameAddress> getGames() {
 		ArrayList<GameAddress> temp = (ArrayList<GameAddress>)currentGames.clone();
 		currentGames.clear();
@@ -108,7 +108,7 @@ public class ClientMonitor {
 	public synchronized void addGame(GameAddress gameAddress) {
 		currentGames.add(gameAddress);		
 	}
-	
+
 	public synchronized void addMovementToBuffer(byte[] movement){
 		Byte[] mov = new Byte[movement.length];
 		for(int i=0; i<movement.length;i++){
@@ -128,7 +128,7 @@ public class ClientMonitor {
 
 	public synchronized void setconnectedPlayers(ArrayList<String> connectedPlayers) {
 		this.connectedPlayers = connectedPlayers;
-}
+	}
 	public synchronized void setReady(boolean b) {
 		isReady = b;
 		notifyAll();
@@ -137,7 +137,7 @@ public class ClientMonitor {
 	public synchronized boolean isReady() {
 		return isReady;
 	}
-	
+
 	public synchronized void setSeed(long seed) {
 		this.seed = seed; 
 		notifyAll();
@@ -148,21 +148,21 @@ public class ClientMonitor {
 			wait();
 		}
 		return seed;
-		
+
 	}
 
 	public synchronized void setMyIndex(int myIndex) {
 		mIndex = myIndex;
 		notifyAll();
 	}
-	
+
 	public synchronized int getMyIndex() throws InterruptedException {
 		while(mIndex == -1){
 			wait();
 		}
 		return mIndex;
 	}
-	
+
 	public synchronized void setNbrOfPlayers(int players) {
 		nbrOfPlayers  = players;	
 		notifyAll();
@@ -182,6 +182,5 @@ public class ClientMonitor {
 
 	public synchronized void setDroppedPlayer(int index) {
 		dropedPlayers.add(index);
-		System.out.println("DROPPED SET IN CM, nbrplay: " + nbrOfPlayers);
 	}
 }

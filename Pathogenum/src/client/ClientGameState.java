@@ -27,6 +27,7 @@ import entities.Player;
 import entities.Wall;
 
 import utils.Constants;
+import utils.Conversions;
 import utils.Dimensions;
 
 
@@ -87,7 +88,7 @@ public class ClientGameState extends BasicGameState {
 		boundPoints[3] = Dimensions.meterToPixel(0.1f)
 				+ Dimensions.SCREEN_HEIGHT * scale
 				- Dimensions.meterToPixel(0.2f); // y coordinate for lower corners
-		
+
 		images = new ArrayList<Image>();
 		walls = new ArrayList<Wall>();
 		npcs = new ArrayList<NPC>();
@@ -138,7 +139,7 @@ public class ClientGameState extends BasicGameState {
 				arg2.translate(Dimensions.meterToPixel(-px * scale)
 						+ (Dimensions.SCREEN_WIDTH / 2),
 						Dimensions.meterToPixel(-py * scale)
-								+ (Dimensions.SCREEN_HEIGHT / 2));
+						+ (Dimensions.SCREEN_HEIGHT / 2));
 			}
 			for (int i = 0; i < players.length; i++) {
 				Player player = players[i];
