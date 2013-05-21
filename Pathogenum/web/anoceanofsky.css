@@ -122,14 +122,14 @@ background-repeat:no-repeat;
 margin-left:10px;
 }
 
-#chat
+#chat1
 {
 width:650px;
 height:440px;
 background-color:#FFFFFF;	
 }
 
-#chat .picture
+#chat1 .picture
 {
 position:relative;
 width:626px;
