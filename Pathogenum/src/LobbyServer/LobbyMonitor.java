@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-import publicMonitors.ChatMonitor;
+import publicmonitors.ChatMonitor;
 
 /**
  * A monitor used by the lobby servers, extends chatmonitor with functionality regarding players in the lobby

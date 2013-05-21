@@ -1,4 +1,4 @@
-package HubServer;
+package hubserver;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -7,7 +7,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import publicMonitors.ChatMonitor;
+import publicmonitors.ChatMonitor;
 
 import utils.Constants;
 import utils.Conversions;

@@ -1,5 +1,7 @@
 package LobbyServer;
 
+import gameserver.GameServer;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
@@ -10,7 +12,6 @@ import java.util.ArrayList;
 import utils.Constants;
 import utils.Conversions;
 
-import GameServer.GameServer;
 
 /**
  * A server representing the lobby that starts a corresponding input and output

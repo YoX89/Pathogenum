@@ -1,4 +1,4 @@
-package HubServer;
+package hubserver;
 
 import java.io.IOException;
 import java.io.InputStream;

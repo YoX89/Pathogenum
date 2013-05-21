@@ -1,4 +1,4 @@
-package publicMonitors;
+package publicmonitors;
 
 import java.util.HashMap;
 import java.util.LinkedList;

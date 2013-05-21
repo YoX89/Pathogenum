@@ -1,4 +1,4 @@
-package GameServer;
+package gameserver;
 
 import java.io.IOException;
 import java.io.OutputStream;

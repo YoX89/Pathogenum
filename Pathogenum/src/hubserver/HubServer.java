@@ -1,4 +1,4 @@
-package HubServer;
+package hubserver;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 
-import publicMonitors.ChatMonitor;
+import publicmonitors.ChatMonitor;
 import utils.GameAddress;
 
 /**

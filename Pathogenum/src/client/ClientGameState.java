@@ -18,16 +18,18 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import physics.PathogenumWorld;
+
+import entities.Entity;
+import entities.NPC;
+import entities.NpcFactory;
+import entities.Player;
+import entities.Wall;
+
 import utils.Constants;
 import utils.Conversions;
 import utils.Dimensions;
 import utils.Misc;
-import Entities.Entity;
-import Entities.NPC;
-import Entities.NpcFactory;
-import Entities.Player;
-import Entities.Wall;
-import Physics.PathogenumWorld;
 
 /**
  * A gamestate representing the main game window
@@ -198,7 +200,7 @@ public class ClientGameState extends BasicGameState {
 			byte[] movements = cch.receiveMovements();
 			System.out.println("The delta in the update funcgtion is: " + arg2);
 			// TODO change here if you want different delta
-			doMovements(movements, 25);
+			doMovements(movements, Constants.GAME_SPEED);
 			if (FSAE > FSTBAOE) {
 				npcs.add(fac.getNpc());
 				FSAE = 0;

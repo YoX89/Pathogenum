@@ -1,4 +1,4 @@
-package GameServer;
+package gameserver;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
